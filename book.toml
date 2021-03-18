@@ -7,7 +7,7 @@ src = "src"
 title = "The Wayland Protocol（自译中文版）"
 
 [build]
-build-dir = "book"
+build-dir = "docs"
 create-missing = false
 
 [output.html]
