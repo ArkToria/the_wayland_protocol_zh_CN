@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1.介绍.html"><strong aria-hidden="true">1.</strong> 介绍</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -190,6 +190,16 @@
 <h2 id="关于作者"><a class="header" href="#关于作者">关于作者</a></h2>
 <p>用 Drew 紧密合作者 Preston Carpenter 的话来说：</p>
 <p>Drew DeVault 从 <a href="https://swaywm.org/">sway</a>（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。</p>
+<h1 id="wayland-的上层设计"><a class="header" href="#wayland-的上层设计">Wayland 的上层设计</a></h1>
+<p>你的电脑有输入和输出设备，它们各自负责接收你的信息并将其显示给你。输入设备例如：</p>
+<ul>
+<li>键盘</li>
+<li>麦克风</li>
+<li>触摸板</li>
+<li>触摸屏</li>
+<li>数位板</li>
+</ul>
+<p>而输出设备通常是桌面上的显示器、笔记本或其他移动设备的屏幕。这些显示资源在你的应用程序之间共用，而 Wayland 混成器在其中起到给客户端分派输入事件并在合适位置显示程序窗口的作用。将所有应用程序窗口组合在一起显示在屏幕上的过程被称为“混成”，因此我们将执行此操作的软件叫做混成器。</p>
 
                     </main>
 
