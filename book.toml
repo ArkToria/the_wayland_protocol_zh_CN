@@ -1,0 +1,20 @@
+[book]
+authors = ["Ariel AxionL"]
+description = "一本介绍 Wayland 协议的书"
+language = "zh-cmn-Hans-CN"
+multilingual = false
+src = "src"
+title = "The Wayland Protocol（自译中文版）"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html]
+mathjax-support = true
+
+[output.html.search]
+limit-results = 15
+
+[output.html.playground]
+editable = false
