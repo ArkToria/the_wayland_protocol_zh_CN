@@ -15,26 +15,38 @@
    id="svg8"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="banner.svg"
-   inkscape:export-filename="/home/axionl/banner.png"
+   inkscape:export-filename="/home/axionl/Documents/computer/Wayland/src/banner.png"
    inkscape:export-xdpi="558.54999"
    inkscape:export-ydpi="558.54999">
   <defs
      id="defs2">
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient852">
+      <stop
+         style="stop-color:#2b598d;stop-opacity:1"
+         offset="0"
+         id="stop848" />
+      <stop
+         style="stop-color:#338ef2;stop-opacity:1"
+         offset="1"
+         id="stop850" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="linearGradient867-5-9">
       <stop
-         style="stop-color:#5edcff;stop-opacity:1"
+         style="stop-color:#3397ff;stop-opacity:1"
          offset="0"
          id="stop863" />
       <stop
-         style="stop-color:#a2ffed;stop-opacity:1"
+         style="stop-color:#0b72ea;stop-opacity:1"
          offset="1"
          id="stop865" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient867-5-9"
+       xlink:href="#linearGradient852"
        id="linearGradient869"
        x1="0.53453921"
        y1="143.06774"
@@ -48,8 +60,8 @@
        id="linearGradient879"
        x1="179.07059"
        y1="190.83044"
-       x2="299.8764"
-       y2="130.06589"
+       x2="328.84177"
+       y2="123.24943"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.99931806,0,0,0.7830109,-0.53416927,41.077688)" />
   </defs>
@@ -101,7 +113,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -150,7 +162,7 @@
       </g>
     </g>
     <path
-       style="fill:url(#linearGradient879);fill-opacity:1;fill-rule:evenodd;stroke-width:0.234412"
+       style="fill:url(#linearGradient879);fill-opacity:1;fill-rule:evenodd;stroke-width:0.234412;opacity:0.68215159"
        d="m 169.4849,154.41945 c 0,0 52.73173,-38.00278 169.18177,-38.00278 l -2e-5,35.15819 2e-5,38.92514 H 169.33334 Z"
        id="path871"
        sodipodi:nodetypes="cccccc" />
