@@ -11,7 +11,11 @@ build-dir = "docs"
 create-missing = false
 
 [output.html]
+default-theme = "light"
 mathjax-support = true
+git-repository-url = "https://github.com/axionl/the_wayland_protocol_zh_CN"
+cname = "axionl.me"
+site-url = "/the_wayland_protocol_zh_CN/"
 
 [output.html.search]
 limit-results = 15
