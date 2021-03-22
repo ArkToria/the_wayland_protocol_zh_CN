@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -232,13 +232,21 @@ by-path  card0  renderD128
 <h3 id="pixman"><a class="header" href="#pixman">pixman</a></h3>
 <p>这是一个客户端和混成器都使用的简单库，其可以有效的处理像素缓冲区，使用相交的矩形进行数学运算，以及执行其他类似的像素操作任务。</p>
 <h3 id="libwayland"><a class="header" href="#libwayland">libwayland</a></h3>
-<p>libwayland 是 Wayland 协议最常用的 C 语言实现，它处理许多底层的有线协议。同时也提供了一个从 Wayland 协议定义（XML 文件）生成高级代码的工具。我们将在第 1.3 章以及整本书中详细讨论 libwayland。</p>
+<p>libwayland 是 Wayland 协议最常用的 C 语言实现，它处理许多底层的线形协议。同时也提供了一个从 Wayland 协议定义（XML 文件）生成高级代码的工具。我们将在第 1.3 章以及整本书中详细讨论 libwayland。</p>
 <h3 id="其他"><a class="header" href="#其他">其他</a></h3>
 <p>到目前为止，提到的每个部分在整个 Linux 桌面生态系统中都是一致的。而除此以外还有更多的组件。许多图形应用程序根本不了解 Wayland，而是选择诸如 GTK+、QT、SDL 和 GLFW 之类的库来进行处理。许多混成器选择像 wlroots 这样的软件来抽象它们所负责的部分，而其它的一类混成器则在内部实现所有功能。</p>
 <h1 id="目标和受众"><a class="header" href="#目标和受众">目标和受众</a></h1>
 <p>我们的目标是让您从本书中了解到 Wayland 协议及其高级用法。您应该对 Wayland 核心协议中的所有内容有扎实的了解，并具有评估和实现生产中使用的各种扩展协议的必备知识。首先，这本书通过着重于 Wayland 的客户端来介绍其架构。此外，它也应该为 Wayland 混成器开发者提供一些实用的工具。</p>
 <p>自由桌面生态系统十分复杂，并且由许多分离的部分所组成。我们将很少讨论这些部分——在这里你将不会找到关于在 Wayland 混成器中利用 libdrm 或者 libinput 处理 evdev 事件的信息。因此这本书不是构建 Wayland 混成器的综合指南。我们也不会讨论到图像绘制技术，如 Cairo、Pango、GTK+ 等，尽管它们对于 Wayland 客户端来说十分有用。因此，对于实际的 Wayland 客户端实现而言，这也不是一个可靠的指南。相反，我们只专注于 Wayland 的细节。</p>
 <p>这本书只涵盖协议和 libwayland。如果你正在编写一个客户端，并且已经熟悉自己喜欢的 UI 渲染库，那么请带上自己的“像素”，我们将帮助您在 Wayland 上显示它们。如果你已经对操作混成器和输入设备所需的技术有所了解，那么本书将帮助您学习如何与客户端进行通信。</p>
+<h1 id="wayland-软件包内容"><a class="header" href="#wayland-软件包内容">Wayland 软件包内容</a></h1>
+<p>当你在遵循 freedesktop.org 规范的 Linux 发行版中安装 &quot;wayland&quot; 的时候，很可能最后得到  <code>libwayland-client</code>、<code>libwayland-server</code>、<code>wayland-scanner</code> 和 <code>wayland.xml</code> 这些文件。它们或分别位于 <code>/usr/lib</code>、<code>/usr/include</code>、<code>/usr/bin</code> 和 <code>/usr/share/wayland</code> 中。该软件包代表了 Wayland 协议最主流的实现，但这并不是唯一的。第三章详细介绍了 Wayland 的实现；这本书其余部分同样适用于任何实现。</p>
+<h2 id="waylandxml"><a class="header" href="#waylandxml">wayland.xml</a></h2>
+<p>Wayland 协议通过 XML 文件进行定义。如果定位到并在编辑器中打开了 &quot;wayland.xml&quot; 文件，你将会发现 Wayland 核心协议的 XML 规范。这是一个高级协议，它建立在我们在下一章将要讨论的线形协议之上。本书的大部分内容致力于解释该文件。</p>
+<h2 id="wayland-scanner"><a class="header" href="#wayland-scanner">wayland-scanner</a></h2>
+<p>&quot;wayland-scanner&quot; 工具被用于处理这些 XML 文件并生成对应代码，其最常用的实现正如你现在所见的 <code>wayland-scanner</code>，它可以用于从诸如 wayland.xml 之类的文件生成 C 头文件和上下文代码。在其它的编程语言中有对应的 scanner，如 wayland-rs (Rust)、waymonad-scanner (Haskell) 等。</p>
+<h2 id="libwayland-1"><a class="header" href="#libwayland-1">libwayland</a></h2>
+<p><code>libwayland-client</code> 和 <code>libwayland-server</code> 这两个库包含了一个双端通信线形协议的实现，提供了一些常用的实用工具来处理 Wayland 的数据结构、简单的事件循环等。此外，这些库还包含 <code>wayland-scanner</code> 生成的 Wayland 核心协议的预编译副本。</p>
 
                     </main>
 
