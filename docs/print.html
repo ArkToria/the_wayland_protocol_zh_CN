@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -232,7 +232,7 @@ by-path  card0  renderD128
 <h3 id="pixman"><a class="header" href="#pixman">pixman</a></h3>
 <p>这是一个客户端和混成器都使用的简单库，其可以有效的处理像素缓冲区，使用相交的矩形进行数学运算，以及执行其他类似的像素操作任务。</p>
 <h3 id="libwayland"><a class="header" href="#libwayland">libwayland</a></h3>
-<p>libwayland 是 Wayland 协议最常用的 C 语言实现，它处理许多底层的线形协议。同时也提供了一个从 Wayland 协议定义（XML 文件）生成高级代码的工具。我们将在第 1.3 章以及整本书中详细讨论 libwayland。</p>
+<p>libwayland 是 Wayland 协议最常用的 C 语言实现，它处理许多底层的线协议。同时也提供了一个从 Wayland 协议定义（XML 文件）生成高级代码的工具。我们将在第 1.3 章以及整本书中详细讨论 libwayland。</p>
 <h3 id="其他"><a class="header" href="#其他">其他</a></h3>
 <p>到目前为止，提到的每个部分在整个 Linux 桌面生态系统中都是一致的。而除此以外还有更多的组件。许多图形应用程序根本不了解 Wayland，而是选择诸如 GTK+、QT、SDL 和 GLFW 之类的库来进行处理。许多混成器选择像 wlroots 这样的软件来抽象它们所负责的部分，而其它的一类混成器则在内部实现所有功能。</p>
 <h1 id="目标和受众"><a class="header" href="#目标和受众">目标和受众</a></h1>
@@ -242,11 +242,57 @@ by-path  card0  renderD128
 <h1 id="wayland-软件包内容"><a class="header" href="#wayland-软件包内容">Wayland 软件包内容</a></h1>
 <p>当你在遵循 freedesktop.org 规范的 Linux 发行版中安装 &quot;wayland&quot; 的时候，很可能最后得到  <code>libwayland-client</code>、<code>libwayland-server</code>、<code>wayland-scanner</code> 和 <code>wayland.xml</code> 这些文件。它们或分别位于 <code>/usr/lib</code>、<code>/usr/include</code>、<code>/usr/bin</code> 和 <code>/usr/share/wayland</code> 中。该软件包代表了 Wayland 协议最主流的实现，但这并不是唯一的。第三章详细介绍了 Wayland 的实现；这本书其余部分同样适用于任何实现。</p>
 <h2 id="waylandxml"><a class="header" href="#waylandxml">wayland.xml</a></h2>
-<p>Wayland 协议通过 XML 文件进行定义。如果定位到并在编辑器中打开了 &quot;wayland.xml&quot; 文件，你将会发现 Wayland 核心协议的 XML 规范。这是一个高级协议，它建立在我们在下一章将要讨论的线形协议之上。本书的大部分内容致力于解释该文件。</p>
+<p>Wayland 协议通过 XML 文件进行定义。如果定位到并在编辑器中打开了 &quot;wayland.xml&quot; 文件，你将会发现 Wayland 核心协议的 XML 规范。这是一个高级协议，它建立在我们在下一章将要讨论的线协议之上。本书的大部分内容致力于解释该文件。</p>
 <h2 id="wayland-scanner"><a class="header" href="#wayland-scanner">wayland-scanner</a></h2>
 <p>&quot;wayland-scanner&quot; 工具被用于处理这些 XML 文件并生成对应代码，其最常用的实现正如你现在所见的 <code>wayland-scanner</code>，它可以用于从诸如 wayland.xml 之类的文件生成 C 头文件和上下文代码。在其它的编程语言中有对应的 scanner，如 wayland-rs (Rust)、waymonad-scanner (Haskell) 等。</p>
 <h2 id="libwayland-1"><a class="header" href="#libwayland-1">libwayland</a></h2>
-<p><code>libwayland-client</code> 和 <code>libwayland-server</code> 这两个库包含了一个双端通信线形协议的实现，提供了一些常用的实用工具来处理 Wayland 的数据结构、简单的事件循环等。此外，这些库还包含 <code>wayland-scanner</code> 生成的 Wayland 核心协议的预编译副本。</p>
+<p><code>libwayland-client</code> 和 <code>libwayland-server</code> 这两个库包含了一个双端通信线协议的实现，提供了一些常用的实用工具来处理 Wayland 的数据结构、简单的事件循环等。此外，这些库还包含 <code>wayland-scanner</code> 生成的 Wayland 核心协议的预编译副本。</p>
+<h1 id="协议设计"><a class="header" href="#协议设计">协议设计</a></h1>
+<p>Wayland 协议是由多层抽象结构所构建的。它从一个基本的线协议格式开始（该格式是可用事先约定好的接口解码的消息流），然后用更高级别的程序来枚举接口，创建符合这些接口的资源，以及交换相关信息，这便是 Wayland 协议及其扩展的内容。且最重要的是，我们拥有了一些更宽泛的模式，这些模式在 Wayland 协议设计中经常用到。我们将在本章节中介绍所有相关内容。</p>
+<p>让我们继续自下而上地学习。</p>
+<h1 id="基础线协议"><a class="header" href="#基础线协议">基础线协议</a></h1>
+<p><strong>注意：</strong> 如果你正打算使用 <code>libwayland</code>，那么本章节选读，可自由转跳到第 2.2 章节。</p>
+<p>线协议是由 32 位值所组成的流，使用主机的字节顺序进行编码（例如 x86 系列 CPU 上的小端序）。如下表示原始类型的值：</p>
+<ul>
+<li>int, uint: 32 位有符号或无符号整型</li>
+<li>fixed: 24 位整数 + 8 位小数的定点数</li>
+<li>object: 32 位对象 ID</li>
+<li>new_id: 32 位对象 ID，收到对象时分配</li>
+</ul>
+<p>除了上面这些基本类型之外，下面还有一些常用的类型：</p>
+<ul>
+<li>
+<p>string: 字符串，以 32 位整数为前缀，指定其长度（以字节为单位），而后是字符串内容和 NUL 终止符，并用未定义的数据填充满 32 位。没有指定编码，但实际上是使用 UTF-8。</p>
+</li>
+<li>
+<p>array: 任意的数据块，以 32 位整形作为前缀按位指定其长度，随后是数组逐字内容和 NUL 结束符，用未定义的数据填充不满 32 位长度的部分。</p>
+</li>
+<li>
+<p>fd: 主传输上的 0-bit 值，在 Unix 域套接字信息（msg_control）中使用辅助数据，将文件描述符从一段传输到另一端。</p>
+</li>
+<li>
+<p>enum: 一个单独的值（或者 bitmap）用于枚举已知常量，编码为 32 位整形。</p>
+</li>
+</ul>
+<h2 id="消息"><a class="header" href="#消息">消息</a></h2>
+<p>线协议是使用这些原语构建而成的消息流。每个消息都是对 object 起作用的一个事（服务端到客户端）件或者请求（客户端到服务端）。</p>
+<p>消息头由两个部分组成。第一个是起作用的对象 ID。第二个是两个 16 位值；高 16 位读音消息的大小（包括头本身），低 16 位事件或请求的操作码。其参数基于双方事先约定的消息签名。接收方查找对象 ID 以及由其操作码定义的事件或请求，以确定消息的签名和性质。</p>
+<table><thead><tr><th></th><th>msg header</th><th></th></tr></thead><tbody>
+<tr><td>object ID</td><td>msg size (upper 16bits)</td><td>code (lower 16bits)</td></tr>
+</tbody></table>
+<p>为了解析消息，客户端和服务端必须先创建对象。作为 Wayland 的显示单例已预先分配对象 ID，可用于引导其他对象。我们将在第四章中对此进行讨论，而下一章将讨论什么是接口，以及假设您已经协商了对象 ID 的情况下请求和事件是如何工作，下见后文。</p>
+<h2 id="对象-id"><a class="header" href="#对象-id">对象 ID</a></h2>
+<p>当消息带着 <code>new_id</code> 参数来的时候，发送方将为其分配一个对象 ID（用于该对象的接口是通过其他参数建立的，或者是针对该请求或事件预先约定的）。此对象 ID 可以用在后续消息中使用，作为信息头的第一个字或者 <code>object_id</code> 参数。客户端从 <code>1</code> 到 <code>0xFEFFFFFF</code> 范围内分配 ID，服务端在 <code>0xFF000000</code> 到 <code>0xFFFFFFFF</code> 内分配 ID。ID 从下限开始，并随着每次新对象的分配而递增。</p>
+<p>对象 ID 为 0 表示一个空对象；也就是说不存在对象或缺少显式声明。</p>
+<h2 id="传输"><a class="header" href="#传输">传输</a></h2>
+<p>迄今为止，所有已知的 Wayland 实现都工作在 Unix 域套接字上。尤其是出于一个原因而使用它：文件描述符消息。Unix 套接字是能够在进程之间传输文件描述符的最为实用的传输方式，并且对于大量数据传输而言是十分必要的（主要如键映射、像素缓冲和剪贴板内容）。从理论上讲，可以使用其他传输方式（如 TCP），但需要有人来找出另一种传输块数据的方式。</p>
+<p>要找到连接的 Unix 套接字，大多数实现只需要执行 libwayland 的操作：</p>
+<ol>
+<li>如果已经设置了 <code>WAYLAND_SOCKET</code>，则说明已经在其上建立了文件描述符编号，并假设父进程为我们配置了连接。</li>
+<li>如果已经设置了 <code>WAYLAND_DISPLAY</code>，则与 <code>XDG_RUNTIME_DIR</code> 路径连接以建立 Unix 套接字。</li>
+<li>假定套接字名称为 <code>wayland-0</code>，并与 <code>XDG_RUNTIME_DIR</code> 路径连接以建立套接字。</li>
+<li>建议放弃。</li>
+</ol>
 
                     </main>
 
