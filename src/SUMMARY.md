@@ -6,3 +6,4 @@
     - [Wayland 软件包内容](./1.Introduction/3.Whats_in_the_wayland_package.md)
 - [协议设计](./2.Protocol_design/index.md)
     - [基础线协议](./2.Protocol_design/1.wire_protocol_basics.md)
+    - [接口、请求和事件](./2.Protocol_design/2.interfaces_requests_events.md)

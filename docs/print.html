@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -293,6 +293,28 @@ by-path  card0  renderD128
 <li>假定套接字名称为 <code>wayland-0</code>，并与 <code>XDG_RUNTIME_DIR</code> 路径连接以建立 Unix 套接字。</li>
 <li>建议放弃。</li>
 </ol>
+<h1 id="接口请求和事件"><a class="header" href="#接口请求和事件">接口、请求和事件</a></h1>
+<p>Wayland 协议通过发出作用于对象的请求和事件来工作。每个对象都有一个接口，定义了可能的请求和事件以及对应的签名。让我们来考虑一个简单的示例接口：<code>wl_surface</code></p>
+<p><img src="2.Protocol_design/wl_surface.png" alt="wl_surface" /></p>
+<h2 id="请求"><a class="header" href="#请求">请求</a></h2>
+<p>表层是可以在屏幕上显示的像素区域。这是我们构建诸如窗口应用程序的原始方法之一。它的请求之一是“销毁”(damage)，客户端使用它来表示表层的某些部分已经更改并需要重新绘制。下面是一个销毁信息的注释示例：</p>
+<pre><code>0000000A    Object ID (10)
+00180002    Message length (24) and request opcode (2)
+00000000    X coordinate (int): 0
+00000000    Y coordinate (int): 0
+00000100    Width        (int): 256
+00000100    Height       (int): 256
+</code></pre>
+<p>这是会话的一小部分——表层是较早分配的，并且分配的 ID 为 <code>10</code>。当服务端接收到这一消息时，它会查找 ID 为 10 的对象，并发现它是一个 <code>wl_surface</code> 的实例。知道这一点后，它将使用操作码 <code>2</code> 查找请求的签名。然后知道它需要以四个整数作为参数，且可以解码该消息并将其分派以进行内部处理。</p>
+<h2 id="事件"><a class="header" href="#事件">事件</a></h2>
+<p>请求是对于客户端到服务端而言的，反之服务端可以给客户端发回送事件消息。服务端可以发送 <code>wl_surface</code> 的“输入”事件，当该表层在特定输出上显示时，服务端将发送该事件（客户端可以通过如调整 HiDPI 显示的比例系数来对此作出响应）</p>
+<pre><code>0000000A    Object ID (10)
+000C0000    Message length (12) and event opcode (0)
+00000005    Output (object ID): 5
+</code></pre>
+<p>该消息通过其 ID 引用了另一个对象：<code>wl_output</code>，该对象正用于表层显示。客户端收到此消息后与服务端行为类似：查找 ID 为 10 的对象，将其与 <code>wl_surface</code> 接口关联，并查找与操作码 <code>0</code> 对应事件的签名。它相应地解码其余信息（还查找 ID 为 <code>5</code> 的 <code>wl_output</code>），然后将其分派给内部处理。</p>
+<h2 id="接口"><a class="header" href="#接口">接口</a></h2>
+<p>接口用于事先定义请求和事件的列表，与每个请求相关联的操作码和解码消息所需的签名也都来自于其。我敢肯定你渴望知道如何实现接口——请看后文。</p>
 
                     </main>
 
