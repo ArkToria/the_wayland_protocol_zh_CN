@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的顶层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -195,7 +195,7 @@
 <h2 id="关于作者"><a class="header" href="#关于作者">关于作者</a></h2>
 <p>用 Drew 紧密合作者 Preston Carpenter 的话来说：</p>
 <p>Drew DeVault 从 <a href="https://swaywm.org/">sway</a>（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。</p>
-<h1 id="wayland-的顶层设计"><a class="header" href="#wayland-的顶层设计">Wayland 的顶层设计</a></h1>
+<h1 id="wayland-的上层设计"><a class="header" href="#wayland-的上层设计">Wayland 的上层设计</a></h1>
 <p>你的电脑有输入和输出设备，它们各自负责接收你的信息并将其显示给你。输入设备例如：</p>
 <ul>
 <li>键盘</li>
@@ -214,7 +214,7 @@
 <h2 id="内核部分"><a class="header" href="#内核部分">内核部分</a></h2>
 <p>这一责任落到了内核身上。内核是一头复杂的“野兽”，因此我们只关注与 Wayland 相关的部分。Linux 内核的任务是提供一个抽象的硬件，因此可以在用户态安全的访问它们，我们的 Wayland 混成器也同样运行在用户态。对于图形（称为 DRM 或直接渲染管理器 direct rendering manager）来说，可以在用户态有效地为 GPU 分配任务。DRM 另一个重要的子系统是 KMS（kernel mode setting），其用于枚举显示设备并为其设置属性，例如其选定的分辨率（也称为“模式”）。输入设备通过名为 evdev 的接口进行抽象。</p>
 <p>大多数内核接口都可以以特殊的设备文件形式存在于 <code>/dev</code> 供用户态调用。以 DRM 为例，这些文件位于 <code>/dev/dri/</code> 中，通常以主要节点 primary node（例如 card0）的形式进行特权操作（如模式设置），且以渲染节点 render node（如 renderD128）的形式进行非特权操作（如渲染或视频解码），而对于设备节点 device nodes 则为 <code>/dev/input/event*</code></p>
-<pre><code class="language-bash">$ ls /dev/dri/
+<pre><code class="language-shell">$ ls /dev/dri/
 by-path  card0  renderD128
 </code></pre>
 <h2 id="用户态"><a class="header" href="#用户态">用户态</a></h2>
@@ -315,6 +315,28 @@ by-path  card0  renderD128
 <p>该消息通过其 ID 引用了另一个对象：<code>wl_output</code>，该对象正用于表层显示。客户端收到此消息后与服务端行为类似：查找 ID 为 10 的对象，将其与 <code>wl_surface</code> 接口关联，并查找与操作码 <code>0</code> 对应事件的签名。它相应地解码其余信息（还查找 ID 为 <code>5</code> 的 <code>wl_output</code>），然后将其分派给内部处理。</p>
 <h2 id="接口"><a class="header" href="#接口">接口</a></h2>
 <p>接口用于事先定义请求和事件的列表，与每个请求相关联的操作码和解码消息所需的签名也都来自于其。我敢肯定你渴望知道如何实现接口——请看后文。</p>
+<h1 id="上层协议"><a class="header" href="#上层协议">上层协议</a></h1>
+<p>在第 1.3 章节我们提到：<code>wayland.xml</code> 可能与 Wayland 软件包一同被安装到你的操作系统上。立即找到并用你偏好的编辑器打开该文件。通过这样的文件，我们定义了 Wayland 客户端或服务端所支持的接口。</p>
+<pre><code class="language-shell">$ pacman -F wayland.xml
+    usr/share/wayland/wayland.xml
+</code></pre>
+<p>文件中定义了每个接口，以及对应的请求、事件和各自的签名。为此，我们使用了 XML 格式。让我们看看上一章中讨论过的 <code>wl_surface</code> 示例：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;request name=&quot;damage&quot;&gt;
+    &lt;arg name=&quot;x&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;y&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;width&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;height&quot; type=&quot;int&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;event name=&quot;enter&quot;&gt;
+    &lt;arg name=&quot;output&quot; type=&quot;object&quot; interface=&quot;wl_output&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><strong>注意：</strong> 为了简单起见，我已经对该代码进行了删减，但是如果你之前有找到 <code>wayland.xml</code> 文件（实际文件和上述示例略有不同），建议查找此接口并亲自检查一下——其中有额外的文档，这些文档解释了每个请求和事件的目的和精确的语义。</p>
+<p>在处理此 XML 文件时，我们为每个请求和事件分配一个操作码（按照它们出现的顺序，零号开始，依次递增）结合参数列表，你可以解码来自线协议中的请求和事件，并且基于 XML 文件中的文档，你可以决定如何对软件进行编程以对应相应的行为。这一部分代码通常来自于代码生成器，我们将在第 3 章中讨论 libwayland 如何实现这一点。</p>
+<p>而从第四章开始，本书其余大部分内容专门用于解释该文件以及一些补充的扩展协议。</p>
 
                     </main>
 
