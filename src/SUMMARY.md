@@ -12,3 +12,4 @@
 - [深入 libwayland](./3.The_libwayland_implementation/index.md)
     - [Wayland-util 原语](./3.The_libwayland_implementation/1.wayland-util_primitives.md)
     - [wayland-scanner](./3.The_libwayland_implementation/2.wayland-scanner.md)
+    - [代理与资源](./3.The_libwayland_implementation/3.proxies_and_resources.md)
