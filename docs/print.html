@@ -4,52 +4,30 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>The Wayland Protocol（自译中文版）</title>
-        
         <meta name="robots" content="noindex" />
-        
-        
-
-
         <!-- Custom HTML head -->
-        
-
-
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="一本介绍 Wayland 协议的书">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        
         <link rel="icon" href="favicon.svg">
-        
-        
         <link rel="shortcut icon" href="favicon.png">
-        
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
-        
         <link rel="stylesheet" href="css/print.css" media="print">
-        
-
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        
         <link rel="stylesheet" href="fonts/fonts.css">
-        
-
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
-
-        
         <!-- MathJax -->
         <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        
     </head>
     <body>
         <!-- Provide site root to javascript -->
@@ -100,7 +78,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -108,7 +86,6 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
@@ -125,33 +102,26 @@
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
-                        
                     </div>
 
                     <h1 class="menu-title">The Wayland Protocol（自译中文版）</h1>
 
                     <div class="right-buttons">
-                        
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        
-                        
                         <a href="https://github.com/axionl/the_wayland_protocol_zh_CN" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        
                     </div>
                 </div>
 
-                
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -159,8 +129,6 @@
                         </ul>
                     </div>
                 </div>
-                
-
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script type="text/javascript">
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
@@ -195,7 +163,7 @@
 <h2 id="关于作者"><a class="header" href="#关于作者">关于作者</a></h2>
 <p>用 Drew 紧密合作者 Preston Carpenter 的话来说：</p>
 <p>Drew DeVault 从 <a href="https://swaywm.org/">sway</a>（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。</p>
-<h1 id="wayland-的上层设计"><a class="header" href="#wayland-的上层设计">Wayland 的上层设计</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-的上层设计"><a class="header" href="#wayland-的上层设计">Wayland 的上层设计</a></h1>
 <p>你的电脑有输入和输出设备，它们各自负责接收你的信息并将其显示给你。输入设备例如：</p>
 <ul>
 <li>键盘</li>
@@ -235,11 +203,11 @@ by-path  card0  renderD128
 <p>libwayland 是 Wayland 协议最常用的 C 语言实现，它处理许多底层的线协议。同时也提供了一个从 Wayland 协议定义（XML 文件）生成高级代码的工具。我们将在第 1.3 章以及整本书中详细讨论 libwayland。</p>
 <h3 id="其他"><a class="header" href="#其他">其他</a></h3>
 <p>到目前为止，提到的每个部分在整个 Linux 桌面生态系统中都是一致的。而除此以外还有更多的组件。许多图形应用程序根本不了解 Wayland，而是选择诸如 GTK+、QT、SDL 和 GLFW 之类的库来进行处理。许多混成器选择像 wlroots 这样的软件来抽象它们所负责的部分，而其它的一类混成器则在内部实现所有功能。</p>
-<h1 id="目标和受众"><a class="header" href="#目标和受众">目标和受众</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="目标和受众"><a class="header" href="#目标和受众">目标和受众</a></h1>
 <p>我们的目标是让您从本书中了解到 Wayland 协议及其高级用法。您应该对 Wayland 核心协议中的所有内容有扎实的了解，并具有评估和实现生产中使用的各种扩展协议的必备知识。首先，这本书通过着重于 Wayland 的客户端来介绍其架构。此外，它也应该为 Wayland 混成器开发者提供一些实用的工具。</p>
 <p>自由桌面生态系统十分复杂，并且由许多分离的部分所组成。我们将很少讨论这些部分——在这里你将不会找到关于在 Wayland 混成器中利用 libdrm 或者 libinput 处理 evdev 事件的信息。因此这本书不是构建 Wayland 混成器的综合指南。我们也不会讨论到图像绘制技术，如 Cairo、Pango、GTK+ 等，尽管它们对于 Wayland 客户端来说十分有用。因此，对于实际的 Wayland 客户端实现而言，这也不是一个可靠的指南。相反，我们只专注于 Wayland 的细节。</p>
 <p>这本书只涵盖协议和 libwayland。如果你正在编写一个客户端，并且已经熟悉自己喜欢的 UI 渲染库，那么请带上自己的“像素”，我们将帮助您在 Wayland 上显示它们。如果你已经对操作混成器和输入设备所需的技术有所了解，那么本书将帮助您学习如何与客户端进行通信。</p>
-<h1 id="wayland-软件包内容"><a class="header" href="#wayland-软件包内容">Wayland 软件包内容</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-软件包内容"><a class="header" href="#wayland-软件包内容">Wayland 软件包内容</a></h1>
 <p>当你在遵循 freedesktop.org 规范的 Linux 发行版中安装 &quot;wayland&quot; 的时候，很可能最后得到  <code>libwayland-client</code>、<code>libwayland-server</code>、<code>wayland-scanner</code> 和 <code>wayland.xml</code> 这些文件。它们或分别位于 <code>/usr/lib</code>、<code>/usr/include</code>、<code>/usr/bin</code> 和 <code>/usr/share/wayland</code> 中。该软件包代表了 Wayland 协议最主流的实现，但这并不是唯一的。第三章详细介绍了 Wayland 的实现；这本书其余部分同样适用于任何实现。</p>
 <h2 id="waylandxml"><a class="header" href="#waylandxml">wayland.xml</a></h2>
 <p>Wayland 协议通过 XML 文件进行定义。如果定位到并在编辑器中打开了 &quot;wayland.xml&quot; 文件，你将会发现 Wayland 核心协议的 XML 规范。这是一个高级协议，它建立在我们在下一章将要讨论的线协议之上。本书的大部分内容致力于解释该文件。</p>
@@ -247,10 +215,10 @@ by-path  card0  renderD128
 <p>&quot;wayland-scanner&quot; 工具被用于处理这些 XML 文件并生成对应代码，其最常用的实现正如你现在所见的 <code>wayland-scanner</code>，它可以用于从诸如 wayland.xml 之类的文件生成 C 头文件和上下文代码。在其它的编程语言中有对应的 scanner，如 wayland-rs (Rust)、waymonad-scanner (Haskell) 等。</p>
 <h2 id="libwayland-1"><a class="header" href="#libwayland-1">libwayland</a></h2>
 <p><code>libwayland-client</code> 和 <code>libwayland-server</code> 这两个库包含了一个双端通信线协议的实现，提供了一些常用的实用工具来处理 Wayland 的数据结构、简单的事件循环等。此外，这些库还包含 <code>wayland-scanner</code> 生成的 Wayland 核心协议的预编译副本。</p>
-<h1 id="协议设计"><a class="header" href="#协议设计">协议设计</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="协议设计"><a class="header" href="#协议设计">协议设计</a></h1>
 <p>Wayland 协议是由多层抽象结构所构建的。它从一个基本的线协议格式开始（该格式是可用事先约定好的接口解码的消息流），然后用更高级别的程序来枚举接口，创建符合这些接口的资源，以及交换相关信息，这便是 Wayland 协议及其扩展的内容。且最重要的是，我们拥有了一些更宽泛的模式，这些模式在 Wayland 协议设计中经常用到。我们将在本章节中介绍所有相关内容。</p>
 <p>让我们继续自下而上地学习。</p>
-<h1 id="基础线协议"><a class="header" href="#基础线协议">基础线协议</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="基础线协议"><a class="header" href="#基础线协议">基础线协议</a></h1>
 <p><strong>注意：</strong> 如果你正打算使用 <code>libwayland</code>，那么本章节选读，可自由转跳到第 2.2 章节。</p>
 <p>线协议是由 32 位值所组成的流，使用主机的字节顺序进行编码（例如 x86 系列 CPU 上的小端序）。如下表示原始类型的值：</p>
 <ul>
@@ -293,7 +261,7 @@ by-path  card0  renderD128
 <li>假定套接字名称为 <code>wayland-0</code>，并与 <code>XDG_RUNTIME_DIR</code> 路径连接以建立 Unix 套接字。</li>
 <li>建议放弃。</li>
 </ol>
-<h1 id="接口请求和事件"><a class="header" href="#接口请求和事件">接口、请求和事件</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="接口请求和事件"><a class="header" href="#接口请求和事件">接口、请求和事件</a></h1>
 <p>Wayland 协议通过发出作用于对象的请求和事件来工作。每个对象都有一个接口，定义了可能的请求和事件以及对应的签名。让我们来考虑一个简单的示例接口：<code>wl_surface</code></p>
 <p><img src="2.Protocol_design/wl_surface.png" alt="wl_surface" /></p>
 <h2 id="请求"><a class="header" href="#请求">请求</a></h2>
@@ -315,7 +283,7 @@ by-path  card0  renderD128
 <p>该消息通过其 ID 引用了另一个对象：<code>wl_output</code>，该对象正用于表层显示。客户端收到此消息后与服务端行为类似：查找 ID 为 10 的对象，将其与 <code>wl_surface</code> 接口关联，并查找与操作码 <code>0</code> 对应事件的签名。它相应地解码其余信息（还查找 ID 为 <code>5</code> 的 <code>wl_output</code>），然后将其分派给内部处理。</p>
 <h2 id="接口"><a class="header" href="#接口">接口</a></h2>
 <p>接口用于事先定义请求和事件的列表，与每个请求相关联的操作码和解码消息所需的签名也都来自于其。我敢肯定你渴望知道如何实现接口——请看后文。</p>
-<h1 id="上层协议"><a class="header" href="#上层协议">上层协议</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="上层协议"><a class="header" href="#上层协议">上层协议</a></h1>
 <p>在第 1.3 章节我们提到：<code>wayland.xml</code> 可能与 Wayland 软件包一同被安装到你的操作系统上。立即找到并用你偏好的编辑器打开该文件。通过这样的文件，我们定义了 Wayland 客户端或服务端所支持的接口。</p>
 <pre><code class="language-shell">$ pacman -F wayland.xml
     usr/share/wayland/wayland.xml
@@ -337,7 +305,7 @@ by-path  card0  renderD128
 <p><strong>注意：</strong> 为了简单起见，我已经对该代码进行了删减，但是如果你之前有找到 <code>wayland.xml</code> 文件（实际文件和上述示例略有不同），建议查找此接口并亲自检查一下——其中有额外的文档，这些文档解释了每个请求和事件的目的和精确的语义。</p>
 <p>在处理此 XML 文件时，我们为每个请求和事件分配一个操作码（按照它们出现的顺序，零号开始，依次递增）结合参数列表，你可以解码来自线协议中的请求和事件，并且基于 XML 文件中的文档，你可以决定如何对软件进行编程以对应相应的行为。这一部分代码通常来自于代码生成器，我们将在第 3 章中讨论 libwayland 如何实现这一点。</p>
 <p>而从第四章开始，本书其余大部分内容专门用于解释该文件以及一些补充的扩展协议。</p>
-<h1 id="协议设计准则"><a class="header" href="#协议设计准则">协议设计准则</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="协议设计准则"><a class="header" href="#协议设计准则">协议设计准则</a></h1>
 <p>在大多数 Wayland 的协议设计中已经应用了一些关键性的概念，我们将在此简要介绍它们。在整个上层 Wayland 协议及其扩展协议中都可以找到这些准则（至少在 Wayland 协议中）。如果您正在编写自己当协议扩展，那么聪明的做法是借鉴这些准则。</p>
 <h2 id="原子性"><a class="header" href="#原子性">原子性</a></h2>
 <p>Wayland 协议设计中最重要的准则就是原子性。Wayland 的既定目标是“每一帧都是完美的”。为此，大多数接口都允许以事务的方式进行更新，使用多个请求来创建一个新的表示状态，然后一次性提交所有请求。例如，可以在 <code>wl_surface</code> 上配置几个属性：</p>
@@ -354,11 +322,11 @@ by-path  card0  renderD128
 <p>另一个重要的设计准则是：避免服务端和客户端向无效对象发送相关事件或请求。于此，通过接口定义的事件和请求具有有限的生命周期，服务端和客户端也可以通过接口对其进行显式释放。只有当两边都先后同意才能释放对象所分配的资源。</p>
 <p>Wayland 是一个完全异步的协议。它将保证消息按发送顺序送达，但仅仅针对一个发送者的情况。例如，当客户端决定销毁其键盘设备时，服务端可能会有多个输入事件正在排队。客户端必须正确处理不再需要的对象事件，直到服务端同步。同理，如果客户端在销毁对象前将一些不再需要的请求入队，则服务端必须以正确的顺序发送这些请求，以便在客户端同意销毁该对象后不再对其进行使用。</p>
 <h2 id="版本控制"><a class="header" href="#版本控制">版本控制</a></h2>
-<h1 id="关于-libwayland-的实现"><a class="header" href="#关于-libwayland-的实现">关于 libwayland 的实现</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="关于-libwayland-的实现"><a class="header" href="#关于-libwayland-的实现">关于 libwayland 的实现</a></h1>
 <p>我们在 1.3 节中介绍了 libwayland 这一最受欢迎的 Wayland 实现。本书的大部分内容适用于任何实现，但是接下来的两章将使你熟悉 libwayland。</p>
 <p>Wayland 软件包包括用于 Wayland-Client 和 Wayland-Server 的 pkg-config 规范——请参阅构建系统的文档以获取有关它们的链接介绍。当然，大多数应用程序只会连接到其中一个。该库包含一些简单的原语（如链表）和 Wayland 的核心协议 ——<code>Wayland.xml</code> 的预编译版本。</p>
 <p>我们将从原语开始介绍。</p>
-<h1 id="wayland-util-原语"><a class="header" href="#wayland-util-原语">Wayland-util 原语</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-util-原语"><a class="header" href="#wayland-util-原语">Wayland-util 原语</a></h1>
 <p><code>wayland-util.h</code> 是客户端和服务端共同使用的库，它定义了许多结构、实用函数和宏，建立了一些用于 Wayland 应用程序的原语。其中包括：</p>
 <ul>
 <li>生成用于 Wayland 协议消息结构化重组和解构的代码</li>
@@ -368,7 +336,7 @@ by-path  card0  renderD128
 <li>调试记录工具，收集来自 libwayland 内部传出的消息</li>
 </ul>
 <p>头文件包含了许多非常好的注解，您应该自己阅读该文件。在接下来的几页中我们将详细介绍如何运用这些原语。</p>
-<h1 id="wayland-scanner-1"><a class="header" href="#wayland-scanner-1">wayland-scanner</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-scanner-1"><a class="header" href="#wayland-scanner-1">wayland-scanner</a></h1>
 <p>Wayland 包中含有一个二进制文件：<code>wayland-scanner</code>。该工具基于 2.3 节中所提及的定义 Wayland 协议的 XML 文件来生成 C 头文件和对应的胶水代码。生成的头文件为 <code>wayland-client-protocol.h</code> 和 <code>wayland-server-protocol.h</code>，此外通常还包括对协议进行封装的头文件 <code>wayland-client.h</code> 和 <code>wayland-server.h</code> ，而不是直接使用它们。</p>
 <p>该工具的用法非常简单（并可以在 <code>wayland-scanner -h</code> 看到用法总结），但仍可概述如下：</p>
 <ul>
@@ -388,7 +356,7 @@ by-path  card0  renderD128
 </code></pre>
 <p>不同的构建系统将使用不同的方法来自定义命令——请查阅构建系统的文档。一般来说，您将需要在构建时运行 <code>wayland-scanner</code>，然后编译并将你的应用程序链接到胶水代码。</p>
 <p>如果你方便的话可以立即尝试任意的 Wayland 协议（示例 <code>wayland.xml</code> 可能在 <code>/usr/share/wayland</code>）。打开胶水代码和头文件，并在阅读下面的章节时进行参考，以了解 <code>libwayland</code> 提供的原语在生成的代码中如何实际应用。</p>
-<h1 id="代理与资源"><a class="header" href="#代理与资源">代理与资源</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="代理与资源"><a class="header" href="#代理与资源">代理与资源</a></h1>
 <p>对象是客户端和服务端都知道的具有某种状态的实体，通过线协议协商来对其进行更改。在客户端，<code>libwayland</code> 通过 <code>wl_proxy</code> 接口引用这些对象。这些接口是对 C 语言友好的，是抽象对象的具体“代理”，并为客户端提供了间接函数，以将请求编组转化为线协议格式。如果你查看 <code>wayland-client.core.h</code> 文件，会发现一些实现该目的的底层函数。而通常你不会直接使用它们。</p>
 <pre><code class="language-c">// /usr/include/wayland-client-core.h
 // ...
@@ -399,57 +367,109 @@ struct wl_proxy * wl_proxy_create(struct wl_proxy *factory, const struct wl_inte
 </code></pre>
 <p>在服务端，对象是通过 <code>wl_resource</code> 抽象的，这与客户端非常相似，但另有更复杂的内容——服务端必须跟踪哪个对象属于哪个客户端。每个 <code>wl_resource</code> 均由单个客户端所有。除此之外，该这两个接口基本相同，并且为编组事件发送到关联的客户端提供了底层的抽象。与直接在客户端上使用 <code>wl_proxy</code> 相比，直接在服务端上使用 <code>wl_resource</code> 的频率更高。这种用法的一个例子是获取对 <code>wl_client</code> 的引用，该 <code>wl_client</code> 拥有你所在上下文之外的操作资源，或者在客户端尝试无效操作的时候发送协议错误。</p>
 <p>此外还有另一组高级接口，大多数 Wayland 客户端和服务端的代码都与之交互以完成其大部分任务。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="接口与监听器"><a class="header" href="#接口与监听器">接口与监听器</a></h1>
+<p>终于，我们到达了 libwayland 抽象的顶层：接口和监听器。这一想法在先前的 wl_proxy, wl_resource 和原语一章中提到过，它们是 libwayland 中的单一实现，为这一层提供支持。当你通过 wayland-scanner 运行一个 XML 文件，它会生成接口和监听器，以及它们与底层接口之间的胶水代码，所有具体的实现都在包含高级协议所定义的每个接口中。</p>
+<p>回想一下，Wayland 连接上的每个参与者都可以接受和发送消息。客户端监听事件并发送请求，服务端监听请求并发送事件。各方都使用特定名称的 wl_listener 监听另一方的消息。下面是这个接口的一个例子：</p>
+<blockquote>
+<p>译者注：surface 有多重含义，但就 wayland 的使用场景来说往往指代窗口上的内容，而 shell surface 实际上就指代传统意义上的窗口。下面这个监听器包含进入和离开事件</p>
+</blockquote>
+<pre><code class="language-c">struct wl_surface_listener {
+	/** surface enters an output */
+	void (*enter)(void *data,
+		      struct wl_surface *wl_surface,
+		      struct wl_output *output);
+
+	/** surface leaves an output */
+	void (*leave)(void *data,
+		      struct wl_surface *wl_surface,
+		      struct wl_output *output);
+};
+</code></pre>
+<p>这是客户端 wl_surface 对应的监听器。wayland-scanner 生成要用到的 XML 文件如下：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;event name=&quot;enter&quot;&gt;
+    &lt;arg name=&quot;output&quot;
+      type=&quot;object&quot;
+      interface=&quot;wl_output&quot;/&gt;
+  &lt;/event&gt;
+
+  &lt;event name=&quot;leave&quot;&gt;
+    &lt;arg name=&quot;output&quot;
+      type=&quot;object&quot;
+      interface=&quot;wl_output&quot;/&gt;
+  &lt;/event&gt;
+  &lt;!-- additional details omitted for brevity --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>这下清楚了这些事件是如何构成一个监听接口的。每个函数指针接受任意一些用户数据，以及对所属资源的引用和该事件的参数，我们可以像这样将监听器绑定到 wl_surface：</p>
+<blockquote>
+<p>listener 结构体内带有对应的函数指针，将 listener 添加到 surface</p>
+</blockquote>
+<pre><code class="language-c">static void wl_surface_enter(void *data,
+        struct wl_surface *wl_surface, struct wl_output *output) {
+    // ...
+}
+
+static void wl_surface_leave(void *data,
+        struct wl_surface *wl_surface, struct wl_output *output) {
+    // ...
+}
+
+static const struct wl_surface_listener surface_listener = {
+    .enter = wl_surface_enter,
+    .leave = wl_surface_leave,
+};
+
+// ...cotd...
+
+struct wl_surface *surf;
+wl_surface_add_listener(surf, &amp;surface_listener, NULL);
+</code></pre>
+<p>wl_surface 接口也为客户端定义了一些可用的请求：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;request name=&quot;attach&quot;&gt;
+    &lt;arg name=&quot;buffer&quot;
+      type=&quot;object&quot;
+      interface=&quot;wl_buffer&quot;
+      allow-null=&quot;true&quot;/&gt;
+    &lt;arg name=&quot;x&quot; type=&quot;int&quot;/&gt;
+    &lt;arg name=&quot;y&quot; type=&quot;int&quot;/&gt;
+  &lt;/request&gt;
+  &lt;!-- additional details omitted for brevity --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>wayland-scanner 生成以下原型，以及编组此消息的胶水代码。</p>
+<pre><code class="language-c">void wl_surface_attach(struct wl_surface *wl_surface,
+    struct wl_buffer *buffer, int32_t x, int32_t y);
+</code></pre>
+<p>接口和监听器的服务端代码是相同的，不同的是它为请求生成监听器而为事件生成代码。当 libwayland 受到一条消息时，它会查找对象 ID 及其接口，然后使用它来解码消息的剩余部分。再在对象上寻找监听器并用消息的参数来调用你的函数。（传入的函数指针）</p>
+<p>这便是它的全貌了！我们用了几个抽象层才到达这一步，因此你现在应该了解一个事件是如何从你的服务端代码开始，在线路上变成一条消息，再到被客户端解读，并被分派到你的客户端代码。然而，还有一个未解决的问题。所有这些都假设你已经拥有了对 Wayland 对象的引用，而它又是如何得到的呢？</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
-
-                        
-
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-
-                
             </nav>
 
         </div>
 
-        
-
-        
-
-        
-
-        
         <script type="text/javascript">
             window.playground_copyable = true;
         </script>
-        
-
-        
-
-        
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-
         <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        
-
-        
-        
         <script type="text/javascript">
         window.addEventListener('load', function() {
             MathJax.Hub.Register.StartupHook('End', function() {
@@ -457,8 +477,5 @@ struct wl_proxy * wl_proxy_create(struct wl_proxy *factory, const struct wl_inte
             });
         });
         </script>
-        
-        
-
     </body>
 </html>
