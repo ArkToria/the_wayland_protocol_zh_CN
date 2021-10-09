@@ -1,5 +1,7 @@
 # The Wayland Protocol（自译中文版）
 
+![banner](./src/banner.png)
+
 ## 说明
 > 阅读地址：https://wayland.axionl.me/
 
