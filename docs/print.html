@@ -508,7 +508,7 @@ Connection established!
 <p><code>wl_display_connect</code> 是客户端建立 Wayland 连接最常见的方式，其声明如下：</p>
 <pre><code class="language-cpp">struct wl_display *wl_display_connect(const char *name);
 </code></pre>
-<p>参数 <code>name</code> 是 Wayland 显示服务的名称，通常是 &quot;wayland-0&quot;（可以通过 <code>$WAYLAND_DISPLAY</code> 环境变量查看）。你可以在我们的测试客户端中把 <code>NULL</code> 换成这个，然后自己试试——这很可能是可行的。这与 <code>$XDG_RUNTIME_DIR</code> 中的 Unix 套接字的名称相对应。但是 <code>NULL</code> 是推荐选项，如果选用，<code>libwyaland</code> 会有如下操作：</p>
+<p>参数 <code>name</code> 是 Wayland 显示服务的名称，通常是 &quot;wayland-0&quot;（可以通过 <code>$WAYLAND_DISPLAY</code> 环境变量查看）。你可以在我们的测试客户端中把 <code>NULL</code> 换成这个，然后自己试试——这很可能是可行的。这与 <code>$XDG_RUNTIME_DIR</code> 中的 Unix 套接字的名称相对应。但是 <code>NULL</code> 是推荐选项，如果选用，<code>libwayland</code> 会有如下操作：</p>
 <ul>
 <li>
 <ol>
@@ -566,7 +566,7 @@ Running Wayland display on wayland-1
 $ WAYLAND_DISPLAY=wayland-1 ./client
 Connection established!
 </code></pre>
-<p>使用 <code>wl_display_add_socket_auto</code> 将会允许 <code>libwyaland</code> 自动决定显示服务的名称，默认为 <code>wayland-0</code>，或者 <code>wayland-$n</code>，这取决于是否有其他的 Wayland 混成器在 <code>$XDG_RUNTIME_DIR</code> 中存有套接字。然而，与客户端一样，你还有一些其他的选项来配置显示服务：</p>
+<p>使用 <code>wl_display_add_socket_auto</code> 将会允许 <code>libwayland</code> 自动决定显示服务的名称，默认为 <code>wayland-0</code>，或者 <code>wayland-$n</code>，这取决于是否有其他的 Wayland 混成器在 <code>$XDG_RUNTIME_DIR</code> 中存有套接字。然而，与客户端一样，你还有一些其他的选项来配置显示服务：</p>
 <pre><code class="language-cpp">int wl_display_add_socket(struct wl_display *display, const char *name);
 
 int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
