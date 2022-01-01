@@ -15,3 +15,4 @@
     - [代理与资源](./3.The_libwayland_implementation/3.proxies_and_resources.md)
     - [接口和监听](./3.The_libwayland_implementation/4.interfaces_and_listeners.md)
 - [Wayland 显示](./4.The_Wayland_display/index.md)
+    - [创建显示](./4.The_Wayland_display/1.Creating_a_display.md)
