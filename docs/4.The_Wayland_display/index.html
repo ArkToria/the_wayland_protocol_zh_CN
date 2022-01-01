@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>介绍 - The Wayland Protocol（自译中文版）</title>
+        <title>Wayland 显示 - The Wayland Protocol（自译中文版）</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="一本介绍 Wayland 协议的书">
@@ -77,7 +77,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html" class="active"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html" class="active"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -139,36 +139,48 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p><img src="banner.png" alt="banner" /></p>
-<h1 id="介绍"><a class="header" href="#介绍">介绍</a></h1>
-<p>Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 系统的下一代显示服务。并自称是将应用程序窗口显示在用户屏幕上的最佳方法。过去曾经使用过 X11 的读者会对 Wayland 的改进感到惊喜，而 Unix 上的图形新手将发现它是一个灵活而强大的系统，可用于构建图形应用程序和桌面。</p>
-<p>这本书将会帮助您深入理解 Wayland 的概念、设计和实现，并为您提供构建自行构建 Wayland 客户端和服务端所需的工具。在阅读过程中，我们将构建 Wayland 的理想模型，并建立对其原理的认知。在这本书中，你能发现许多令你恍然大悟的时刻，Wayland 直观的设计让选择变得更加明确，有利于保持顺畅的阅读体验。欢迎来到开源图形的未来！</p>
-<p><strong>注意：</strong> 这还只是草案。第一到第十章基本已完成，可能后续会有所更新。第十一章及后续内容大部分有待撰写。</p>
-<h3 id="todo"><a class="header" href="#todo">TODO</a></h3>
-<ul>
-<li>Expand on resource lifetimes and avoiding race conditions in chapter 2.4</li>
-<li>Move linux-dmabuf details to the appendix, add note about wl_drm &amp; Mesa</li>
-<li>Rewrite the introduction text</li>
-<li>Add example code for interactive move, to demonstrate the use of serials</li>
-<li>Use — instead of - where appropriate</li>
-<li>Prepare PDFs and EPUBs</li>
-</ul>
-<h2 id="关于这本书"><a class="header" href="#关于这本书">关于这本书</a></h2>
-<p>本书采用 <a href="https://github.com/rust-lang/mdBook">mdbook</a> 构建，译者翻译水平有限，疑问请自寻原书解答，许可同源。</p>
-<p>自译项目地址：<a href="https://github.com/axionl/the_wayland_protocol_zh_CN">repo</a></p>
-<p>原书：<a href="https://wayland-book.com/introduction.html">https://wayland-book.com</a></p>
-<p>许可：<a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p>
-<p>源码：<a href="https://git.sr.ht/%7Esircmpwn/wayland-book">repo</a></p>
-<h2 id="关于作者"><a class="header" href="#关于作者">关于作者</a></h2>
-<p>用 Drew 紧密合作者 Preston Carpenter 的话来说：</p>
-<p>Drew DeVault 从 <a href="https://swaywm.org/">sway</a>（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。</p>
+                        <h1 id="wayland-显示"><a class="header" href="#wayland-显示">Wayland 显示</a></h1>
+<p>截至目前，我们已经解释了 Wayland 协议如何在客户端和服务端中通过对象管理节点所有权，但还留下了一个重要的细节：如何在一开始创建这些对象。Wayland 的显示服务或默认的 <code>wl_display</code> 实现隐含在每个 Wayland 连接内。它通常有如下接口：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;sync&quot;&gt;
+    &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot;
+       summary=&quot;callback object for the sync request&quot;/&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;get_registry&quot;&gt;
+    &lt;arg name=&quot;registry&quot; type=&quot;new_id&quot; interface=&quot;wl_registry&quot;
+      summary=&quot;global registry object&quot;/&gt;
+  &lt;/request&gt;
+
+  &lt;event name=&quot;error&quot;&gt;
+    &lt;arg name=&quot;object_id&quot; type=&quot;object&quot; summary=&quot;object where the error occurred&quot;/&gt;
+    &lt;arg name=&quot;code&quot; type=&quot;uint&quot; summary=&quot;error code&quot;/&gt;
+    &lt;arg name=&quot;message&quot; type=&quot;string&quot; summary=&quot;error description&quot;/&gt;
+  &lt;/event&gt;
+
+  &lt;enum name=&quot;error&quot;&gt;
+    &lt;entry name=&quot;invalid_object&quot; value=&quot;0&quot; /&gt;
+    &lt;entry name=&quot;invalid_method&quot; value=&quot;1&quot; /&gt;
+    &lt;entry name=&quot;no_memory&quot; value=&quot;2&quot; /&gt;
+    &lt;entry name=&quot;implementation&quot; value=&quot;3&quot; /&gt;
+  &lt;/enum&gt;
+
+  &lt;event name=&quot;delete_id&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;uint&quot; summary=&quot;deleted object ID&quot;/&gt;
+  &lt;/event&gt;
+  &lt;!-- event 相当于接口的声明，其内部指定了变量名称，类型和说明 --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>对于大多数 Wayland 用户来说，最有趣的接口是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。简而言之，注册函数是用来分配其他对象的。其他的接口用于连接的状态维护，并且除非你正在写你自己的 libwayland 替代，否则这通常不重要。</p>
+<p>相反，本章节将重点讨论 libwayland 与 wl_display 对象相关的一些函数，用于建立和维护你与 Wayland 的连接。这些函数是用来操作 libwayland 内部状态的，而不是直接与线性协议请求和事件相关。</p>
+<p>我们将从这些函数中最重要的部分开始：建立显示服务。对于客户端来说，这将涵盖到连接服务器的实际过程。而对于服务端来说，则是为客户端连接配置显示服务的过程。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="../1.Introduction/1.High-level_Wayland_Design.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -176,8 +188,8 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="../1.Introduction/1.High-level_Wayland_Design.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="prev" href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
             </nav>
 
