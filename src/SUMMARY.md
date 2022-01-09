@@ -16,3 +16,4 @@
     - [接口和监听](./3.The_libwayland_implementation/4.interfaces_and_listeners.md)
 - [Wayland 显示](./4.The_Wayland_display/index.md)
     - [创建显示](./4.The_Wayland_display/1.Creating_a_display.md)
+    - [加入一个事件循环](./4.The_Wayland_display/2.Incorporating_an_event_loop.md)
