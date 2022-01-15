@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Wayland 显示 - The Wayland Protocol（自译中文版）</title>
+        <title>使用 wl_compositor - The Wayland Protocol（自译中文版）</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="一本介绍 Wayland 协议的书">
@@ -77,7 +77,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html" class="active"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/index.html"><strong aria-hidden="true">6.</strong> 缓冲区和表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/1.Use_wl_compositor.html"><strong aria-hidden="true">6.1.</strong> 使用 wl_compositor</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/index.html"><strong aria-hidden="true">6.</strong> 缓冲区和表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/1.Use_wl_compositor.html" class="active"><strong aria-hidden="true">6.1.</strong> 使用 wl_compositor</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -139,51 +139,46 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="wayland-显示"><a class="header" href="#wayland-显示">Wayland 显示</a></h1>
-<p>截至目前，我们已经解释了 Wayland 协议如何在客户端和服务端中通过对象管理节点所有权，但还留下了一个重要的细节：如何在一开始创建这些对象。Wayland 的显示服务或默认的 <code>wl_display</code> 实现隐含在每个 Wayland 连接内。它通常有如下接口：</p>
-<pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
-  &lt;request name=&quot;sync&quot;&gt;
-    &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot;
-       summary=&quot;callback object for the sync request&quot;/&gt;
-  &lt;/request&gt;
+                        <h1 id="使用-wl_compositor"><a class="header" href="#使用-wl_compositor">使用 wl_compositor</a></h1>
+<p>有人说给事物命名是计算机科学中最为复杂的问题之一，而在这也是如此，并且证据确凿。<code>wl_compositor</code> 是全局的混成器，也是混成器的一部分。通过这个接口，你可以向服务端发送你要展示的窗口，以便与旁边其他的窗口进行混成。混成器有两项工作：创建表面和区域。</p>
+<p>此处引用规范来介绍：一个 Wayland 表面有一个矩形区域，可以显示在 0 号（默认显示器）或者更多的输出设备上，递交缓冲区，接受用户输入，并定义一个相对坐标系。我们将在后期详细讨论这些问题，但从最根本的部分开始：获得一个表面并为其强加缓冲区。要获得一个表面，首先我们要自己的混成器绑定到全局 <code>wl_compositor</code>。通过扩展 5.1 章的例子，我们可以得到如下结果：</p>
+<pre><code class="language-c">struct our_state {
+    // ...
+    struct wl_compositor *compositor;
+    // ...
+};
 
-  &lt;request name=&quot;get_registry&quot;&gt;
-    &lt;arg name=&quot;registry&quot; type=&quot;new_id&quot; interface=&quot;wl_registry&quot;
-      summary=&quot;global registry object&quot;/&gt;
-  &lt;/request&gt;
+static void
+registry_handle_global(void *data, struct wl_registry *wl_registry,
+		uint32_t name, const char *interface, uint32_t version)
+{
+    struct our_state *state = data;
+    if (strcmp(interface, wl_compositor_interface.name) == 0) {
+        state-&gt;compositor = wl_registry_bind(
+            wl_registry, name, &amp;wl_compositor_interface, 4);
+    }
+}
 
-  &lt;event name=&quot;error&quot;&gt;
-    &lt;arg name=&quot;object_id&quot; type=&quot;object&quot; summary=&quot;object where the error occurred&quot;/&gt;
-    &lt;arg name=&quot;code&quot; type=&quot;uint&quot; summary=&quot;error code&quot;/&gt;
-    &lt;arg name=&quot;message&quot; type=&quot;string&quot; summary=&quot;error description&quot;/&gt;
-  &lt;/event&gt;
-
-  &lt;enum name=&quot;error&quot;&gt;
-    &lt;entry name=&quot;invalid_object&quot; value=&quot;0&quot; /&gt;
-    &lt;entry name=&quot;invalid_method&quot; value=&quot;1&quot; /&gt;
-    &lt;entry name=&quot;no_memory&quot; value=&quot;2&quot; /&gt;
-    &lt;entry name=&quot;implementation&quot; value=&quot;3&quot; /&gt;
-  &lt;/enum&gt;
-
-  &lt;event name=&quot;delete_id&quot;&gt;
-    &lt;arg name=&quot;id&quot; type=&quot;uint&quot; summary=&quot;deleted object ID&quot;/&gt;
-  &lt;/event&gt;
-  &lt;!-- event 相当于接口的声明，其内部指定了变量名称，类型和说明 --&gt;
-&lt;/interface&gt;
+int
+main(int argc, char *argv[])
+{
+    struct our_state state = { 0 };
+    // ...
+    wl_registry_add_listener(registry, &amp;registry_listener, &amp;state);
+    // ...
+}
 </code></pre>
-<p>对于大多数 Wayland 用户来说，最有趣的接口是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。简而言之，注册函数是用来分配其他对象的。其他的接口用于连接的状态维护，并且除非你正在写你自己的 libwayland 替代，否则这通常不重要。</p>
-<p>相反，本章节将重点讨论 libwayland 与 wl_display 对象相关的一些函数，用于建立和维护你与 Wayland 的连接。这些函数是用来操作 libwayland 内部状态的，而不是直接与线性协议请求和事件相关。</p>
-<p>我们将从这些函数中最重要的部分开始：建立显示服务。对于客户端来说，这将涵盖到连接服务器的实际过程。而对于服务端来说，则是为客户端连接配置显示服务的过程。</p>
+<p>注意，我们在调用 <code>wl_registry_bind</code> 时指定了版本 4，这是写作时的最新版本。有了这个引用的保证，我们就可以创建一个 <code>wl_surface</code>。</p>
+<pre><code class="language-c">struct wl_surface *surface = wl_compositor_create_surface(state.compositor);
+</code></pre>
+<p>在我们能够显示它之前，我们必须首先给它附加一个像素源：一个 <code>wl_buffer</code>。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../6.Buffers_and_surfaces/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="../4.The_Wayland_display/1.Creating_a_display.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -191,11 +186,8 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../6.Buffers_and_surfaces/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="../4.The_Wayland_display/1.Creating_a_display.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

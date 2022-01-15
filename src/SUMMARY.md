@@ -20,4 +20,5 @@
 - [全局和注册](./5.Globals_and_the_registry/index.md)
     - [绑定到全局](./5.Globals_and_the_registry/1.Binding_to_globals.md)
     - [注册全局对象](./5.Globals_and_the_registry/2.Registering_globals.md)
-- [缓存和曲面](./6.Buffers_and_surfaces/index.md)
+- [缓冲区和表面](./6.Buffers_and_surfaces/index.md)
+    - [使用 wl_compositor](./6.Buffers_and_surfaces/1.Use_wl_compositor.md)
