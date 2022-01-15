@@ -20,3 +20,4 @@
 - [全局和注册](./5.Globals_and_the_registry/index.md)
     - [绑定到全局](./5.Globals_and_the_registry/1.Binding_to_globals.md)
     - [注册全局对象](./5.Globals_and_the_registry/2.Registering_globals.md)
+- [缓存和曲面](./6.Buffers_and_surfaces/index.md)

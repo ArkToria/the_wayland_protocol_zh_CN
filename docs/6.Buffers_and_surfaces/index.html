@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Wayland-util 原语 - The Wayland Protocol（自译中文版）</title>
+        <title>缓存和曲面 - The Wayland Protocol（自译中文版）</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="一本介绍 Wayland 协议的书">
@@ -77,7 +77,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html" class="active"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/index.html"><strong aria-hidden="true">6.</strong> 缓存和曲面</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/index.html" class="active"><strong aria-hidden="true">6.</strong> 缓存和曲面</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -139,26 +139,16 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="wayland-util-原语"><a class="header" href="#wayland-util-原语">Wayland-util 原语</a></h1>
-<p><code>wayland-util.h</code> 是客户端和服务端共同使用的库，它定义了许多结构、实用函数和宏，建立了一些用于 Wayland 应用程序的原语。其中包括：</p>
-<ul>
-<li>生成用于 Wayland 协议消息结构化重组和解构的代码</li>
-<li>链表 <code>wl_list</code> 的实现</li>
-<li>数组 <code>wl_array</code> 的实现（装配到相应的 Wayland 原语）</li>
-<li>用于 Wayland 标量（如定点小数）和 C 类型转化的实用程序</li>
-<li>调试记录工具，收集来自 libwayland 内部传出的消息</li>
-</ul>
-<p>头文件包含了许多非常好的注解，您应该自己阅读该文件。在接下来的几页中我们将详细介绍如何运用这些原语。</p>
+                        <h1 id="缓存和曲面"><a class="header" href="#缓存和曲面">缓存和曲面</a></h1>
+<p>显然，这个系统的全部意义在于向用户显示信息，并接收他们的反馈以进行额外处理。在这一章，我们将会探讨这些任务其中之一：在屏幕上显示像素。</p>
+<p>为实现这一目的，我们有两个基本概念需要了解：缓冲区和曲面，分别由 <code>wl_buffer</code> 和 <code>wl_surface</code> 接口管理。缓冲区作为一些底层像素的存储，并且由客户端来提供一些实现方法——共享内存缓冲区和 GPU 句柄是最为常见的方法。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../3.The_libwayland_implementation/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../5.Globals_and_the_registry/2.Registering_globals.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="../3.The_libwayland_implementation/2.wayland-scanner.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -166,11 +156,8 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../3.The_libwayland_implementation/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../5.Globals_and_the_registry/2.Registering_globals.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="../3.The_libwayland_implementation/2.wayland-scanner.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
