@@ -22,3 +22,4 @@
     - [注册全局对象](./5.Globals_and_the_registry/2.Registering_globals.md)
 - [缓冲区和表面](./6.Buffers_and_surfaces/index.md)
     - [使用 wl_compositor](./6.Buffers_and_surfaces/1.Use_wl_compositor.md)
+    - [共享内存缓冲区](./6.Buffers_and_surfaces/2.Shared_memory_buffers.md)
