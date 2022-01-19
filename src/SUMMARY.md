@@ -24,3 +24,4 @@
     - [使用 wl_compositor](./6.Buffers_and_surfaces/1.Use_wl_compositor.md)
     - [共享内存缓冲区](./6.Buffers_and_surfaces/2.Shared_memory_buffers.md)
     - [Linux dmabuf](./6.Buffers_and_surfaces/3.Linux_dmabuf.md)
+    - [表面的 “角色”](./6.Buffers_and_surfaces/4.Surface_roles.md)
