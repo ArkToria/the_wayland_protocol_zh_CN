@@ -26,3 +26,4 @@
     - [Linux dmabuf](./6.Buffers_and_surfaces/3.Linux_dmabuf.md)
     - [表面的 “角色”](./6.Buffers_and_surfaces/4.Surface_roles.md)
 - [XDG shell 基础](./7.XDG_shell_basics/index.md)
+    - [XDG surfaces](./7.XDG_shell_basics/1.XDG_surfaces.md)
