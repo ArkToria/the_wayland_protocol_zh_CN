@@ -25,3 +25,4 @@
     - [共享内存缓冲区](./6.Buffers_and_surfaces/2.Shared_memory_buffers.md)
     - [Linux dmabuf](./6.Buffers_and_surfaces/3.Linux_dmabuf.md)
     - [表面的 “角色”](./6.Buffers_and_surfaces/4.Surface_roles.md)
+- [XDG shell 基础](./7.XDG_shell_basics/index.md)
