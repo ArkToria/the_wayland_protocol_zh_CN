@@ -27,3 +27,5 @@
     - [表面的 “角色”](./6.Buffers_and_surfaces/4.Surface_roles.md)
 - [XDG shell 基础](./7.XDG_shell_basics/index.md)
     - [XDG surfaces](./7.XDG_shell_basics/1.XDG_surfaces.md)
+    - [应用程序窗口](./7.XDG_shell_basics/2.Application_windows.md)
+    - [扩展示例代码](./7.XDG_shell_basics/3.Extended_example_code.md)
