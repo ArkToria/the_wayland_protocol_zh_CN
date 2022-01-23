@@ -31,3 +31,4 @@
     - [扩展示例代码](./7.XDG_shell_basics/3.Extended_example_code.md)
 - [深入理解表面](./8.Surfaces_in_depth/index.md)
     - [表面的生命周期](./8.Surfaces_in_depth/1.Surface_lifecycle.md)
+    - [帧回调](./8.Surfaces_in_depth/2.Frame_callbacks.md)
