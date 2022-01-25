@@ -32,3 +32,5 @@
 - [深入理解表面](./8.Surfaces_in_depth/index.md)
     - [表面的生命周期](./8.Surfaces_in_depth/1.Surface_lifecycle.md)
     - [帧回调](./8.Surfaces_in_depth/2.Frame_callbacks.md)
+    - [损坏表面](./8.Surfaces_in_depth/3.Damaging_surfaces.md)
+    - [表面区域](./8.Surfaces_in_depth/4.Surface_regions.md)
