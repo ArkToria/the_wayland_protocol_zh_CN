@@ -37,3 +37,4 @@
     - [子表面](./8.Surfaces_in_depth/5.Subsurfaces.md)
     - [高分辨率表面](./8.Surfaces_in_depth/6.High_density_surfaces.md)
 - [Seats: 处理输入](./9.Seats_handling_input/index.md)
+    - [光标指针输入](./9.Seats_handling_input/1.Pointer_input.md)
