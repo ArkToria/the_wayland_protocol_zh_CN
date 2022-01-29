@@ -39,3 +39,4 @@
 - [Seats: 处理输入](./9.Seats_handling_input/index.md)
     - [光标指针输入](./9.Seats_handling_input/1.Pointer_input.md)
     - [XKB 简介](./9.Seats_handling_input/2.XKB_briefly.md)
+    - [键盘输入](./9.Seats_handling_input/3.Keyboard_input.md)
