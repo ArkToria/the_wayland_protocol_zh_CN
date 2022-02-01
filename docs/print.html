@@ -2162,7 +2162,7 @@ static const struct wl_seat_listener wl_seat_listener = {
 };
 </code></pre>
 <p>如果你现在编译 <code>(cc -o client client.c xdg-shell-protocol.c)</code> 并运行这个，你的座位名字就应该被打印到 stderr。</p>
-<h2 id="构造指针事件"><a class="header" href="#构造指针事件">构造指针事件</a></h2>
+<h2 id="接入指针事件"><a class="header" href="#接入指针事件">接入指针事件</a></h2>
 <p>让我们来谈谈光标指针事件。如果你还记得，前面我们提到来自 Wayland 服务端的指针事件会被累积为一个单一逻辑事件。因此，我们需要定义一个结构体来存储这些事件。</p>
 <pre><code class="language-c">enum pointer_event_mask {
        POINTER_EVENT_ENTER = 1 &lt;&lt; 0,
@@ -2318,6 +2318,460 @@ wl_pointer_axis_discrete(void *data, struct wl_pointer *wl_pointer,
        client_state-&gt;pointer_event.axes[axis].discrete = discrete;
 }
 </code></pre>
+<p>除了更新受到影响的轴这一主要变化之外，其余部分也同样非常直截了当。请注意 &quot;valid&quot; 布尔值的使用：我们有可能受到更新了一个轴但没更新另一个的指针帧 (pointer frame)，所以我们使用 &quot;valid&quot; 值来确定该帧事件中哪些轴被有效更新。</p>
+<p>说到这里，现在是该集中注意力的地方了：我们的 &quot;frame&quot; 句柄。</p>
+<pre><code class="language-c">static void
+wl_pointer_frame(void *data, struct wl_pointer *wl_pointer)
+{
+       struct client_state *client_state = data;
+       struct pointer_event *event = &amp;client_state-&gt;pointer_event;
+       fprintf(stderr, &quot;pointer frame @ %d: &quot;, event-&gt;time);
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_ENTER) {
+               fprintf(stderr, &quot;entered %f, %f &quot;,
+                               wl_fixed_to_double(event-&gt;surface_x),
+                               wl_fixed_to_double(event-&gt;surface_y));
+       }
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_LEAVE) {
+               fprintf(stderr, &quot;leave&quot;);
+       }
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_MOTION) {
+               fprintf(stderr, &quot;motion %f, %f &quot;,
+                               wl_fixed_to_double(event-&gt;surface_x),
+                               wl_fixed_to_double(event-&gt;surface_y));
+       }
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_BUTTON) {
+               char *state = event-&gt;state == WL_POINTER_BUTTON_STATE_RELEASED ?
+                       &quot;released&quot; : &quot;pressed&quot;;
+               fprintf(stderr, &quot;button %d %s &quot;, event-&gt;button, state);
+       }
+
+       uint32_t axis_events = POINTER_EVENT_AXIS
+               | POINTER_EVENT_AXIS_SOURCE
+               | POINTER_EVENT_AXIS_STOP
+               | POINTER_EVENT_AXIS_DISCRETE;
+       char *axis_name[2] = {
+               [WL_POINTER_AXIS_VERTICAL_SCROLL] = &quot;vertical&quot;,
+               [WL_POINTER_AXIS_HORIZONTAL_SCROLL] = &quot;horizontal&quot;,
+       };
+       char *axis_source[4] = {
+               [WL_POINTER_AXIS_SOURCE_WHEEL] = &quot;wheel&quot;,
+               [WL_POINTER_AXIS_SOURCE_FINGER] = &quot;finger&quot;,
+               [WL_POINTER_AXIS_SOURCE_CONTINUOUS] = &quot;continuous&quot;,
+               [WL_POINTER_AXIS_SOURCE_WHEEL_TILT] = &quot;wheel tilt&quot;,
+       };
+       if (event-&gt;event_mask &amp; axis_events) {
+               for (size_t i = 0; i &lt; 2; ++i) {
+                       if (!event-&gt;axes[i].valid) {
+                               continue;
+                       }
+                       fprintf(stderr, &quot;%s axis &quot;, axis_name[i]);
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS) {
+                               fprintf(stderr, &quot;value %f &quot;, wl_fixed_to_double(
+                                                       event-&gt;axes[i].value));
+                       }
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS_DISCRETE) {
+                               fprintf(stderr, &quot;discrete %d &quot;,
+                                               event-&gt;axes[i].discrete);
+                       }
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS_SOURCE) {
+                               fprintf(stderr, &quot;via %s &quot;,
+                                               axis_source[event-&gt;axis_source]);
+                       }
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS_STOP) {
+                               fprintf(stderr, &quot;(stopped) &quot;);
+                       }
+               }
+       }
+
+       fprintf(stderr, &quot;\n&quot;);
+       memset(event, 0, sizeof(*event));
+}
+</code></pre>
+<p>毋庸置疑，这是最长的一串代码了。但愿它不会令人感到困惑。我们在这里所做的就是把这一帧期间累积的状态漂亮地打印到 stderr 上。如果你现在再编译并运行这个程序，你应该可以在窗口上晃动你的鼠标，并看到输入事件被打印出来!</p>
+<h2 id="接入键盘事件"><a class="header" href="#接入键盘事件">接入键盘事件</a></h2>
+<p>让我们用一些字段更新我们的 <code>client_state</code> 结构，以存储 XKB 的状态。</p>
+<pre><code class="language-diff">@@ -105,6 +107,9 @@ struct client_state {
+        int width, height;
+        bool closed;
+        struct pointer_event pointer_event;
++       struct xkb_state *xkb_state;
++       struct xkb_context *xkb_context;
++       struct xkb_keymap *xkb_keymap;
+};
+</code></pre>
+<p>我们需要 <code>xkbcommon</code> 头文件来定义这些。通常当我们这样做的时候，我将会把 <code>assert.h</code> 也拉进来。</p>
+<pre><code class="language-diff">@@ -1,4 +1,5 @@
+ #define _POSIX_C_SOURCE 200112L
++#include &lt;assert.h&gt;
+ #include &lt;errno.h&gt;
+ #include &lt;fcntl.h&gt;
+ #include &lt;limits.h&gt;
+@@ -9,6 +10,7 @@
+ #include &lt;time.h&gt;
+ #include &lt;unistd.h&gt;
+ #include &lt;wayland-client.h&gt;
++#include &lt;xkbcommon/xkbcommon.h&gt;
+ #include &quot;xdg-shell-client-protocol.h&quot;
+</code></pre>
+<p>我们还需要在我们的主函数中初始化 <code>xkb_context</code>:</p>
+<pre><code class="language-diff">@@ -603,6 +649,7 @@ main(int argc, char *argv[])
+        state.height = 480;
+        state.wl_display = wl_display_connect(NULL);
+        state.wl_registry = wl_display_get_registry(state.wl_display);
++       state.xkb_context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+        wl_registry_add_listener(state.wl_registry, &amp;wl_registry_listener, &amp;state);
+        wl_display_roundtrip(state.wl_display);
+</code></pre>
+<p>下一步，让我们来更新我们座位的功能函数，把我们的键盘监听器也接入。</p>
+<pre><code class="language-diff">        } else if (!have_pointer &amp;&amp; state-&gt;wl_pointer != NULL) {
+                wl_pointer_release(state-&gt;wl_pointer);
+                state-&gt;wl_pointer = NULL;
+        }
++
++       bool have_keyboard = capabilities &amp; WL_SEAT_CAPABILITY_KEYBOARD;
++
++       if (have_keyboard &amp;&amp; state-&gt;wl_keyboard == NULL) {
++               state-&gt;wl_keyboard = wl_seat_get_keyboard(state-&gt;wl_seat);
++               wl_keyboard_add_listener(state-&gt;wl_keyboard,
++                               &amp;wl_keyboard_listener, state);
++       } else if (!have_keyboard &amp;&amp; state-&gt;wl_keyboard != NULL) {
++               wl_keyboard_release(state-&gt;wl_keyboard);
++               state-&gt;wl_keyboard = NULL;
++       }
+ }
+</code></pre>
+<p>我们也要在这里定义我们使用的 <code>wl_keyboard_listener</code>。</p>
+<pre><code class="language-c">static const struct wl_keyboard_listener wl_keyboard_listener = {
+       .keymap = wl_keyboard_keymap,
+       .enter = wl_keyboard_enter,
+       .leave = wl_keyboard_leave,
+       .key = wl_keyboard_key,
+       .modifiers = wl_keyboard_modifiers,
+       .repeat_info = wl_keyboard_repeat_info,
+};
+</code></pre>
+<p>现在开始有了一些变化，让我们从 keymap 开始：</p>
+<pre><code class="language-c">static void
+wl_keyboard_keymap(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t format, int32_t fd, uint32_t size)
+{
+       struct client_state *client_state = data;
+       assert(format == WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1);
+
+       char *map_shm = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+       assert(map_shm != MAP_FAILED);
+
+       struct xkb_keymap *xkb_keymap = xkb_keymap_new_from_string(
+                       client_state-&gt;xkb_context, map_shm,
+                       XKB_KEYMAP_FORMAT_TEXT_V1, XKB_KEYMAP_COMPILE_NO_FLAGS);
+       munmap(map_shm, size);
+       close(fd);
+
+       struct xkb_state *xkb_state = xkb_state_new(xkb_keymap);
+       xkb_keymap_unref(client_state-&gt;xkb_keymap);
+       xkb_state_unref(client_state-&gt;xkb_state);
+       client_state-&gt;xkb_keymap = xkb_keymap;
+       client_state-&gt;xkb_state = xkb_state;
+}
+</code></pre>
+<p>现在我们可以看到为什么我们需要添加 <code>assert.h</code>——我们在这里用断言来确保 keymap 的格式是我们所期望的。然后，我们用 mmap 将混成器发送给我们的文件描述符 fd 映射成一个 <code>char*</code> 指针，我们可以将其传入 <code>xkb_keymap_new_from_string</code>。不要忘记 <code>munmap</code> 并在之后关闭这个文件描述符，然后设置我们的 XKB 状态。还要注意的是，我们也用 &quot;*_unref&quot; 去掉了先前在调用此函数时所设置的一切 XKB keymap 或 state 引用，以防混成器在运行时改变 keymap<sup class="footnote-reference"><a href="#1">1</a></sup>。</p>
+<pre><code class="language-c">static void
+wl_keyboard_enter(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, struct wl_surface *surface,
+               struct wl_array *keys)
+{
+       struct client_state *client_state = data;
+       fprintf(stderr, &quot;keyboard enter; keys pressed are:\n&quot;);
+       uint32_t *key;
+       wl_array_for_each(key, keys) {
+               char buf[128];
+               xkb_keysym_t sym = xkb_state_key_get_one_sym(
+                               client_state-&gt;xkb_state, *key + 8);
+               xkb_keysym_get_name(sym, buf, sizeof(buf));
+               fprintf(stderr, &quot;sym: %-12s (%d), &quot;, buf, sym);
+               xkb_state_key_get_utf8(client_state-&gt;xkb_state,
+                               *key + 8, buf, sizeof(buf));
+               fprintf(stderr, &quot;utf8: '%s'\n&quot;, buf);
+       }
+}
+</code></pre>
+<p>当键盘 &quot;进入&quot; 我们的表面时，我们已经获得了键盘的输入焦点。混成器会将这之前所按键的队列转发出来，这里我们只是枚举它们并记录它们的 keysym 名称和 UTF-8 等效值。当按键被按下的时候，我们会做类似如下的事情：</p>
+<pre><code class="language-c">static void
+wl_keyboard_key(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
+{
+       struct client_state *client_state = data;
+       char buf[128];
+       uint32_t keycode = key + 8;
+       xkb_keysym_t sym = xkb_state_key_get_one_sym(
+                       client_state-&gt;xkb_state, keycode);
+       xkb_keysym_get_name(sym, buf, sizeof(buf));
+       const char *action =
+               state == WL_KEYBOARD_KEY_STATE_PRESSED ? &quot;press&quot; : &quot;release&quot;;
+       fprintf(stderr, &quot;key %s: sym: %-12s (%d), &quot;, action, buf, sym);
+       xkb_state_key_get_utf8(client_state-&gt;xkb_state, keycode,
+                       buf, sizeof(buf));
+       fprintf(stderr, &quot;utf8: '%s'\n&quot;, buf);
+}
+</code></pre>
+<p>最后，我们增加了其余三个小事件的实现：</p>
+<pre><code class="language-c">static void
+wl_keyboard_leave(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, struct wl_surface *surface)
+{
+       fprintf(stderr, &quot;keyboard leave\n&quot;);
+}
+
+static void
+wl_keyboard_modifiers(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, uint32_t mods_depressed,
+               uint32_t mods_latched, uint32_t mods_locked,
+               uint32_t group)
+{
+       struct client_state *client_state = data;
+       xkb_state_update_mask(client_state-&gt;xkb_state,
+               mods_depressed, mods_latched, mods_locked, 0, 0, group);
+}
+
+static void
+wl_keyboard_repeat_info(void *data, struct wl_keyboard *wl_keyboard,
+               int32_t rate, int32_t delay)
+{
+       /* Left as an exercise for the reader */
+}
+</code></pre>
+<p>对于修饰符，我们可以进一步解码，但大多数应用程序不需要这样做。我们只是在这里更新 XKB 的状态。至于处理按键重复，这对于你的应用来说有诸多限制。比如，你想重复输入文本吗，想重复键盘快捷键吗，这些重复的所需的时间如何与你的事件循环进行互动？这些问题的答案需要由你自己来决定。</p>
+<p>如果你再次编译并运行，你应该能够开始在窗口中开始打字，并看到你的输入被打印到终端日志中。这值得欢呼！</p>
+<h2 id="接入触摸事件"><a class="header" href="#接入触摸事件">接入触摸事件</a></h2>
+<p>最后，我们将新增设备的触摸功能支持。就和指针事件一样，触摸设备也存在一个 &quot;frame&quot; 帧事件。然而，由于有多个触摸点可能在一帧内被更新，所以它们可能变得更加复杂。我们将增加一些结构体和枚举类型来表示状态的累积。</p>
+<pre><code class="language-c">enum touch_event_mask {
+       TOUCH_EVENT_DOWN = 1 &lt;&lt; 0,
+       TOUCH_EVENT_UP = 1 &lt;&lt; 1,
+       TOUCH_EVENT_MOTION = 1 &lt;&lt; 2,
+       TOUCH_EVENT_CANCEL = 1 &lt;&lt; 3,
+       TOUCH_EVENT_SHAPE = 1 &lt;&lt; 4,
+       TOUCH_EVENT_ORIENTATION = 1 &lt;&lt; 5,
+};
+
+struct touch_point {
+       bool valid;
+       int32_t id;
+       uint32_t event_mask;
+       wl_fixed_t surface_x, surface_y;
+       wl_fixed_t major, minor;
+       wl_fixed_t orientation;
+};
+
+struct touch_event {
+       uint32_t event_mask;
+       uint32_t time;
+       uint32_t serial;
+       struct touch_point points[10];
+};
+</code></pre>
+<p>请注意，我在这里选择了 10 个触摸点，假设大多数用户只会使用这么多手指。而对于较大的多用户触摸屏，你可能需要一个更高的上限。此外，有些触摸硬件同时支持的触摸点少于十个，仅有八个也是常见的，而支持触摸点数量更少的硬件在老旧设备中也十分常见。</p>
+<p>我们把这个结构体添加到 <code>client_state</code>:</p>
+<pre><code class="language-diff">@@ -110,6 +135,7 @@ struct client_state {
+        struct xkb_state *xkb_state;
+        struct xkb_context *xkb_context;
+        struct xkb_keymap *xkb_keymap;
++       struct touch_event touch_event;
+ };
+</code></pre>
+<p>当触摸支持可用的时候，我们将更新座位的功能句柄，以介入一个监听器。</p>
+<pre><code class="language-diff">        } else if (!have_keyboard &amp;&amp; state-&gt;wl_keyboard != NULL) {
+                wl_keyboard_release(state-&gt;wl_keyboard);
+                state-&gt;wl_keyboard = NULL;
+        }
++
++       bool have_touch = capabilities &amp; WL_SEAT_CAPABILITY_TOUCH;
++
++       if (have_touch &amp;&amp; state-&gt;wl_touch == NULL) {
++               state-&gt;wl_touch = wl_seat_get_touch(state-&gt;wl_seat);
++               wl_touch_add_listener(state-&gt;wl_touch,
++                               &amp;wl_touch_listener, state);
++       } else if (!have_touch &amp;&amp; state-&gt;wl_touch != NULL) {
++               wl_touch_release(state-&gt;wl_touch);
++               state-&gt;wl_touch = NULL;
++       }
+ }
+</code></pre>
+<p>我们对作为上触摸功能的出现和消失也做了同样处理，因此我们的代码在运行时设备热插拔处理方面都很健壮。不过，触摸设备热插拔的情况在实际中不太常见。</p>
+<p>这里是其自身的监听器:</p>
+<pre><code class="language-c">static const struct wl_touch_listener wl_touch_listener = {
+       .down = wl_touch_down,
+       .up = wl_touch_up,
+       .motion = wl_touch_motion,
+       .frame = wl_touch_frame,
+       .cancel = wl_touch_cancel,
+       .shape = wl_touch_shape,
+       .orientation = wl_touch_orientation,
+};
+</code></pre>
+<p>为了解决多点触摸问题，我们需要写一个小的辅助函数:</p>
+<pre><code class="language-c">+static struct touch_point *
++get_touch_point(struct client_state *client_state, int32_t id)
++{
++       struct touch_event *touch = &amp;client_state-&gt;touch_event;
++       const size_t nmemb = sizeof(touch-&gt;points) / sizeof(struct touch_point);
++       int invalid = -1;
++       for (size_t i = 0; i &lt; nmemb; ++i) {
++               if (touch-&gt;points[i].id == id) {
++                       return &amp;touch-&gt;points[i];
++               }
++               if (invalid == -1 &amp;&amp; !touch-&gt;points[i].valid) {
++                       invalid = i;
++               }
++       }
++       if (invalid == -1) {
++               return NULL;
++       }
++       touch-&gt;points[invalid].valid = true;
++       touch-&gt;points[invalid].id = id;
++       return &amp;touch-&gt;points[invalid];
++}
+</code></pre>
+<p>这个函数的基本目的是从我们添加到 <code>touch_event</code> 结构体的数组中，根据我们要接收事件的触摸点 ID，挑选一个触摸点。如果我们找到了该 ID 的现有触摸点，我们就将其返回。如果没有，则会返回第一个可用的触摸点。如果我们都找完了还没有，就会返回 <code>NULL</code>。</p>
+<p>现在我们可以利用这点来实现我们的第一个功能：触摸。</p>
+<pre><code class="language-c">static void
+wl_touch_down(void *data, struct wl_touch *wl_touch, uint32_t serial,
+               uint32_t time, struct wl_surface *surface, int32_t id,
+               wl_fixed_t x, wl_fixed_t y)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_UP;
+       point-&gt;surface_x = wl_fixed_to_double(x),
+               point-&gt;surface_y = wl_fixed_to_double(y);
+       client_state-&gt;touch_event.time = time;
+       client_state-&gt;touch_event.serial = serial;
+}
+</code></pre>
+<p>和指针事件一样，我们也是简单地将这个状态累积起来，以便后续使用。我们还不知道这个事件是否代表一个完整的触摸帧。让我们为触摸添加一些类似的东西：</p>
+<pre><code class="language-c">static void
+wl_touch_up(void *data, struct wl_touch *wl_touch, uint32_t serial,
+               uint32_t time, int32_t id)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_UP;
+}
+</code></pre>
+<p>以及运动：</p>
+<pre><code class="language-c">static void
+wl_touch_motion(void *data, struct wl_touch *wl_touch, uint32_t time,
+               int32_t id, wl_fixed_t x, wl_fixed_t y)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_MOTION;
+       point-&gt;surface_x = x, point-&gt;surface_y = y;
+       client_state-&gt;touch_event.time = time;
+}
+</code></pre>
+<p>触摸事件的取消与之前有所不同，因为它一次性 “取消” 了所有活动的触摸点。我们只需要将其存储在 <code>touch_event</code> 的顶层事件掩码中。</p>
+<pre><code class="language-c">static void
+wl_touch_cancel(void *data, struct wl_touch *wl_touch)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;touch_event.event_mask |= TOUCH_EVENT_CANCEL;
+}
+</code></pre>
+<p>然而，形状和方向事件类似于向上、向下和移动，因为它们告诉我们一个特定触摸点的尺寸。</p>
+<pre><code class="language-c">static void
+wl_touch_shape(void *data, struct wl_touch *wl_touch,
+               int32_t id, wl_fixed_t major, wl_fixed_t minor)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_SHAPE;
+       point-&gt;major = major, point-&gt;minor = minor;
+}
+
+static void
+wl_touch_orientation(void *data, struct wl_touch *wl_touch,
+               int32_t id, wl_fixed_t orientation)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_ORIENTATION;
+       point-&gt;orientation = orientation;
+}
+</code></pre>
+<p>最后，在收到一个帧事件时，我们可以将所有这些累积的状态解释为一个单一的输入事件，就像我们的光标指针代码一样。</p>
+<pre><code class="language-c">static void
+wl_touch_frame(void *data, struct wl_touch *wl_touch)
+{
+       struct client_state *client_state = data;
+       struct touch_event *touch = &amp;client_state-&gt;touch_event;
+       const size_t nmemb = sizeof(touch-&gt;points) / sizeof(struct touch_point);
+       fprintf(stderr, &quot;touch event @ %d:\n&quot;, touch-&gt;time);
+
+       for (size_t i = 0; i &lt; nmemb; ++i) {
+               struct touch_point *point = &amp;touch-&gt;points[i];
+               if (!point-&gt;valid) {
+                       continue;
+               }
+               fprintf(stderr, &quot;point %d: &quot;, touch-&gt;points[i].id);
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_DOWN) {
+                       fprintf(stderr, &quot;down %f,%f &quot;,
+                                       wl_fixed_to_double(point-&gt;surface_x),
+                                       wl_fixed_to_double(point-&gt;surface_y));
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_UP) {
+                       fprintf(stderr, &quot;up &quot;);
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_MOTION) {
+                       fprintf(stderr, &quot;motion %f,%f &quot;,
+                                       wl_fixed_to_double(point-&gt;surface_x),
+                                       wl_fixed_to_double(point-&gt;surface_y));
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_SHAPE) {
+                       fprintf(stderr, &quot;shape %fx%f &quot;,
+                                       wl_fixed_to_double(point-&gt;major),
+                                       wl_fixed_to_double(point-&gt;minor));
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_ORIENTATION) {
+                       fprintf(stderr, &quot;orientation %f &quot;,
+                                       wl_fixed_to_double(point-&gt;orientation));
+               }
+
+               point-&gt;valid = false;
+               fprintf(stderr, &quot;\n&quot;);
+       }
+}
+</code></pre>
+<p>编译并再次运行这个程序，你就可以看到当你与触摸设备交互时，触摸事件被答应到 stderr （假设你现在有支持触摸的设备）。现在我们的客户端终于了实现输入的支持！</p>
+<h2 id="接下来该做什么"><a class="header" href="#接下来该做什么">接下来该做什么？</a></h2>
+<p>有很多不同种类的输入设备，因此扩展我们的代码以支持这些设备是一项相当庞大的工作——仅在本章中我们的代码量就增加了 2.5 倍。不过收获应该也是相当大的，因为你现在已经熟悉了足够多的 Wayland 概念（和代码），由此你可以实现多种多样的客户端了。</p>
+<p>这之后还有更多的东西要学——在最后几章，我们将介绍弹出窗口、上下文菜单、交互式窗口的移动和大小调整、剪贴板和拖放支持，以及后来的一些有趣的扩展协议，以支持更多小众的使用场景。我强烈建议你在构建自己的客户端之前先读到第 10.1 章，因为它涵盖诸如根据混成器的要求调整窗口大小等内容。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>这种情况在实践中确实发生了！</p>
+</div>
 
                     </main>
 
