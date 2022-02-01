@@ -44,3 +44,4 @@
     - [扩展我们的示例代码](./9.Seats_handling_input/5.Expanding_our_example_code.md)
 - [深入理解 XDG shell](./10.XDG_shell_in_depth/index.md)
     - [配置和生命周期](./10.XDG_shell_in_depth/1.Configuration_and_lifecycle.md)
+    - [弹出窗口](./10.XDG_shell_in_depth/2.Popups.md)
