@@ -22,3 +22,5 @@ limit-results = 15
 
 [output.html.playground]
 editable = false
+
+[output.epub]

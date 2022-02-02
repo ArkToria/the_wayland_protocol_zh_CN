@@ -19,14 +19,20 @@ Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 
 ## 关于这本书
 本书采用 [mdbook](https://github.com/rust-lang/mdBook) 构建，译者翻译水平有限，疑问请自寻原书解答，许可同源。
 
-自译项目地址：[repo](https://github.com/axionl/the_wayland_protocol_zh_CN)
+自译项目地址：[https://github.com/axionl/the_wayland_protocol_zh_CN](https://github.com/axionl/the_wayland_protocol_zh_CN)
+
+阅读地址：[https://wayland.axionl.me](https://wayland.axionl.me)
 
 原书：[https://wayland-book.com](https://wayland-book.com/introduction.html)
 
 许可：[Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/)
 
-源码：[repo](https://git.sr.ht/%7Esircmpwn/wayland-book)
+源码：[https://git.sr.ht/~sircmpwn/wayland-book](https://git.sr.ht/~sircmpwn/wayland-book)
 
+## 电子版下载
+
+EPUB 格式：
+PDF 格式：页面右上角打印
 
 ## 关于作者
 用 Drew 紧密合作者 Preston Carpenter 的话来说：

@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html lang="zh-cmn-Hans-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>光标指针输入 - The Wayland Protocol（自译中文版）</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="一本介绍 Wayland 协议的书">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/index.html"><strong aria-hidden="true">6.</strong> 缓冲区和表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/1.Use_wl_compositor.html"><strong aria-hidden="true">6.1.</strong> 使用 wl_compositor</a></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/2.Shared_memory_buffers.html"><strong aria-hidden="true">6.2.</strong> 共享内存缓冲区</a></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/3.Linux_dmabuf.html"><strong aria-hidden="true">6.3.</strong> Linux dmabuf</a></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/4.Surface_roles.html"><strong aria-hidden="true">6.4.</strong> 表面的 “角色”</a></li></ol></li><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/index.html"><strong aria-hidden="true">7.</strong> XDG shell 基础</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/1.XDG_surfaces.html"><strong aria-hidden="true">7.1.</strong> XDG surfaces</a></li><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/2.Application_windows.html"><strong aria-hidden="true">7.2.</strong> 应用程序窗口</a></li><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/3.Extended_example_code.html"><strong aria-hidden="true">7.3.</strong> 扩展示例代码</a></li></ol></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/index.html"><strong aria-hidden="true">8.</strong> 深入理解表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/1.Surface_lifecycle.html"><strong aria-hidden="true">8.1.</strong> 表面的生命周期</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/2.Frame_callbacks.html"><strong aria-hidden="true">8.2.</strong> 帧回调</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/3.Damaging_surfaces.html"><strong aria-hidden="true">8.3.</strong> 损坏表面</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/4.Surface_regions.html"><strong aria-hidden="true">8.4.</strong> 表面区域</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/5.Subsurfaces.html"><strong aria-hidden="true">8.5.</strong> 子表面</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/6.High_density_surfaces.html"><strong aria-hidden="true">8.6.</strong> 高分辨率表面</a></li></ol></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/index.html"><strong aria-hidden="true">9.</strong> Seats: 处理输入</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../9.Seats_handling_input/1.Pointer_input.html" class="active"><strong aria-hidden="true">9.1.</strong> 光标指针输入</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/2.XKB_briefly.html"><strong aria-hidden="true">9.2.</strong> XKB 简介</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/3.Keyboard_input.html"><strong aria-hidden="true">9.3.</strong> 键盘输入</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/4.Touch_input.html"><strong aria-hidden="true">9.4.</strong> 触控输入</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/5.Expanding_our_example_code.html"><strong aria-hidden="true">9.5.</strong> 扩展我们的示例代码</a></li></ol></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/index.html"><strong aria-hidden="true">10.</strong> 深入理解 XDG shell</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/1.Configuration_and_lifecycle.html"><strong aria-hidden="true">10.1.</strong> 配置和生命周期</a></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/2.Popups.html"><strong aria-hidden="true">10.2.</strong> 弹出窗口</a></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/3.Interactive_move_and_resize.html"><strong aria-hidden="true">10.3.</strong> 交互式移动和尺寸调整</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Wayland Protocol（自译中文版）</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/axionl/the_wayland_protocol_zh_CN" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="光标指针输入"><a class="header" href="#光标指针输入">光标指针输入</a></h1>
+<p>使用 <code>wl_seat.get_pointer</code> 请求，客户端可以获得一个 <code>wl_pointer</code> 对象。只要用户移动他们的指针、按下鼠标按钮、使用滚轮等——只要指针在你的一个表面上，服务端就会向它发送事件。我们可以通过 <code>wl_pointer.enter</code> 事件来判断是否满足条件。</p>
+<pre><code class="language-xml">&lt;event name=&quot;enter&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+  &lt;arg name=&quot;surface_x&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;surface_y&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>当指针在我们的一个表面上移动的时候，服务端将发送这一事件，并指定 “进入” 的表面，以及指针所处的表面本地坐标（从左上角开始）。这里的坐标使用 <code>fixed</code> 类型指定，你可能还记得第 2.1 章节，它代表一个 24 位长度（8 位色深）的固定精度数字（<code>wl_fixed_to_double</code> 会把它转换成 C 语言的 <code>double</code> 类型）。</p>
+<p>当指针从你的表面移开时，相应的事件就会更短小：</p>
+<pre><code class="language-xml">&lt;event name=&quot;leave&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>一旦指针进入到你的表面，你将会接受到它的额外事件，我们将很快对此作出讨论。然而，你可能想做的第一件事是提供一个光标的图像。这个过程如下：</p>
+<ol>
+<li>用 <code>wl_compositor</code> 创建一个新的 <code>wl_surface</code>。</li>
+<li>使用 <code>wl_pointer.set_cursot</code> 将表面附加到指针上。</li>
+<li>将光标图像的 <code>wl_buffer</code> 附加到该表面并提交。</li>
+</ol>
+<p>这里唯一引入的新 API 是 <code>wl_pointer.set_cursor</code>。</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_cursor&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; allow-null=&quot;true&quot; /&gt;
+  &lt;arg name=&quot;hotspot_x&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;hotspot_y&quot; type=&quot;int&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>这里的序列必须来自输入事件。<code>hotspot_x</code> 和 <code>hotspot_y</code> 参数 指定了光标 “热点” 在表面的本地坐标，或者指针在光标图像中的有效位置（例如，在尖头的顶端）。还要注意，表面可以是空的——用它来完全隐藏光标。</p>
+<p>如果你正在寻找一个好的指针图标来源，<code>libwayland</code> 带有一个单独的 <code>wayland-cursor</code> 库，它可以从磁盘上加载 X 光标主题并为它们创建 <code>wl_buffers</code>。详见 <code>wayland-cursor.h</code>，或者参考第 9.5 章中对我们客户端示例的更新。</p>
+<p><em>注意：<code>wayland-cursor</code> 包括处理动画光标的代码，这即便是在 1998 年也不酷。如果我是你，我就不会去管这些。从来没有人抱怨过我的 Wayland 客户端不支持光标动画。</em></p>
+<p>在光标进入你的表面，并且你附加了一个合适的光标图片后，你就可以开始处理输入事件了。有运动、按钮和轴事件。</p>
+<h2 id="指针帧"><a class="header" href="#指针帧">指针帧</a></h2>
+<p>服务端上的一帧输入处理可以携带许多变化的信息——例如，轮询一次鼠标可以在一个数据包中返回一个更新的位置和一个释放的按钮。服务端将这些变化作为单独的 Wayland 事件发送，并使用 “帧” 事件将它们组合在一起。</p>
+<pre><code class="language-xml">&lt;event name=&quot;frame&quot;&gt;&lt;/event&gt;
+</code></pre>
+<p>客户端应该在受到所有 <code>wl_pointer</code> 事件时将它们累积起来，一旦受到 “帧” 事件，就将这些未决的输入作为一二个单一的指针事件来处理。</p>
+<h2 id="运动事件"><a class="header" href="#运动事件">运动事件</a></h2>
+<p>运动事件与进入事件使用的相同坐标空间，并在进入时指定，且其定义也非常直接：</p>
+<pre><code class="language-xml">&lt;event name=&quot;motion&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface_x&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;surface_y&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>就像所有包含时间戳的输入事件一样，时间值是一个与此输入事件相关的，单调增长的，毫秒级的时间戳。</p>
+<h2 id="按键事件"><a class="header" href="#按键事件">按键事件</a></h2>
+<p>按键事件大多数都不言而喻：</p>
+<pre><code class="language-xml">&lt;enum name=&quot;button_state&quot;&gt;
+  &lt;entry name=&quot;released&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;pressed&quot; value=&quot;1&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;button&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;button&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;state&quot; type=&quot;uint&quot; enum=&quot;button_state&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>然而，按键的参数值值得作一些额外的解释。这些数字是一个特定平台的输入事件，尽管注意到 FreeBSD 平台也重用了 Linux 的数值。你可以在 <code>linux/input-event-codes.h</code> （一般由 linux-headers 或者 linux-api-headers 包提供）中找到这些 Linux 下的数值，最有用的数值可能是由常量 <code>BTN_LEFT</code>、<code>BTN_RIGHT</code> 和 <code>BTN_MIDDLE</code> 表示的。除此之外还有更多定义，在你闲暇的时候可以浏览一下头文件。</p>
+<pre><code class="language-c"> 342   │ #define BTN_MISC        0x100
+ 343   │ #define BTN_0           0x100
+ 344   │ #define BTN_1           0x101
+ 345   │ #define BTN_2           0x102
+ 346   │ #define BTN_3           0x103
+ 347   │ #define BTN_4           0x104
+ 348   │ #define BTN_5           0x105
+ 349   │ #define BTN_6           0x106
+ 350   │ #define BTN_7           0x107
+ 351   │ #define BTN_8           0x108
+ 352   │ #define BTN_9           0x109
+</code></pre>
+<h2 id="轴事件"><a class="header" href="#轴事件">轴事件</a></h2>
+<p>轴事件用于描述滚轮动作，例如旋转你的滚轮或者左右摇动它。最基本的形式看起来像这样：</p>
+<pre><code class="language-xml">&lt;enum name=&quot;axis&quot;&gt;
+  &lt;entry name=&quot;vertical_scroll&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;horizontal_scroll&quot; value=&quot;1&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;axis&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;axis&quot; type=&quot;uint&quot; enum=&quot;axis&quot; /&gt;
+  &lt;arg name=&quot;value&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>然而，轴事件是复杂的，这也是 <code>wl_pointer</code> 接口中多年来受到最多关注的部分。有几个额外的事件存在，它们增加了轴事件的特殊性：</p>
+<pre><code class="language-xml">&lt;enum name=&quot;axis_source&quot;&gt;
+  &lt;entry name=&quot;wheel&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;finger&quot; value=&quot;1&quot; /&gt;
+  &lt;entry name=&quot;continuous&quot; value=&quot;2&quot; /&gt;
+  &lt;entry name=&quot;wheel_tilt&quot; value=&quot;3&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;axis_source&quot; since=&quot;5&quot;&gt;
+  &lt;arg name=&quot;axis_source&quot; type=&quot;uint&quot; enum=&quot;axis_source&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p><code>axis_source</code> 事件告诉你哪种轴被驱动了——滚轮、触摸板上的手指移动、向旁边倾斜的摇杆、或更新颖的东西。这个事件本身很简单，但其余的就不那么简单了：</p>
+<pre><code class="language-xml">&lt;event name=&quot;axis_stop&quot; since=&quot;5&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;axis&quot; type=&quot;uint&quot; enum=&quot;axis&quot; /&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;axis_discrete&quot; since=&quot;5&quot;&gt;
+  &lt;arg name=&quot;axis&quot; type=&quot;uint&quot; enum=&quot;axis&quot; /&gt;
+  &lt;arg name=&quot;discrete&quot; type=&quot;int&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>这两个事件的精确语义很复杂，如果你想利用它们，我建议仔细阅读 <code>wayland.xml</code> 中的摘要。简而言之，<code>axis_discrete</code> 事件用于区分任意规模的轴事件和离散的步骤，例如，滚轮的每一次 “点击” 代表书轴值的一次离散的变化。<code>axis_stop</code> 事件标志着一个离散的用户运动行为已经完成，并用于计算发生在几个帧之间的滚动事件。任何未来的事件都应该被解释为一个单独的运动。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../9.Seats_handling_input/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../9.Seats_handling_input/2.XKB_briefly.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../9.Seats_handling_input/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../9.Seats_handling_input/2.XKB_briefly.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
