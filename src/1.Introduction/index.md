@@ -31,8 +31,8 @@ Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 
 
 ## 电子版下载
 
-EPUB 格式：
-PDF 格式：页面右上角打印
+- EPUB 格式：[The Wayland Protocol（自译中文版）.epub](https://raw.githubusercontent.com/axionl/the_wayland_protocol_zh_CN/main/docs/epub/The%20Wayland%20Protocol%EF%BC%88%E8%87%AA%E8%AF%91%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89.epub)
+- PDF 格式：页面右上角打印
 
 ## 关于作者
 用 Drew 紧密合作者 Preston Carpenter 的话来说：
