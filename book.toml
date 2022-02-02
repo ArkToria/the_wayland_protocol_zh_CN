@@ -24,3 +24,4 @@ limit-results = 15
 editable = false
 
 [output.epub]
+cover-image = "cover.png"
