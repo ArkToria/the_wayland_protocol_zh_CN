@@ -46,3 +46,4 @@
     - [配置和生命周期](./10.XDG_shell_in_depth/1.Configuration_and_lifecycle.md)
     - [弹出窗口](./10.XDG_shell_in_depth/2.Popups.md)
     - [交互式移动和尺寸调整](./10.XDG_shell_in_depth/3.Interactive_move_and_resize.md)
+    - [指针](./10.XDG_shell_in_depth/4.Pointers.md)
