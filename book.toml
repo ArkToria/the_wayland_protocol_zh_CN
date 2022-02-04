@@ -7,7 +7,7 @@ src = "src"
 title = "The Wayland Protocol（自译中文版）"
 
 [build]
-build-dir = "."
+build-dir = "docs"
 create-missing = true
 
 [output.html]
@@ -23,5 +23,5 @@ limit-results = 15
 [output.html.playground]
 editable = false
 
-[output.epub]
-cover-image = "cover.png"
+#[output.epub]
+#cover-image = "cover.png"

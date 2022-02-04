@@ -29,9 +29,9 @@ Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 
 
 源码：[https://git.sr.ht/~sircmpwn/wayland-book](https://git.sr.ht/~sircmpwn/wayland-book)
 
-## 电子版下载
+## 电子版
 
-- EPUB 格式：[The Wayland Protocol（自译中文版）.epub](https://raw.githubusercontent.com/axionl/the_wayland_protocol_zh_CN/main/docs/epub/The%20Wayland%20Protocol%EF%BC%88%E8%87%AA%E8%AF%91%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89.epub)
+- EPUB 格式：由于 github page 页面目录结构配置问题，暂时无法提供，可以自行 `cargo install mdbook-epub` 安装最新版构建。
 - PDF 格式：页面右上角打印
 
 ## 关于作者
