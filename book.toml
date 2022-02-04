@@ -7,8 +7,8 @@ src = "src"
 title = "The Wayland Protocol（自译中文版）"
 
 [build]
-build-dir = "docs"
-create-missing = false
+build-dir = "."
+create-missing = true
 
 [output.html]
 default-theme = "light"
