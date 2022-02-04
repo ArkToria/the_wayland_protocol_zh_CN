@@ -38,3 +38,8 @@ Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 
 用 Drew 紧密合作者 Preston Carpenter 的话来说：
 
 Drew DeVault 从 [sway](https://swaywm.org/)（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。
+
+## 扩展阅读
+
+- [桌面系统的混成器简史](https://farseerfc.me/zhs/brief-history-of-compositors-in-desktop-os.html)
+- [X 中的混成器与 Composite 扩展](https://farseerfc.me/zhs/compositor-in-X-and-compositext.html)
