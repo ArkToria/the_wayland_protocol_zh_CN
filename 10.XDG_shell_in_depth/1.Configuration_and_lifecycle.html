@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="zh-cmn-Hans-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>配置和生命周期 - The Wayland Protocol（自译中文版）</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="一本介绍 Wayland 协议的书">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="../1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="../1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="../2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="../2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="../3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="../4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="../5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/index.html"><strong aria-hidden="true">6.</strong> 缓冲区和表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/1.Use_wl_compositor.html"><strong aria-hidden="true">6.1.</strong> 使用 wl_compositor</a></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/2.Shared_memory_buffers.html"><strong aria-hidden="true">6.2.</strong> 共享内存缓冲区</a></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/3.Linux_dmabuf.html"><strong aria-hidden="true">6.3.</strong> Linux dmabuf</a></li><li class="chapter-item expanded "><a href="../6.Buffers_and_surfaces/4.Surface_roles.html"><strong aria-hidden="true">6.4.</strong> 表面的 “角色”</a></li></ol></li><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/index.html"><strong aria-hidden="true">7.</strong> XDG shell 基础</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/1.XDG_surfaces.html"><strong aria-hidden="true">7.1.</strong> XDG surfaces</a></li><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/2.Application_windows.html"><strong aria-hidden="true">7.2.</strong> 应用程序窗口</a></li><li class="chapter-item expanded "><a href="../7.XDG_shell_basics/3.Extended_example_code.html"><strong aria-hidden="true">7.3.</strong> 扩展示例代码</a></li></ol></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/index.html"><strong aria-hidden="true">8.</strong> 深入理解表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/1.Surface_lifecycle.html"><strong aria-hidden="true">8.1.</strong> 表面的生命周期</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/2.Frame_callbacks.html"><strong aria-hidden="true">8.2.</strong> 帧回调</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/3.Damaging_surfaces.html"><strong aria-hidden="true">8.3.</strong> 损坏表面</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/4.Surface_regions.html"><strong aria-hidden="true">8.4.</strong> 表面区域</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/5.Subsurfaces.html"><strong aria-hidden="true">8.5.</strong> 子表面</a></li><li class="chapter-item expanded "><a href="../8.Surfaces_in_depth/6.High_density_surfaces.html"><strong aria-hidden="true">8.6.</strong> 高分辨率表面</a></li></ol></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/index.html"><strong aria-hidden="true">9.</strong> Seats: 处理输入</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../9.Seats_handling_input/1.Pointer_input.html"><strong aria-hidden="true">9.1.</strong> 光标指针输入</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/2.XKB_briefly.html"><strong aria-hidden="true">9.2.</strong> XKB 简介</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/3.Keyboard_input.html"><strong aria-hidden="true">9.3.</strong> 键盘输入</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/4.Touch_input.html"><strong aria-hidden="true">9.4.</strong> 触控输入</a></li><li class="chapter-item expanded "><a href="../9.Seats_handling_input/5.Expanding_our_example_code.html"><strong aria-hidden="true">9.5.</strong> 扩展我们的示例代码</a></li></ol></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/index.html"><strong aria-hidden="true">10.</strong> 深入理解 XDG shell</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/1.Configuration_and_lifecycle.html" class="active"><strong aria-hidden="true">10.1.</strong> 配置和生命周期</a></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/2.Popups.html"><strong aria-hidden="true">10.2.</strong> 弹出窗口</a></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/3.Interactive_move_and_resize.html"><strong aria-hidden="true">10.3.</strong> 交互式移动和尺寸调整</a></li><li class="chapter-item expanded "><a href="../10.XDG_shell_in_depth/4.Pointers.html"><strong aria-hidden="true">10.4.</strong> 指针</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Wayland Protocol（自译中文版）</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/axionl/the_wayland_protocol_zh_CN" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="配置和生命周期"><a class="header" href="#配置和生命周期">配置和生命周期</a></h1>
+<p>先前，按我们的选择创建了一个固定尺寸的窗口：640x480。然而，混成器往往会对我们的窗口应假设什么样的尺寸有意见，而我们可能也想传达自己的偏好尺寸。未能这样做往往会导致非预期行为，比如你窗口的一部分被混成器裁切掉，而混成器试图告诉你让你的表面尺寸缩小。</p>
+<p>混成器可以为应用程序提供额外的线索，了解其显示的上下文。它可以让你知道应用是否正处于最大化或者全屏状态，亦或其窗口边的一个或多个边缘正与其他窗口或显示器的边缘平铺、正处于焦点还是后台空闲状态，等等。由于 <code>wl_surface</code> 是用来在客户端和服务端之间原子化交流表面的变化，<code>xdg_surface</code> 提供接口提供了一下两个消息，供混成器建议一些变化和客户端确认：</p>
+<pre><code class="language-xml">&lt;request name=&quot;ack_configure&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+&lt;/request&gt;
+
+&lt;event name=&quot;configure&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>就它们本身而言，这些消息只能携带很小的信息量。然而，<code>xdg_surface</code> 的每个子类 (<code>xdg_toplevel</code> 和 <code>xdg_popup</code>) 都有额外的事件，服务端可以在 &quot;configure&quot; 配置事件之前发送，以提出到目前为止所提到的各种建议。服务端将发送这些状态，如最大化、焦点、尺寸建议等，然后用 <code>serial</code> 来配置事件。当客户端的状态与这些建议一致的时候，它将嘎送一个带有相同序列的 <code>ack_configure</code> 请求来表明这一点。在下次提交到相关的 <code>wl_surface</code> 时，混成器将认为该状态是一致的。</p>
+<h2 id="xdg-顶层窗口的生命周期"><a class="header" href="#xdg-顶层窗口的生命周期">XDG 顶层窗口的生命周期</a></h2>
+<p>我们第 7 章的示例代码虽然可以工作，但它不是桌面的最佳范式。它并没有假定混成器推荐的尺寸，而且如果用户试图关闭窗口，它也不会消失。若要响应这些由混成器提供的事件，这里涉及到两个 Wayland <code>事件：configure</code> 和 <code>close</code> 即配置和关闭。</p>
+<pre><code class="language-xml">&lt;event name=&quot;configure&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;states&quot; type=&quot;array&quot;/&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;close&quot; /&gt;
+</code></pre>
+<p>这里的宽度 <code>width</code> 和高度 <code>height</code> 是混成器为窗口推荐的首选尺寸<sup class="footnote-reference"><a href="#1">1</a></sup>，而状态 <code>states</code> 则是由以下数值构成的数组:</p>
+<pre><code class="language-xml">&lt;enum name=&quot;state&quot;&gt;
+  &lt;entry name=&quot;maximized&quot; /&gt;
+  &lt;entry name=&quot;fullscreen&quot; /&gt;
+  &lt;entry name=&quot;resizing&quot; /&gt;
+  &lt;entry name=&quot;activated&quot; /&gt;
+  &lt;entry name=&quot;tiled_left&quot; /&gt;
+  &lt;entry name=&quot;tiled_right&quot; /&gt;
+  &lt;entry name=&quot;tiled_top&quot; /&gt;
+  &lt;entry name=&quot;tiled_bottom&quot; /&gt;
+&lt;/enum&gt;
+</code></pre>
+<p>关闭事件有时可以被忽略，一个典型的原因是向用户显示一个确认对话框，以保存他们还未保存的工作。我们可以很轻松地更新第 7 章中的示例代码，以支持这些事件。</p>
+<pre><code class="language-diff">diff --git a/client.c b/client.c
+--- a/client.c
++++ b/client.c
+@@ -70,9 +70,10 @@ struct client_state {
+ 	struct xdg_surface *xdg_surface;
+ 	struct xdg_toplevel *xdg_toplevel;
+ 	/* State */
+-	bool closed;
+ 	float offset;
+ 	uint32_t last_frame;
++	int width, height;
++	bool closed;
+ };
+ 
+ static void wl_buffer_release(void *data, struct wl_buffer *wl_buffer) {
+@@ -86,7 +87,7 @@ static const struct wl_buffer_listener wl_buffer_listener = {
+ static struct wl_buffer *
+ draw_frame(struct client_state *state)
+ {
+-	const int width = 640, height = 480;
++	int width = state-&gt;width, height = state-&gt;height;
+ 	int stride = width * 4;
+ 	int size = stride * height;
+ 
+@@ -124,6 +125,32 @@ draw_frame(struct client_state *state)
+ 	return buffer;
+ }
+ 
++static void
++xdg_toplevel_configure(void *data,
++		struct xdg_toplevel *xdg_toplevel, int32_t width, int32_t height,
++		struct wl_array *states)
++{
++	struct client_state *state = data;
++	if (width == 0 || height == 0) {
++		/* Compositor is deferring to us */
++		return;
++	}
++	state-&gt;width = width;
++	state-&gt;height = height;
++}
++
++static void
++xdg_toplevel_close(void *data, struct xdg_toplevel *toplevel)
++{
++	struct client_state *state = data;
++	state-&gt;closed = true;
++}
++
++static const struct xdg_toplevel_listener xdg_toplevel_listener = {
++	.configure = xdg_toplevel_configure,
++	.close = xdg_toplevel_close,
++};
++
+ static void
+ xdg_surface_configure(void *data,
+ 		struct xdg_surface *xdg_surface, uint32_t serial)
+@@ -163,7 +190,7 @@ wl_surface_frame_done(void *data, struct wl_callback *cb, uint32_t time)
+ 	cb = wl_surface_frame(state-&gt;wl_surface);
+ 	wl_callback_add_listener(cb, &amp;wl_surface_frame_listener, state);
+ 
+-	/* Update scroll amount at 8 pixels per second */
++	/* Update scroll amount at 24 pixels per second */
+ 	if (state-&gt;last_frame != 0) {
+ 		int elapsed = time - state-&gt;last_frame;
+ 		state-&gt;offset += elapsed / 1000.0 * 24;
+@@ -217,6 +244,8 @@ int
+ main(int argc, char *argv[])
+ {
+ 	struct client_state state = { 0 };
++	state.width = 640;
++	state.height = 480;
+ 	state.wl_display = wl_display_connect(NULL);
+ 	state.wl_registry = wl_display_get_registry(state.wl_display);
+ 	wl_registry_add_listener(state.wl_registry, &amp;wl_registry_listener, &amp;state);
+@@ -227,6 +256,8 @@ main(int argc, char *argv[])
+ 			state.xdg_wm_base, state.wl_surface);
+ 	xdg_surface_add_listener(state.xdg_surface, &amp;xdg_surface_listener, &amp;state);
+ 	state.xdg_toplevel = xdg_surface_get_toplevel(state.xdg_surface);
++	xdg_toplevel_add_listener(state.xdg_toplevel,
++			&amp;xdg_toplevel_listener, &amp;state);
+ 	xdg_toplevel_set_title(state.xdg_toplevel, &quot;Example client&quot;);
+ 	wl_surface_commit(state.wl_surface);
+</code></pre>
+<p>如果你再次编译并运行这个客户端，你会注意到它的行为表现得比之前更加完善了。</p>
+<h2 id="请求改变状态"><a class="header" href="#请求改变状态">请求改变状态</a></h2>
+<p>客户端也可以向混成器请求将自己置入这些状态中（最大、最小化等等），或者对窗口的大小进行限制。</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_max_size&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;set_min_size&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;set_maximized&quot; /&gt;
+
+&lt;request name=&quot;unset_maximized&quot; /&gt;
+
+&lt;request name=&quot;set_fullscreen&quot; /&gt;
+  &lt;arg name=&quot;output&quot;
+    type=&quot;object&quot;
+    interface=&quot;wl_output&quot;
+    allow-null=&quot;true&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;unset_fullscreen&quot; /&gt;
+
+&lt;request name=&quot;set_minimized&quot; /&gt;
+</code></pre>
+<p>混成器通过发送一个相应的 <code>configure</code> 配置事件来表明它对这些请求的确认。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>这考虑到了客户端 <code>set_window_geometry</code> 请求所发送的窗口的几何形状。建议的尺寸仅包括窗口几何形状所代表的空间（即外接矩形）。</p>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../10.XDG_shell_in_depth/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../10.XDG_shell_in_depth/2.Popups.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../10.XDG_shell_in_depth/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../10.XDG_shell_in_depth/2.Popups.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

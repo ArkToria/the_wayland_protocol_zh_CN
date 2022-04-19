@@ -1,0 +1,3112 @@
+<!DOCTYPE HTML>
+<html lang="zh-cmn-Hans-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Wayland Protocol（自译中文版）</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="一本介绍 Wayland 协议的书">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1.Introduction/index.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1.Introduction/1.High-level_Wayland_Design.html"><strong aria-hidden="true">1.1.</strong> Wayland 的上层设计</a></li><li class="chapter-item expanded "><a href="1.Introduction/2.Goals_and_target_audience.html"><strong aria-hidden="true">1.2.</strong> 目标和受众</a></li><li class="chapter-item expanded "><a href="1.Introduction/3.Whats_in_the_wayland_package.html"><strong aria-hidden="true">1.3.</strong> Wayland 软件包内容</a></li></ol></li><li class="chapter-item expanded "><a href="2.Protocol_design/index.html"><strong aria-hidden="true">2.</strong> 协议设计</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2.Protocol_design/1.wire_protocol_basics.html"><strong aria-hidden="true">2.1.</strong> 基础线协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/2.interfaces_requests_events.html"><strong aria-hidden="true">2.2.</strong> 接口、请求和事件</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/3.the_high-level_protocol.html"><strong aria-hidden="true">2.3.</strong> 上层协议</a></li><li class="chapter-item expanded "><a href="2.Protocol_design/4.protocol_design_patterns.html"><strong aria-hidden="true">2.4.</strong> 协议设计准则</a></li></ol></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/index.html"><strong aria-hidden="true">3.</strong> 深入 libwayland</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/1.wayland-util_primitives.html"><strong aria-hidden="true">3.1.</strong> Wayland-util 原语</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/2.wayland-scanner.html"><strong aria-hidden="true">3.2.</strong> wayland-scanner</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/3.proxies_and_resources.html"><strong aria-hidden="true">3.3.</strong> 代理与资源</a></li><li class="chapter-item expanded "><a href="3.The_libwayland_implementation/4.interfaces_and_listeners.html"><strong aria-hidden="true">3.4.</strong> 接口和监听</a></li></ol></li><li class="chapter-item expanded "><a href="4.The_Wayland_display/index.html"><strong aria-hidden="true">4.</strong> Wayland 显示</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4.The_Wayland_display/1.Creating_a_display.html"><strong aria-hidden="true">4.1.</strong> 创建显示</a></li><li class="chapter-item expanded "><a href="4.The_Wayland_display/2.Incorporating_an_event_loop.html"><strong aria-hidden="true">4.2.</strong> 加入一个事件循环</a></li></ol></li><li class="chapter-item expanded "><a href="5.Globals_and_the_registry/index.html"><strong aria-hidden="true">5.</strong> 全局和注册</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5.Globals_and_the_registry/1.Binding_to_globals.html"><strong aria-hidden="true">5.1.</strong> 绑定到全局</a></li><li class="chapter-item expanded "><a href="5.Globals_and_the_registry/2.Registering_globals.html"><strong aria-hidden="true">5.2.</strong> 注册全局对象</a></li></ol></li><li class="chapter-item expanded "><a href="6.Buffers_and_surfaces/index.html"><strong aria-hidden="true">6.</strong> 缓冲区和表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6.Buffers_and_surfaces/1.Use_wl_compositor.html"><strong aria-hidden="true">6.1.</strong> 使用 wl_compositor</a></li><li class="chapter-item expanded "><a href="6.Buffers_and_surfaces/2.Shared_memory_buffers.html"><strong aria-hidden="true">6.2.</strong> 共享内存缓冲区</a></li><li class="chapter-item expanded "><a href="6.Buffers_and_surfaces/3.Linux_dmabuf.html"><strong aria-hidden="true">6.3.</strong> Linux dmabuf</a></li><li class="chapter-item expanded "><a href="6.Buffers_and_surfaces/4.Surface_roles.html"><strong aria-hidden="true">6.4.</strong> 表面的 “角色”</a></li></ol></li><li class="chapter-item expanded "><a href="7.XDG_shell_basics/index.html"><strong aria-hidden="true">7.</strong> XDG shell 基础</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7.XDG_shell_basics/1.XDG_surfaces.html"><strong aria-hidden="true">7.1.</strong> XDG surfaces</a></li><li class="chapter-item expanded "><a href="7.XDG_shell_basics/2.Application_windows.html"><strong aria-hidden="true">7.2.</strong> 应用程序窗口</a></li><li class="chapter-item expanded "><a href="7.XDG_shell_basics/3.Extended_example_code.html"><strong aria-hidden="true">7.3.</strong> 扩展示例代码</a></li></ol></li><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/index.html"><strong aria-hidden="true">8.</strong> 深入理解表面</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/1.Surface_lifecycle.html"><strong aria-hidden="true">8.1.</strong> 表面的生命周期</a></li><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/2.Frame_callbacks.html"><strong aria-hidden="true">8.2.</strong> 帧回调</a></li><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/3.Damaging_surfaces.html"><strong aria-hidden="true">8.3.</strong> 损坏表面</a></li><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/4.Surface_regions.html"><strong aria-hidden="true">8.4.</strong> 表面区域</a></li><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/5.Subsurfaces.html"><strong aria-hidden="true">8.5.</strong> 子表面</a></li><li class="chapter-item expanded "><a href="8.Surfaces_in_depth/6.High_density_surfaces.html"><strong aria-hidden="true">8.6.</strong> 高分辨率表面</a></li></ol></li><li class="chapter-item expanded "><a href="9.Seats_handling_input/index.html"><strong aria-hidden="true">9.</strong> Seats: 处理输入</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="9.Seats_handling_input/1.Pointer_input.html"><strong aria-hidden="true">9.1.</strong> 光标指针输入</a></li><li class="chapter-item expanded "><a href="9.Seats_handling_input/2.XKB_briefly.html"><strong aria-hidden="true">9.2.</strong> XKB 简介</a></li><li class="chapter-item expanded "><a href="9.Seats_handling_input/3.Keyboard_input.html"><strong aria-hidden="true">9.3.</strong> 键盘输入</a></li><li class="chapter-item expanded "><a href="9.Seats_handling_input/4.Touch_input.html"><strong aria-hidden="true">9.4.</strong> 触控输入</a></li><li class="chapter-item expanded "><a href="9.Seats_handling_input/5.Expanding_our_example_code.html"><strong aria-hidden="true">9.5.</strong> 扩展我们的示例代码</a></li></ol></li><li class="chapter-item expanded "><a href="10.XDG_shell_in_depth/index.html"><strong aria-hidden="true">10.</strong> 深入理解 XDG shell</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="10.XDG_shell_in_depth/1.Configuration_and_lifecycle.html"><strong aria-hidden="true">10.1.</strong> 配置和生命周期</a></li><li class="chapter-item expanded "><a href="10.XDG_shell_in_depth/2.Popups.html"><strong aria-hidden="true">10.2.</strong> 弹出窗口</a></li><li class="chapter-item expanded "><a href="10.XDG_shell_in_depth/3.Interactive_move_and_resize.html"><strong aria-hidden="true">10.3.</strong> 交互式移动和尺寸调整</a></li><li class="chapter-item expanded "><a href="10.XDG_shell_in_depth/4.Pointers.html"><strong aria-hidden="true">10.4.</strong> 指针</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Wayland Protocol（自译中文版）</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/axionl/the_wayland_protocol_zh_CN" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p><img src="1.Introduction/banner.png" alt="banner" /></p>
+<h1 id="介绍"><a class="header" href="#介绍">介绍</a></h1>
+<p>Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 系统的下一代显示服务。并自称是将应用程序窗口显示在用户屏幕上的最佳方法。过去曾经使用过 X11 的读者会对 Wayland 的改进感到惊喜，而 Unix 上的图形新手将发现它是一个灵活而强大的系统，可用于构建图形应用程序和桌面。</p>
+<p>这本书将会帮助您深入理解 Wayland 的概念、设计和实现，并为您提供构建自行构建 Wayland 客户端和服务端所需的工具。在阅读过程中，我们将构建 Wayland 的理想模型，并建立对其原理的认知。在这本书中，你能发现许多令你恍然大悟的时刻，Wayland 直观的设计让选择变得更加明确，有利于保持顺畅的阅读体验。欢迎来到开源图形的未来！</p>
+<p><strong>注意：</strong> 这还只是草案。第一到第十章基本已完成，可能后续会有所更新。第十一章及后续内容大部分有待撰写。</p>
+<h3 id="todo"><a class="header" href="#todo">TODO</a></h3>
+<ul>
+<li>Expand on resource lifetimes and avoiding race conditions in chapter 2.4</li>
+<li>Move linux-dmabuf details to the appendix, add note about wl_drm &amp; Mesa</li>
+<li>Rewrite the introduction text</li>
+<li>Add example code for interactive move, to demonstrate the use of serials</li>
+<li>Use — instead of - where appropriate</li>
+<li>Prepare PDFs and EPUBs</li>
+</ul>
+<h2 id="关于这本书"><a class="header" href="#关于这本书">关于这本书</a></h2>
+<p>本书采用 <a href="https://github.com/rust-lang/mdBook">mdbook</a> 构建，译者翻译水平有限，疑问请自寻原书解答，许可同源。</p>
+<p>自译项目地址：<a href="https://github.com/axionl/the_wayland_protocol_zh_CN">https://github.com/axionl/the_wayland_protocol_zh_CN</a></p>
+<p>阅读地址：<a href="https://wayland.axionl.me">https://wayland.axionl.me</a></p>
+<p>原书：<a href="https://wayland-book.com/introduction.html">https://wayland-book.com</a></p>
+<p>许可：<a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p>
+<p>源码：<a href="https://git.sr.ht/%7Esircmpwn/wayland-book">https://git.sr.ht/~sircmpwn/wayland-book</a></p>
+<h2 id="电子版"><a class="header" href="#电子版">电子版</a></h2>
+<ul>
+<li>EPUB 格式：由于 github page 页面目录结构配置问题，暂时无法提供，可以自行 <code>cargo install mdbook-epub</code> 安装最新版构建。</li>
+<li>PDF 格式：页面右上角打印</li>
+</ul>
+<h2 id="关于作者"><a class="header" href="#关于作者">关于作者</a></h2>
+<p>用 Drew 紧密合作者 Preston Carpenter 的话来说：</p>
+<p>Drew DeVault 从 <a href="https://swaywm.org/">sway</a>（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。</p>
+<h2 id="扩展阅读"><a class="header" href="#扩展阅读">扩展阅读</a></h2>
+<ul>
+<li><a href="https://farseerfc.me/zhs/brief-history-of-compositors-in-desktop-os.html">桌面系统的混成器简史</a></li>
+<li><a href="https://farseerfc.me/zhs/compositor-in-X-and-compositext.html">X 中的混成器与 Composite 扩展</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-的上层设计"><a class="header" href="#wayland-的上层设计">Wayland 的上层设计</a></h1>
+<p>你的电脑有输入和输出设备，它们各自负责接收你的信息并将其显示给你。输入设备例如：</p>
+<ul>
+<li>键盘</li>
+<li>麦克风</li>
+<li>触摸板</li>
+<li>触摸屏</li>
+<li>数位板</li>
+</ul>
+<p>而输出设备通常是桌面上的显示器、笔记本或其他移动设备的屏幕。这些显示资源在你的应用程序之间共用，而 Wayland 混成器在其中起到给客户端分派输入事件并在合适位置显示程序窗口的作用。将所有应用程序窗口组合在一起显示在屏幕上的过程被称为“混成”，因此我们将执行此操作的软件称作混成器。</p>
+<h2 id="现状"><a class="header" href="#现状">现状</a></h2>
+<p>有许多不同的软件组成了桌面生态系统。诸如用于渲染的 Mesa 及其 Linux KMS/DRM 子系统，负责缓存分配的 GBM (Generic Buffer Management 通用缓冲区管理)，用户空间库 libdrm, libinput, evdev 等。但是不用担心，理解 Wayland 几乎不需要具备这些体系的专业知识，并且这些内容都大大超出了本书范围。事实上，Wayland 协议是相当保守和抽象的，很容易就能构建出一个基于 Wayland 的桌面并且大多数软件无需额外实现什么就能运行。话虽如此，但从表面上理解这些部分是什么，以及它们是如何工作，仍是十分有用的。让我们自底向上逐步展开。</p>
+<h2 id="硬件部分"><a class="header" href="#硬件部分">硬件部分</a></h2>
+<p>一台典型的计算机配备了一些重要的硬件。在机箱外面，我们还有显示器、键盘、鼠标，或许还有麦克风和一个可爱的 USB 保温杯。机箱内部有一系列与这些设备接口相连的组件。例如,可能你的键盘和鼠标正在使用由系统专有控制器负责的 USB 接口，你的显示器正连接着 GPU。</p>
+<p>这些系统有它们自己的任务和状态。例如，GPU 有以显存形式提供的像素缓冲区，并将这些像素扫描输出到显示器上。GPU 还提供经过特调整的处理器，它们虽然在其他方面有所不如，但可以很好地处理高度并行的任务（例如为 1080P 显示器上的 2,073,600 个像素计算正确的颜色）。USB 控制器的工作同样复杂的令人称奇，它要实现枯燥的 USB 规范以接受来自键盘的输入事件，或精心调控杯垫的温度，从而避免诉讼和让你感到不快的冷咖啡。</p>
+<p>在这个层面上，硬件几乎不了解系统上正在运行哪些应用程序。硬件提供了执行工作的命令接口，并告知相应的操作——而不在乎是谁发出的。因此，只允许一个组件与之对话......</p>
+<h2 id="内核部分"><a class="header" href="#内核部分">内核部分</a></h2>
+<p>这一责任落到了内核身上。内核是一头复杂的“野兽”，因此我们只关注与 Wayland 相关的部分。Linux 内核的任务是提供一个抽象的硬件，因此可以在用户态安全的访问它们，我们的 Wayland 混成器也同样运行在用户态。对于图形（称为 DRM 或直接渲染管理器 direct rendering manager）来说，可以在用户态有效地为 GPU 分配任务。DRM 另一个重要的子系统是 KMS（kernel mode setting），其用于枚举显示设备并为其设置属性，例如其选定的分辨率（也称为“模式”）。输入设备通过名为 evdev 的接口进行抽象。</p>
+<p>大多数内核接口都可以以特殊的设备文件形式存在于 <code>/dev</code> 供用户态调用。以 DRM 为例，这些文件位于 <code>/dev/dri/</code> 中，通常以主要节点 primary node（例如 card0）的形式进行特权操作（如模式设置），且以渲染节点 render node（如 renderD128）的形式进行非特权操作（如渲染或视频解码），而对于设备节点 device nodes 则为 <code>/dev/input/event*</code></p>
+<pre><code class="language-shell">$ ls /dev/dri/
+by-path  card0  renderD128
+</code></pre>
+<h2 id="用户态"><a class="header" href="#用户态">用户态</a></h2>
+<p>现在我们来看用户态。在这里，应用程序于硬件隔离，必须通过内核提供的设备节点才能运行。</p>
+<h3 id="libdrm"><a class="header" href="#libdrm">libdrm</a></h3>
+<p>大多数 Linux 内核接口都有一个对应的用户态，它为使用这些设备节点提供了令人满意的 C 语言 API。libdrm 库是其中之一，它是 DRM 子系统的用户态部分。Wayland 混成器使用它进行模式设置和其他 DRM 操作，但 Wayland 客户端通常不直接使用 libdrm。</p>
+<h3 id="mesa"><a class="header" href="#mesa">Mesa</a></h3>
+<p>Mesa 是 Linux 图形栈中最为重要的部分之一。它除了为 Linux 提供 OpenGL（和 Vulkan）的厂家优化实现之外，还提供了 GBM（Generic Buffer Management）库，这是一种在 libdrm 之上的抽象层，用于在 GPU 上分配缓冲区。大多数 Wayland 混成器将通过 Mesa 同时使用 GBM 和 OpenGL，且多数客户端至少使用 OpenGL 或 Vulkan 其中一种实现。</p>
+<h3 id="libinput"><a class="header" href="#libinput">libinput</a></h3>
+<p>如同 libdrm 是 DRM 子系统的抽象那样，libinput 提供了 evdev 用户态的抽象。它负责从内核接收输入设备的输入事件，将其解码为可用的形式，并传递给 Wayland 混成器。混成器需要特殊的权限才能使用 evdev 设备文件，从而迫使 Wayland 客户端通过混成器接收输入事件，这样可以防止键盘被记录等。</p>
+<h3 id="eudev"><a class="header" href="#eudev">(e)udev</a></h3>
+<p>用户空间负责初步处理来自内核的新设备，在 <code>/dev</code> 中配置目标设备节点的权限，并将这些更改的信息发送给系统上正在运行的程序。大多数系统使用 udev（或 eudev）。Wayland 混成器使用 udev 枚举输入设备和 GPU，并在出现新设备或者拔出旧设备的时候接收通知。</p>
+<h3 id="xkbcommon"><a class="header" href="#xkbcommon">xkbcommon</a></h3>
+<p>XKB（X Keyboard 的缩写）是 Xorg 服务的原始键盘处理子系统。几年前，开发者把它从 Xorg 代码树中提取出来，并做成了一个独立的键盘处理库且不再与 X 有任何实际的联系。Libinput（以及 Wayland 混成器）以扫描码的形式提供键盘事件，其准确含义因键盘而异。xkbcommon 负责将这些扫描到的码转化为有意义的通用键盘符号，如 65 转化为 XKB_KEY_Space。它还包含了一个状态机，该状态机知道在按住 shift 键的同时按下 “1” 会变成 “！”。</p>
+<h3 id="pixman"><a class="header" href="#pixman">pixman</a></h3>
+<p>这是一个客户端和混成器都使用的简单库，其可以有效的处理像素缓冲区，使用相交的矩形进行数学运算，以及执行其他类似的像素操作任务。</p>
+<h3 id="libwayland"><a class="header" href="#libwayland">libwayland</a></h3>
+<p>libwayland 是 Wayland 协议最常用的 C 语言实现，它处理许多底层的线协议。同时也提供了一个从 Wayland 协议定义（XML 文件）生成高级代码的工具。我们将在第 1.3 章以及整本书中详细讨论 libwayland。</p>
+<h3 id="其他"><a class="header" href="#其他">其他</a></h3>
+<p>到目前为止，提到的每个部分在整个 Linux 桌面生态系统中都是一致的。而除此以外还有更多的组件。许多图形应用程序根本不了解 Wayland，而是选择诸如 GTK+、QT、SDL 和 GLFW 之类的库来进行处理。许多混成器选择像 wlroots 这样的软件来抽象它们所负责的部分，而其它的一类混成器则在内部实现所有功能。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="目标和受众"><a class="header" href="#目标和受众">目标和受众</a></h1>
+<p>我们的目标是让您从本书中了解到 Wayland 协议及其高级用法。您应该对 Wayland 核心协议中的所有内容有扎实的了解，并具有评估和实现生产中使用的各种扩展协议的必备知识。首先，这本书通过着重于 Wayland 的客户端来介绍其架构。此外，它也应该为 Wayland 混成器开发者提供一些实用的工具。</p>
+<p>自由桌面生态系统十分复杂，并且由许多分离的部分所组成。我们将很少讨论这些部分——在这里你将不会找到关于在 Wayland 混成器中利用 libdrm 或者 libinput 处理 evdev 事件的信息。因此这本书不是构建 Wayland 混成器的综合指南。我们也不会讨论到图像绘制技术，如 Cairo、Pango、GTK+ 等，尽管它们对于 Wayland 客户端来说十分有用。因此，对于实际的 Wayland 客户端实现而言，这也不是一个可靠的指南。相反，我们只专注于 Wayland 的细节。</p>
+<p>这本书只涵盖协议和 libwayland。如果你正在编写一个客户端，并且已经熟悉自己喜欢的 UI 渲染库，那么请带上自己的“像素”，我们将帮助您在 Wayland 上显示它们。如果你已经对操作混成器和输入设备所需的技术有所了解，那么本书将帮助您学习如何与客户端进行通信。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-软件包内容"><a class="header" href="#wayland-软件包内容">Wayland 软件包内容</a></h1>
+<p>当你在遵循 freedesktop.org 规范的 Linux 发行版中安装 &quot;wayland&quot; 的时候，很可能最后得到  <code>libwayland-client</code>、<code>libwayland-server</code>、<code>wayland-scanner</code> 和 <code>wayland.xml</code> 这些文件。它们或分别位于 <code>/usr/lib</code>、<code>/usr/include</code>、<code>/usr/bin</code> 和 <code>/usr/share/wayland</code> 中。该软件包代表了 Wayland 协议最主流的实现，但这并不是唯一的。第三章详细介绍了 Wayland 的实现；这本书其余部分同样适用于任何实现。</p>
+<h2 id="waylandxml"><a class="header" href="#waylandxml">wayland.xml</a></h2>
+<p>Wayland 协议通过 XML 文件进行定义。如果定位到并在编辑器中打开了 &quot;wayland.xml&quot; 文件，你将会发现 Wayland 核心协议的 XML 规范。这是一个高级协议，它建立在我们在下一章将要讨论的线协议之上。本书的大部分内容致力于解释该文件。</p>
+<h2 id="wayland-scanner"><a class="header" href="#wayland-scanner">wayland-scanner</a></h2>
+<p>&quot;wayland-scanner&quot; 工具被用于处理这些 XML 文件并生成对应代码，其最常用的实现正如你现在所见的 <code>wayland-scanner</code>，它可以用于从诸如 wayland.xml 之类的文件生成 C 头文件和上下文代码。在其它的编程语言中有对应的 scanner，如 wayland-rs (Rust)、waymonad-scanner (Haskell) 等。</p>
+<h2 id="libwayland-1"><a class="header" href="#libwayland-1">libwayland</a></h2>
+<p><code>libwayland-client</code> 和 <code>libwayland-server</code> 这两个库包含了一个双端通信线协议的实现，提供了一些常用的实用工具来处理 Wayland 的数据结构、简单的事件循环等。此外，这些库还包含 <code>wayland-scanner</code> 生成的 Wayland 核心协议的预编译副本。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="协议设计"><a class="header" href="#协议设计">协议设计</a></h1>
+<p>Wayland 协议是由多层抽象结构所构建的。它从一个基本的线协议格式开始（该格式是可用事先约定好的接口解码的消息流），然后用更高级别的程序来枚举接口，创建符合这些接口的资源，以及交换相关信息，这便是 Wayland 协议及其扩展的内容。且最重要的是，我们拥有了一些更宽泛的模式，这些模式在 Wayland 协议设计中经常用到。我们将在本章节中介绍所有相关内容。</p>
+<p>让我们继续自下而上地学习。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="基础线协议"><a class="header" href="#基础线协议">基础线协议</a></h1>
+<p><strong>注意：</strong> 如果你正打算使用 <code>libwayland</code>，那么本章节选读，可自由转跳到第 2.2 章节。</p>
+<p>线协议是由 32 位值所组成的流，使用主机的字节顺序进行编码（例如 x86 系列 CPU 上的小端序）。如下表示原始类型的值：</p>
+<ul>
+<li>int, uint: 32 位有符号或无符号整型</li>
+<li>fixed: 24 位整数 + 8 位小数的定点数</li>
+<li>object: 32 位对象 ID</li>
+<li>new_id: 32 位对象 ID，收到对象时分配</li>
+</ul>
+<p>除了上面这些基本类型之外，下面还有一些常用的类型：</p>
+<ul>
+<li>
+<p>string: 字符串，以 32 位整数为前缀，指定其长度（以字节为单位），而后是字符串内容和 NUL 终止符，并用未定义的数据填充满 32 位。没有指定编码，但实际上是使用 UTF-8。</p>
+</li>
+<li>
+<p>array: 任意的数据块，以 32 位整形作为前缀按位指定其长度，随后是数组逐字内容和 NUL 结束符，用未定义的数据填充不满 32 位长度的部分。</p>
+</li>
+<li>
+<p>fd: 主传输上的 0-bit 值，在 Unix 域套接字信息（msg_control）中使用辅助数据，将文件描述符从一段传输到另一端。</p>
+</li>
+<li>
+<p>enum: 一个单独的值（或者 bitmap）用于枚举已知常量，编码为 32 位整形。</p>
+</li>
+</ul>
+<h2 id="消息"><a class="header" href="#消息">消息</a></h2>
+<p>线协议是使用这些原语构建而成的消息流。每个消息都是对 object 起作用的一个事（服务端到客户端）件或者请求（客户端到服务端）。</p>
+<p>消息头由两个部分组成。第一个是起作用的对象 ID。第二个是两个 16 位值；高 16 位读音消息的大小（包括头本身），低 16 位事件或请求的操作码。其参数基于双方事先约定的消息签名。接收方查找对象 ID 以及由其操作码定义的事件或请求，以确定消息的签名和性质。</p>
+<table><thead><tr><th></th><th>msg header</th><th></th></tr></thead><tbody>
+<tr><td>object ID</td><td>msg size (upper 16bits)</td><td>code (lower 16bits)</td></tr>
+</tbody></table>
+<p>为了解析消息，客户端和服务端必须先创建对象。作为 Wayland 的显示单例已预先分配对象 ID，可用于引导其他对象。我们将在第四章中对此进行讨论，而下一章将讨论什么是接口，以及假设您已经协商了对象 ID 的情况下请求和事件是如何工作，下见后文。</p>
+<h2 id="对象-id"><a class="header" href="#对象-id">对象 ID</a></h2>
+<p>当消息带着 <code>new_id</code> 参数来的时候，发送方将为其分配一个对象 ID（用于该对象的接口是通过其他参数建立的，或者是针对该请求或事件预先约定的）。此对象 ID 可以用在后续消息中使用，作为信息头的第一个字或者 <code>object_id</code> 参数。客户端从 <code>1</code> 到 <code>0xFEFFFFFF</code> 范围内分配 ID，服务端在 <code>0xFF000000</code> 到 <code>0xFFFFFFFF</code> 内分配 ID。ID 从下限开始，并随着每次新对象的分配而递增。</p>
+<p>对象 ID 为 0 表示一个空对象；也就是说不存在对象或缺少显式声明。</p>
+<h2 id="传输"><a class="header" href="#传输">传输</a></h2>
+<p>迄今为止，所有已知的 Wayland 实现都工作在 Unix 域套接字上。尤其是出于一个原因而使用它：文件描述符消息。Unix 套接字是能够在进程之间传输文件描述符的最为实用的传输方式，并且对于大量数据传输而言是十分必要的（主要如键映射、像素缓冲和剪贴板内容）。从理论上讲，可以使用其他传输方式（如 TCP），但需要有人来找出另一种传输块数据的方式。</p>
+<p>要找到连接的 Unix 套接字，大多数实现只需要执行 libwayland 的操作：</p>
+<ol>
+<li>如果已经设置了 <code>WAYLAND_SOCKET</code>，则说明已经在其上建立了文件描述符编号，并假设父进程为我们配置了连接。</li>
+<li>如果已经设置了 <code>WAYLAND_DISPLAY</code>，则与 <code>XDG_RUNTIME_DIR</code> 路径连接以建立 Unix 套接字。</li>
+<li>假定套接字名称为 <code>wayland-0</code>，并与 <code>XDG_RUNTIME_DIR</code> 路径连接以建立 Unix 套接字。</li>
+<li>建议放弃。</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="接口请求和事件"><a class="header" href="#接口请求和事件">接口、请求和事件</a></h1>
+<p>Wayland 协议通过发出作用于对象的请求和事件来工作。每个对象都有一个接口，定义了可能的请求和事件以及对应的签名。让我们来考虑一个简单的示例接口：<code>wl_surface</code></p>
+<p><img src="2.Protocol_design/wl_surface.png" alt="wl_surface" /></p>
+<h2 id="请求"><a class="header" href="#请求">请求</a></h2>
+<p>表层是可以在屏幕上显示的像素区域。这是我们构建诸如窗口应用程序的原始方法之一。它的请求之一是“销毁”(damage)，客户端使用它来表示表层的某些部分已经更改并需要重新绘制。下面是一个销毁信息的注释示例：</p>
+<pre><code>0000000A    Object ID (10)
+00180002    Message length (24) and request opcode (2)
+00000000    X coordinate (int): 0
+00000000    Y coordinate (int): 0
+00000100    Width        (int): 256
+00000100    Height       (int): 256
+</code></pre>
+<p>这是会话的一小部分——表层是较早分配的，并且分配的 ID 为 <code>10</code>。当服务端接收到这一消息时，它会查找 ID 为 10 的对象，并发现它是一个 <code>wl_surface</code> 的实例。知道这一点后，它将使用操作码 <code>2</code> 查找请求的签名。然后知道它需要以四个整数作为参数，且可以解码该消息并将其分派以进行内部处理。</p>
+<h2 id="事件"><a class="header" href="#事件">事件</a></h2>
+<p>请求是对于客户端到服务端而言的，反之服务端可以给客户端发回送事件消息。服务端可以发送 <code>wl_surface</code> 的“输入”事件，当该表层在特定输出上显示时，服务端将发送该事件（客户端可以通过如调整 HiDPI 显示的比例系数来对此作出响应）</p>
+<pre><code>0000000A    Object ID (10)
+000C0000    Message length (12) and event opcode (0)
+00000005    Output (object ID): 5
+</code></pre>
+<p>该消息通过其 ID 引用了另一个对象：<code>wl_output</code>，该对象正用于表层显示。客户端收到此消息后与服务端行为类似：查找 ID 为 10 的对象，将其与 <code>wl_surface</code> 接口关联，并查找与操作码 <code>0</code> 对应事件的签名。它相应地解码其余信息（还查找 ID 为 <code>5</code> 的 <code>wl_output</code>），然后将其分派给内部处理。</p>
+<h2 id="接口"><a class="header" href="#接口">接口</a></h2>
+<p>接口用于事先定义请求和事件的列表，与每个请求相关联的操作码和解码消息所需的签名也都来自于其。我敢肯定你渴望知道如何实现接口——请看后文。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="上层协议"><a class="header" href="#上层协议">上层协议</a></h1>
+<p>在第 1.3 章节我们提到：<code>wayland.xml</code> 可能与 Wayland 软件包一同被安装到你的操作系统上。立即找到并用你偏好的编辑器打开该文件。通过这样的文件，我们定义了 Wayland 客户端或服务端所支持的接口。</p>
+<pre><code class="language-shell">$ pacman -F wayland.xml
+    usr/share/wayland/wayland.xml
+</code></pre>
+<p>文件中定义了每个接口，以及对应的请求、事件和各自的签名。为此，我们使用了 XML 格式。让我们看看上一章中讨论过的 <code>wl_surface</code> 示例：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;request name=&quot;damage&quot;&gt;
+    &lt;arg name=&quot;x&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;y&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;width&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;height&quot; type=&quot;int&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;event name=&quot;enter&quot;&gt;
+    &lt;arg name=&quot;output&quot; type=&quot;object&quot; interface=&quot;wl_output&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><strong>注意：</strong> 为了简单起见，我已经对该代码进行了删减，但是如果你之前有找到 <code>wayland.xml</code> 文件（实际文件和上述示例略有不同），建议查找此接口并亲自检查一下——其中有额外的文档，这些文档解释了每个请求和事件的目的和精确的语义。</p>
+<p>在处理此 XML 文件时，我们为每个请求和事件分配一个操作码（按照它们出现的顺序，零号开始，依次递增）结合参数列表，你可以解码来自线协议中的请求和事件，并且基于 XML 文件中的文档，你可以决定如何对软件进行编程以对应相应的行为。这一部分代码通常来自于代码生成器，我们将在第 3 章中讨论 libwayland 如何实现这一点。</p>
+<p>而从第四章开始，本书其余大部分内容专门用于解释该文件以及一些补充的扩展协议。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="协议设计准则"><a class="header" href="#协议设计准则">协议设计准则</a></h1>
+<p>在大多数 Wayland 的协议设计中已经应用了一些关键性的概念，我们将在此简要介绍它们。在整个上层 Wayland 协议及其扩展协议中都可以找到这些准则（至少在 Wayland 协议中）。如果您正在编写自己当协议扩展，那么聪明的做法是借鉴这些准则。</p>
+<h2 id="原子性"><a class="header" href="#原子性">原子性</a></h2>
+<p>Wayland 协议设计中最重要的准则就是原子性。Wayland 的既定目标是“每一帧都是完美的”。为此，大多数接口都允许以事务的方式进行更新，使用多个请求来创建一个新的表示状态，然后一次性提交所有请求。例如，可以在 <code>wl_surface</code> 上配置几个属性：</p>
+<ul>
+<li>附加的像素缓冲区</li>
+<li>需要重新绘制的变更区域</li>
+<li>出于优化而不透明的区域</li>
+<li>可接受输入事件的区域</li>
+<li>变形，例如旋转 90 度</li>
+<li>缓冲规模，用于 HiDPI</li>
+</ul>
+<p>该接口为这些请求提供了独立的配置，但它们都处于挂起状态（pending）。仅当提交请求的时候，挂起状态才会合并到当前状态（current）。从而使您可以在单帧内原子地更新所有这些属性。结合其他一些关键性设计决策，Wayland 混成器可以在每一帧中完美地呈现所有内容——没有画面撕裂和窗口部分更新，每个像素都恰如其分地显示。</p>
+<h2 id="资源生命周期"><a class="header" href="#资源生命周期">资源生命周期</a></h2>
+<p>另一个重要的设计准则是：避免服务端和客户端向无效对象发送相关事件或请求。于此，通过接口定义的事件和请求具有有限的生命周期，服务端和客户端也可以通过接口对其进行显式释放。只有当两边都先后同意才能释放对象所分配的资源。</p>
+<p>Wayland 是一个完全异步的协议。它将保证消息按发送顺序送达，但仅仅针对一个发送者的情况。例如，当客户端决定销毁其键盘设备时，服务端可能会有多个输入事件正在排队。客户端必须正确处理不再需要的对象事件，直到服务端同步。同理，如果客户端在销毁对象前将一些不再需要的请求入队，则服务端必须以正确的顺序发送这些请求，以便在客户端同意销毁该对象后不再对其进行使用。</p>
+<h2 id="版本控制"><a class="header" href="#版本控制">版本控制</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="关于-libwayland-的实现"><a class="header" href="#关于-libwayland-的实现">关于 libwayland 的实现</a></h1>
+<p>我们在 1.3 节中介绍了 libwayland 这一最受欢迎的 Wayland 实现。本书的大部分内容适用于任何实现，但是接下来的两章将使你熟悉 libwayland。</p>
+<p>Wayland 软件包包括用于 Wayland-Client 和 Wayland-Server 的 pkg-config 规范——请参阅构建系统的文档以获取有关它们的链接介绍。当然，大多数应用程序只会连接到其中一个。该库包含一些简单的原语（如链表）和 Wayland 的核心协议 ——<code>Wayland.xml</code> 的预编译版本。</p>
+<p>我们将从原语开始介绍。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-util-原语"><a class="header" href="#wayland-util-原语">Wayland-util 原语</a></h1>
+<p><code>wayland-util.h</code> 是客户端和服务端共同使用的库，它定义了许多结构、实用函数和宏，建立了一些用于 Wayland 应用程序的原语。其中包括：</p>
+<ul>
+<li>生成用于 Wayland 协议消息结构化重组和解构的代码</li>
+<li>链表 <code>wl_list</code> 的实现</li>
+<li>数组 <code>wl_array</code> 的实现（装配到相应的 Wayland 原语）</li>
+<li>用于 Wayland 标量（如定点小数）和 C 类型转化的实用程序</li>
+<li>调试记录工具，收集来自 libwayland 内部传出的消息</li>
+</ul>
+<p>头文件包含了许多非常好的注解，您应该自己阅读该文件。在接下来的几页中我们将详细介绍如何运用这些原语。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-scanner-1"><a class="header" href="#wayland-scanner-1">wayland-scanner</a></h1>
+<p>Wayland 包中含有一个二进制文件：<code>wayland-scanner</code>。该工具基于 2.3 节中所提及的定义 Wayland 协议的 XML 文件来生成 C 头文件和对应的胶水代码。生成的头文件为 <code>wayland-client-protocol.h</code> 和 <code>wayland-server-protocol.h</code>，此外通常还包括对协议进行封装的头文件 <code>wayland-client.h</code> 和 <code>wayland-server.h</code> ，而不是直接使用它们。</p>
+<p>该工具的用法非常简单（并可以在 <code>wayland-scanner -h</code> 看到用法总结），但仍可概述如下：</p>
+<ul>
+<li>生成客户端头文件</li>
+</ul>
+<pre><code class="language-shell">$ wayland-scanner client-header &lt; protocol.xml &gt; protocol_client.h
+</code></pre>
+<ul>
+<li>生成服务端头文件</li>
+</ul>
+<pre><code class="language-shell">$ wayland-scanner server-header &lt; protocol.xml &gt; protocol_server.h
+</code></pre>
+<ul>
+<li>生成胶水代码</li>
+</ul>
+<pre><code class="language-shell">$ wayland-scanner private-code &lt; protocol.xml &gt; protocol.c
+</code></pre>
+<p>不同的构建系统将使用不同的方法来自定义命令——请查阅构建系统的文档。一般来说，您将需要在构建时运行 <code>wayland-scanner</code>，然后编译并将你的应用程序链接到胶水代码。</p>
+<p>如果你方便的话可以立即尝试任意的 Wayland 协议（示例 <code>wayland.xml</code> 可能在 <code>/usr/share/wayland</code>）。打开胶水代码和头文件，并在阅读下面的章节时进行参考，以了解 <code>libwayland</code> 提供的原语在生成的代码中如何实际应用。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="代理与资源"><a class="header" href="#代理与资源">代理与资源</a></h1>
+<p>对象是客户端和服务端都知道的具有某种状态的实体，通过线协议协商来对其进行更改。在客户端，<code>libwayland</code> 通过 <code>wl_proxy</code> 接口引用这些对象。这些接口是对 C 语言友好的，是抽象对象的具体“代理”，并为客户端提供了间接函数，以将请求编组转化为线协议格式。如果你查看 <code>wayland-client.core.h</code> 文件，会发现一些实现该目的的底层函数。而通常你不会直接使用它们。</p>
+<pre><code class="language-c">// /usr/include/wayland-client-core.h
+// ...
+void wl_proxy_marshal(struct wl_proxy *p, uint32_t opcode, ...);
+
+struct wl_proxy * wl_proxy_create(struct wl_proxy *factory, const struct wl_interface *interface);
+// ...
+</code></pre>
+<p>在服务端，对象是通过 <code>wl_resource</code> 抽象的，这与客户端非常相似，但另有更复杂的内容——服务端必须跟踪哪个对象属于哪个客户端。每个 <code>wl_resource</code> 均由单个客户端所有。除此之外，该这两个接口基本相同，并且为编组事件发送到关联的客户端提供了底层的抽象。与直接在客户端上使用 <code>wl_proxy</code> 相比，直接在服务端上使用 <code>wl_resource</code> 的频率更高。这种用法的一个例子是获取对 <code>wl_client</code> 的引用，该 <code>wl_client</code> 拥有你所在上下文之外的操作资源，或者在客户端尝试无效操作的时候发送协议错误。</p>
+<p>此外还有另一组高级接口，大多数 Wayland 客户端和服务端的代码都与之交互以完成其大部分任务。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="接口与监听器"><a class="header" href="#接口与监听器">接口与监听器</a></h1>
+<p>终于，我们到达了 libwayland 抽象的顶层：接口和监听器。这一想法在先前的 wl_proxy, wl_resource 和原语一章中提到过，它们是 libwayland 中的单一实现，为这一层提供支持。当你通过 wayland-scanner 运行一个 XML 文件，它会生成接口和监听器，以及它们与底层接口之间的胶水代码，所有具体的实现都在包含高级协议所定义的每个接口中。</p>
+<p>回想一下，Wayland 连接上的每个参与者都可以接受和发送消息。客户端监听事件并发送请求，服务端监听请求并发送事件。各方都使用特定名称的 wl_listener 监听另一方的消息。下面是这个接口的一个例子：</p>
+<blockquote>
+<p>译者注：surface 有多重含义，但就 wayland 的使用场景来说往往指代窗口上的内容，而 shell surface 实际上就指代传统意义上的窗口。下面这个监听器包含进入和离开事件</p>
+</blockquote>
+<pre><code class="language-c">struct wl_surface_listener {
+	/** surface enters an output */
+	void (*enter)(void *data,
+		      struct wl_surface *wl_surface,
+		      struct wl_output *output);
+
+	/** surface leaves an output */
+	void (*leave)(void *data,
+		      struct wl_surface *wl_surface,
+		      struct wl_output *output);
+};
+</code></pre>
+<p>这是客户端 wl_surface 对应的监听器。wayland-scanner 生成要用到的 XML 文件如下：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;event name=&quot;enter&quot;&gt;
+    &lt;arg name=&quot;output&quot;
+      type=&quot;object&quot;
+      interface=&quot;wl_output&quot;/&gt;
+  &lt;/event&gt;
+
+  &lt;event name=&quot;leave&quot;&gt;
+    &lt;arg name=&quot;output&quot;
+      type=&quot;object&quot;
+      interface=&quot;wl_output&quot;/&gt;
+  &lt;/event&gt;
+  &lt;!-- additional details omitted for brevity --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>这下清楚了这些事件是如何构成一个监听接口的。每个函数指针接受任意一些用户数据，以及对所属资源的引用和该事件的参数，我们可以像这样将监听器绑定到 wl_surface：</p>
+<blockquote>
+<p>listener 结构体内带有对应的函数指针，将 listener 添加到 surface</p>
+</blockquote>
+<pre><code class="language-c">static void wl_surface_enter(void *data,
+        struct wl_surface *wl_surface, struct wl_output *output) {
+    // ...
+}
+
+static void wl_surface_leave(void *data,
+        struct wl_surface *wl_surface, struct wl_output *output) {
+    // ...
+}
+
+static const struct wl_surface_listener surface_listener = {
+    .enter = wl_surface_enter,
+    .leave = wl_surface_leave,
+};
+
+// ...cotd...
+
+struct wl_surface *surf;
+wl_surface_add_listener(surf, &amp;surface_listener, NULL);
+</code></pre>
+<p>wl_surface 接口也为客户端定义了一些可用的请求：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;request name=&quot;attach&quot;&gt;
+    &lt;arg name=&quot;buffer&quot;
+      type=&quot;object&quot;
+      interface=&quot;wl_buffer&quot;
+      allow-null=&quot;true&quot;/&gt;
+    &lt;arg name=&quot;x&quot; type=&quot;int&quot;/&gt;
+    &lt;arg name=&quot;y&quot; type=&quot;int&quot;/&gt;
+  &lt;/request&gt;
+  &lt;!-- additional details omitted for brevity --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>wayland-scanner 生成以下原型，以及编组此消息的胶水代码。</p>
+<pre><code class="language-c">void wl_surface_attach(struct wl_surface *wl_surface,
+    struct wl_buffer *buffer, int32_t x, int32_t y);
+</code></pre>
+<p>接口和监听器的服务端代码是相同的，不同的是它为请求生成监听器而为事件生成代码。当 libwayland 受到一条消息时，它会查找对象 ID 及其接口，然后使用它来解码消息的剩余部分。再在对象上寻找监听器并用消息的参数来调用你的函数。（传入的函数指针）</p>
+<p>这便是它的全貌了！我们用了几个抽象层才到达这一步，因此你现在应该了解一个事件是如何从你的服务端代码开始，在线路上变成一条消息，再到被客户端解读，并被分派到你的客户端代码。然而，还有一个未解决的问题。所有这些都假设你已经拥有了对 Wayland 对象的引用，而它又是如何得到的呢？</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-显示"><a class="header" href="#wayland-显示">Wayland 显示</a></h1>
+<p>截至目前，我们已经解释了 Wayland 协议如何在客户端和服务端中通过对象管理节点所有权，但还留下了一个重要的细节：如何在一开始创建这些对象。Wayland 的显示服务或默认的 <code>wl_display</code> 实现隐含在每个 Wayland 连接内。它通常有如下接口：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;sync&quot;&gt;
+    &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot;
+       summary=&quot;callback object for the sync request&quot;/&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;get_registry&quot;&gt;
+    &lt;arg name=&quot;registry&quot; type=&quot;new_id&quot; interface=&quot;wl_registry&quot;
+      summary=&quot;global registry object&quot;/&gt;
+  &lt;/request&gt;
+
+  &lt;event name=&quot;error&quot;&gt;
+    &lt;arg name=&quot;object_id&quot; type=&quot;object&quot; summary=&quot;object where the error occurred&quot;/&gt;
+    &lt;arg name=&quot;code&quot; type=&quot;uint&quot; summary=&quot;error code&quot;/&gt;
+    &lt;arg name=&quot;message&quot; type=&quot;string&quot; summary=&quot;error description&quot;/&gt;
+  &lt;/event&gt;
+
+  &lt;enum name=&quot;error&quot;&gt;
+    &lt;entry name=&quot;invalid_object&quot; value=&quot;0&quot; /&gt;
+    &lt;entry name=&quot;invalid_method&quot; value=&quot;1&quot; /&gt;
+    &lt;entry name=&quot;no_memory&quot; value=&quot;2&quot; /&gt;
+    &lt;entry name=&quot;implementation&quot; value=&quot;3&quot; /&gt;
+  &lt;/enum&gt;
+
+  &lt;event name=&quot;delete_id&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;uint&quot; summary=&quot;deleted object ID&quot;/&gt;
+  &lt;/event&gt;
+  &lt;!-- event 相当于接口的声明，其内部指定了变量名称，类型和说明 --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>对于大多数 Wayland 用户来说，最有趣的接口是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。简而言之，注册函数是用来分配其他对象的。其他的接口用于连接的状态维护，并且除非你正在写你自己的 libwayland 替代，否则这通常不重要。</p>
+<p>相反，本章节将重点讨论 libwayland 与 wl_display 对象相关的一些函数，用于建立和维护你与 Wayland 的连接。这些函数是用来操作 libwayland 内部状态的，而不是直接与线性协议请求和事件相关。</p>
+<p>我们将从这些函数中最重要的部分开始：建立显示服务。对于客户端来说，这将涵盖到连接服务器的实际过程。而对于服务端来说，则是为客户端连接配置显示服务的过程。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="创建一个显示"><a class="header" href="#创建一个显示">创建一个显示</a></h1>
+<p>启动你的文本编辑器——是时候编写我们的第一行代码了。</p>
+<h2 id="wayland-客户端"><a class="header" href="#wayland-客户端">Wayland 客户端</a></h2>
+<p>连接到 Wayland 服务端并创建一个 <code>wl_display</code> 来管理连接状态是非常容易的：</p>
+<pre><code class="language-cpp">#include &lt;stdio.h&gt;
+#include &lt;wayland-client.h&gt;
+
+int
+main(int argc, char *argv[])
+{
+    struct wl_display *display = wl_display_connect(NULL);
+    if (!display) {
+        fprintf(stderr, &quot;Failed to connect to Wayland display.\n&quot;);
+        return 1;
+    }
+    fprintf(stderr, &quot;Connection established!\n&quot;);
+
+    wl_display_disconnect(display);
+    return 0;
+}
+</code></pre>
+<p>让我们来编译并运行这个程序。假设你在阅读文本的时候使用的是 Wayland 混成器，那么结果应该是这样的：</p>
+<pre><code class="language-bash">$ cc -o client client.c -lwayland-client # cc 实际上是 gcc 的软链接
+$ ./client
+Connection established!
+</code></pre>
+<p><code>wl_display_connect</code> 是客户端建立 Wayland 连接最常见的方式，其声明如下：</p>
+<pre><code class="language-cpp">struct wl_display *wl_display_connect(const char *name);
+</code></pre>
+<p>参数 <code>name</code> 是 Wayland 显示服务的名称，通常是 &quot;wayland-0&quot;（可以通过 <code>$WAYLAND_DISPLAY</code> 环境变量查看）。你可以在我们的测试客户端中把 <code>NULL</code> 换成这个，然后自己试试——这很可能是可行的。这与 <code>$XDG_RUNTIME_DIR</code> 中的 Unix 套接字的名称相对应。但是 <code>NULL</code> 是推荐选项，如果选用，<code>libwayland</code> 会有如下操作：</p>
+<ul>
+<li>
+<ol>
+<li>如果 <code>$WAYLAND_DISPLAY</code> 已经被设置，则尝试连接到 <code>$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY</code></li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>试图连接 <code>$XDG_RUNTIME_DIR/wayland-0</code></li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>失败</li>
+</ol>
+</li>
+</ul>
+<p>这允许用户通过设置 <code>$WAYLAND_DISPLAY</code> 变量来特别指定他们想在哪个 Wayland 显示器上运行他们的客户端。如果有更复杂的需求，你也可以自行建立连接，并从文件描述符中创建一个 Wayland 显示服务：</p>
+<pre><code class="language-cpp">struct wl_display *wl_display_connect_to_fd(int fd);
+</code></pre>
+<p>你也可以通过 <code>wl_display_get_fd</code> 获得 <code>wl_display</code> 正在使用的文件描述符，无论你是如何创建这个显示服务的。</p>
+<pre><code class="language-cpp">int wl_display_get_fd(struct wl_display *display);
+</code></pre>
+<h2 id="wayland-服务端"><a class="header" href="#wayland-服务端">Wayland 服务端</a></h2>
+<p>这个过程对服务端来说也是相当简单的。显示服务的创建和套接字绑定是分离的，以使得你有时间在任何客户端能够连接到显示服务之前配置它。这里是另一个简例：</p>
+<pre><code class="language-cpp">#include &lt;stdio.h&gt;
+#include &lt;wayland-server.h&gt;
+
+int
+main(int argc, char *argv[])
+{
+    struct wl_display *display = wl_display_create();
+    if (!display) {
+        fprintf(stderr, &quot;Unable to create Wayland display.\n&quot;);
+        return 1;
+    }
+
+    const char *socket = wl_display_add_socket_auto(display);
+    if (!socket) {
+        fprintf(stderr, &quot;Unable to add socket to Wayland display.\n&quot;);
+        return 1;
+    }
+
+    fprintf(stderr, &quot;Running Wayland display on %s\n&quot;, socket);
+    wl_display_run(display);
+
+    wl_display_destroy(display);
+    return 0;
+}
+</code></pre>
+<p>让我们继续编译并运行：</p>
+<pre><code class="language-bash">$ cc -o server server.c -lwayland-server
+$ ./server &amp;
+Running Wayland display on wayland-1
+$ WAYLAND_DISPLAY=wayland-1 ./client
+Connection established!
+</code></pre>
+<p>使用 <code>wl_display_add_socket_auto</code> 将会允许 <code>libwayland</code> 自动决定显示服务的名称，默认为 <code>wayland-0</code>，或者 <code>wayland-$n</code>，这取决于是否有其他的 Wayland 混成器在 <code>$XDG_RUNTIME_DIR</code> 中存有套接字。然而，与客户端一样，你还有一些其他的选项来配置显示服务：</p>
+<pre><code class="language-cpp">int wl_display_add_socket(struct wl_display *display, const char *name);
+
+int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
+</code></pre>
+<p>在添加套接字后，调用 <code>wl_display_run</code> 将会运行 <code>libwayland</code> 的内部事件循环，并阻塞至调用 <code>wl_display_terminate</code> 终止。这个事件循环是什么？让我们翻开下一页就明白了！</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="加入一个事件循环"><a class="header" href="#加入一个事件循环">加入一个事件循环</a></h1>
+<p><code>libwayland</code> 为 Wayland 服务端提供了自己的事件循环实现，但维护者需要知道这是一种设计上的僭越行为。</p>
+<h2 id="wayland-服务端事件循环"><a class="header" href="#wayland-服务端事件循环">Wayland 服务端事件循环</a></h2>
+<p>由 <code>libwayland-server</code> 创建的每一个 <code>wl_display</code> 都有一个对应的 <code>wl_event_loop</code>，你可以通过 <code>wl_display_get_event_loop</code> 来获取其引用。如果你正在写一个新的 Wayland 混成器，你很可能想把它作为唯一的事件循环。你可以用 <code>wl_event_loop_add_fd</code> 来添加一个文件描述符，用 <code>wl_event_loop_add_timer</code> 来添加一个计时器。还可以通过 <code>wl_event_loop_add_signal</code> 来处理信号，这可能是非常便捷的做法。</p>
+<p>可以根据你的喜好配置事件循环，以监控混成器所需响应的全部事件。你可以通过调用 <code>wl_display_run</code> 来一次性处理事件和调度 Wayland 客户端。它将处理并陷入事件循环，直到通过 <code>wl_display_terminate</code> 进行终止。大多数 Wayland 混成器从一开始就考虑到 Wayland 的这种用法（而不是从 X11 移植过来）。</p>
+<p>然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。<code>wl_display</code> 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 <code>wl_event_loop_get_fd</code> 来过的一个可以回调的文件描述符，然后在该文件描述符发生活动时调用 <code>wl_event_loop_dispatch</code> 来处理事件。当你有数据需要写入客户端时，你也需要调用 <code>wl_display_flush_clients</code>。 </p>
+<h2 id="wayland-客户端事件循环"><a class="header" href="#wayland-客户端事件循环">Wayland 客户端事件循环</a></h2>
+<p>另一方面，<code>libwayland-client</code> 并没有自己的事件循环。然而，由于通常只有一个文件描述符，所以没有自己的事件循环更容易管理。如果你的程序期望响应唯一的 Wayland 事件，那么这个简单的循环就足够了。</p>
+<pre><code class="language-c">while (wl_display_dispatch(display) != -1) {
+    /* This space deliberately left blank */
+}
+</code></pre>
+<p>然而，如果你有一个更复杂的应用程序，你可以以任何方式建立你自己的事件循环，并通过 <code>wl_display_get_fd</code> 获得 Wayland 显示器的文件描述符。在 POLLIN 事件中调用 <code>wl_display_dispatch</code> 来处理传入的事件。要刷新输出的请求则用 <code>wl_display_flush</code>。</p>
+<h2 id="小节"><a class="header" href="#小节">小节</a></h2>
+<p>至此，你已经拥有了所有设置 Wayland 显示器和处理事件和请求的背景知识。剩下的唯一步骤是分配对象，以便与连接的对方通讯。为此，我们使用 registry 注册。在下一章结束时，我们将拥有自己第一个可用的 Wayland 客户端。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="全局和注册"><a class="header" href="#全局和注册">全局和注册</a></h1>
+<p>如果你还能回想起 2.1 章的内容——每个请求和事件都有一个对象 ID 与之关联。但到目前为止，我们还没有讨论对象是如何被创建的。当我们收到一个 Wayland 消息时，我们必须知道对象 ID 所代表的接口，以便对其进行编码。我们还必须以某种方式协商可用的对象，创建新的对象，以及为它们分配 ID。在 Wayland 上，我们同时解决这两个问题——当我们帮顶一个对象 ID 时，我们认为在未来所有的消息中使用其接口，并在我们本地状态中存储一个对象 ID 到接口的映射。</p>
+<p>为了引导这些，服务端提供了一个全局对象的列表。这些全局对象已经根据自身特点来提供信息和功能，且最常见的是它们被用来代理其他对象以实现各种目的——比如创建应用程序的窗口。这些全局对象它们自己也有对象 ID 和接口，我们必须以某种方式来分配和同意这些对象。</p>
+<p>毫无疑问地，你现在已经想到了鸡生蛋的问题，我们将揭示其奥秘：对象 ID 为 1 的已经被隐式分配给了 <code>wl_display</code> 接口。当你想要调用这个接口时，注意使用 <code>wl_display::get_registry</code> 请求：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;sync&quot;&gt;
+    &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;get_registry&quot;&gt;
+    &lt;arg name=&quot;registry&quot; type=&quot;new_id&quot; interface=&quot;wl_registry&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;!-- cotd --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><code>wl_display::get_registry</code> 请求可以用来将一个对象 ID 绑定定到 <code>wl_registry</code> 接口，这是在 <code>wayland.xml</code> 中找到的下一个接口。鉴于 <code>wl_display</code> 总是有 ID 为 1 的对象，下面的线程信息应该是有意义的（以大端序为例）</p>
+<pre><code>C-&gt;S    00000001 000C0001 00000002            .... .... ....
+</code></pre>
+<p>当我们将其分解时，第一串序列是对象 ID，第二串序列中前 16 位是消息总长度（以字节为单位），其后的位是请求操作码。剩下的字（只有一个）是参数。简而言之，这是对象 ID 1 <code>(wl_display)</code> 上调用的请求 1
+（从 0 开始），它接受一个参数：一个新对象生成的 ID。在 XML 文档中注意，这个新 ID 是提前定义好的，由 <code>wl_registry</code> 接口来管理。</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_registry&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;bind&quot;&gt;
+    &lt;arg name=&quot;name&quot; type=&quot;uint&quot; /&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;event name=&quot;global&quot;&gt;
+    &lt;arg name=&quot;name&quot; type=&quot;uint&quot; /&gt;
+    &lt;arg name=&quot;interface&quot; type=&quot;string&quot; /&gt;
+    &lt;arg name=&quot;version&quot; type=&quot;uint&quot; /&gt;
+  &lt;/event&gt;
+
+  &lt;event name=&quot;global_remove&quot;&gt;
+    &lt;arg name=&quot;name&quot; type=&quot;uint&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>这些接口我们将在后续的章节中讨论。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="绑定到全局"><a class="header" href="#绑定到全局">绑定到全局</a></h1>
+<p>在创建一个注册表对象时，服务端将为服务端上每个可用的全局对象发起全局事件。然后你可以与你需要的全局对象进行绑定。</p>
+<p>这个为已知对象分配 ID 的过程称为对象绑定。一旦客户端像这样绑定到注册表，服务器就会多次发起全局事件，以告知它支持哪些接口。每一个全局对象都有一个独一无二的名字，是一个无符号整数。接口字符串映射到协议中的接口名称：上面 XML 中的 <code>wl_display</code> 就是这样一个名称的例子。版本号也在这里定义——关于接口版本的更多信息，详见附录 C。</p>
+<p>为了绑定任意这些接口，我们需要使用绑定请求，其工作原理类似于我们绑定到 <code>wl_registry</code> 的神奇过程。例如，考虑这个线协议交换：</p>
+<pre><code>C-&gt;S    00000001 000C0001 00000002            .... .... ....
+
+S-&gt;C    00000002 001C0000 00000001 00000007   .... .... .... ....
+        776C5f73 686d0000 00000001            wl_s hm.. ....
+        [...]
+
+C-&gt;S    00000002 00100000 00000001 00000003   .... .... .... ....
+</code></pre>
+<p>第一个消息与我们已经剖析过的消息相同。第二个消息是来自服务端的事件：对象 2 （客户端在第一个消息中分配了 <code>wl_registry</code>）操作码 0（全局），参数 1、<code>wl_shm</code> 和 1 分别是这个全局对象的名字、接口和版本。客户端通过调用对象ID 2（<code>wl_registry::bind</code>）的操作码 0 进行响应，并将对象 ID 3 分配给全局名称 1 ——即绑定到全局的 <code>wl_shm </code>。这个对象未来的事件和请求是由 <code>wl_shm</code> （shared memory support）协议定义的，你可以在 <code>wayland.xml</code> (<code>/usr/share/wayland/wayland.xml</code>) 中找到。</p>
+<p>一旦你创建了这个对象，你就可以利用其接口来完成各种任务——在 <code>wl_shm</code> 的例子中，管理客户端和服务端之间的共享内存。本书剩下的大部分内容是用来解释这些全局对象的用法。</p>
+<p>有了这些信息，我们就可以写出我们第一个有用的 Wayland 客户端：它可以简单地打印出服务端上所有可用的全局接口。</p>
+<pre><code class="language-c">#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;wayland-client.h&gt;
+
+static void
+registry_handle_global(void *data, struct wl_registry *registry,
+		uint32_t name, const char *interface, uint32_t version)
+{
+	printf(&quot;interface: '%s', version: %d, name: %d\n&quot;,
+			interface, version, name);
+}
+
+static void
+registry_handle_global_remove(void *data, struct wl_registry *registry,
+		uint32_t name)
+{
+	// This space deliberately left blank
+}
+
+static const struct wl_registry_listener
+registry_listener = {
+	.global = registry_handle_global,
+	.global_remove = registry_handle_global_remove,
+};
+
+int
+main(int argc, char *argv[])
+{
+	struct wl_display *display = wl_display_connect(NULL);
+	struct wl_registry *registry = wl_display_get_registry(display);
+	wl_registry_add_listener(registry, &amp;registry_listener, NULL);
+	wl_display_roundtrip(display);
+	return 0;
+}
+</code></pre>
+<p>请参考之前的章节来解释这个程序。我们连接到显示器（4.1 章），获得注册表（本章），然后给它添加一个监听器（3.4 章），最后打印这个混成器上可用的全局接口来处理全局事件。自己试试吧。</p>
+<pre><code class="language-bash">$ cc -o globals -lwayland-client globals.c
+</code></pre>
+<p>执行程序后输出结果如下：</p>
+<pre><code>interface: 'wl_shm', version: 1, name: 1
+interface: 'wl_drm', version: 2, name: 2
+interface: 'zwp_linux_dmabuf_v1', version: 3, name: 3
+...
+</code></pre>
+<p>注意：本章是我们最后一次展示线程协议输出到十六进制，可能也是你最后一次在文中看到它们总体的情况。追踪你的 Wayland 客户端或服务端的一个更好的方法是，在运行你的程序之前，将环境中的 <code>WAYLAND_DEBUG</code> 变量设为 1。现在就用 <code>globals</code> 程序试试吧!</p>
+<pre><code>[4144282.115]  -&gt; wl_display@1.get_registry(new id wl_registry@2)
+[4144282.149]  -&gt; wl_display@1.sync(new id wl_callback@3)
+[4144282.551] wl_display@1.delete_id(3)
+[4144282.575] wl_registry@2.global(1, &quot;wl_shm&quot;, 1)
+interface: 'wl_shm', version: 1, name: 1
+[4144282.605] wl_registry@2.global(2, &quot;wl_drm&quot;, 2)
+interface: 'wl_drm', version: 2, name: 2
+[4144282.625] wl_registry@2.global(3, &quot;zwp_linux_dmabuf_v1&quot;, 3)
+interface: 'zwp_linux_dmabuf_v1', version: 3, name: 3
+[4144282.644] wl_registry@2.global(4, &quot;wl_compositor&quot;, 4)
+interface: 'wl_compositor', version: 4, name: 4
+[4144282.661] wl_registry@2.global(5, &quot;wl_subcompositor&quot;, 1)
+interface: 'wl_subcompositor', version: 1, name: 5
+[4144282.678] wl_registry@2.global(6, &quot;wl_data_device_manager&quot;, 3)
+interface: 'wl_data_device_manager', version: 3, name: 6
+[4144282.696] wl_registry@2.global(7, &quot;zwlr_gamma_control_manager_v1&quot;, 1)
+interface: 'zwlr_gamma_control_manager_v1', version: 1, name: 7
+[4144282.719] wl_registry@2.global(8, &quot;zxdg_output_manager_v1&quot;, 3)
+interface: 'zxdg_output_manager_v1', version: 3, name: 8
+[4144282.738] wl_registry@2.global(9, &quot;org_kde_kwin_idle&quot;, 1)
+interface: 'org_kde_kwin_idle', version: 1, name: 9
+[4144282.759] wl_registry@2.global(10, &quot;zwp_idle_inhibit_manager_v1&quot;, 1)
+interface: 'zwp_idle_inhibit_manager_v1', version: 1, name: 10
+[4144282.775] wl_registry@2.global(11, &quot;zwlr_layer_shell_v1&quot;, 4)
+interface: 'zwlr_layer_shell_v1', version: 4, name: 11
+[4144282.793] wl_registry@2.global(12, &quot;xdg_wm_base&quot;, 2)
+interface: 'xdg_wm_base', version: 2, name: 12
+[4144282.810] wl_registry@2.global(13, &quot;zwp_tablet_manager_v2&quot;, 1)
+interface: 'zwp_tablet_manager_v2', version: 1, name: 13
+[4144282.828] wl_registry@2.global(14, &quot;org_kde_kwin_server_decoration_manager&quot;, 1)
+interface: 'org_kde_kwin_server_decoration_manager', version: 1, name: 14
+[4144282.843] wl_registry@2.global(15, &quot;zxdg_decoration_manager_v1&quot;, 1)
+interface: 'zxdg_decoration_manager_v1', version: 1, name: 15
+[4144282.872] wl_registry@2.global(16, &quot;zwp_relative_pointer_manager_v1&quot;, 1)
+interface: 'zwp_relative_pointer_manager_v1', version: 1, name: 16
+[4144282.890] wl_registry@2.global(17, &quot;zwp_pointer_constraints_v1&quot;, 1)
+interface: 'zwp_pointer_constraints_v1', version: 1, name: 17
+[4144282.905] wl_registry@2.global(18, &quot;wp_presentation&quot;, 1)
+interface: 'wp_presentation', version: 1, name: 18
+[4144282.924] wl_registry@2.global(19, &quot;zwlr_output_manager_v1&quot;, 2)
+interface: 'zwlr_output_manager_v1', version: 2, name: 19
+[4144282.942] wl_registry@2.global(20, &quot;zwlr_output_power_manager_v1&quot;, 1)
+interface: 'zwlr_output_power_manager_v1', version: 1, name: 20
+[4144282.962] wl_registry@2.global(21, &quot;zwp_input_method_manager_v2&quot;, 1)
+interface: 'zwp_input_method_manager_v2', version: 1, name: 21
+[4144282.978] wl_registry@2.global(22, &quot;zwp_text_input_manager_v3&quot;, 1)
+interface: 'zwp_text_input_manager_v3', version: 1, name: 22
+[4144282.995] wl_registry@2.global(23, &quot;zwlr_foreign_toplevel_manager_v1&quot;, 3)
+interface: 'zwlr_foreign_toplevel_manager_v1', version: 3, name: 23
+[4144283.012] wl_registry@2.global(24, &quot;zwlr_export_dmabuf_manager_v1&quot;, 1)
+interface: 'zwlr_export_dmabuf_manager_v1', version: 1, name: 24
+[4144283.029] wl_registry@2.global(25, &quot;zwlr_screencopy_manager_v1&quot;, 3)
+interface: 'zwlr_screencopy_manager_v1', version: 3, name: 25
+[4144283.044] wl_registry@2.global(26, &quot;zwlr_data_control_manager_v1&quot;, 2)
+interface: 'zwlr_data_control_manager_v1', version: 2, name: 26
+[4144283.060] wl_registry@2.global(27, &quot;zwp_primary_selection_device_manager_v1&quot;, 1)
+interface: 'zwp_primary_selection_device_manager_v1', version: 1, name: 27
+[4144283.078] wl_registry@2.global(28, &quot;wp_viewporter&quot;, 1)
+interface: 'wp_viewporter', version: 1, name: 28
+[4144283.102] wl_registry@2.global(29, &quot;zxdg_exporter_v1&quot;, 1)
+interface: 'zxdg_exporter_v1', version: 1, name: 29
+[4144283.119] wl_registry@2.global(30, &quot;zxdg_importer_v1&quot;, 1)
+interface: 'zxdg_importer_v1', version: 1, name: 30
+[4144283.137] wl_registry@2.global(31, &quot;zxdg_exporter_v2&quot;, 1)
+interface: 'zxdg_exporter_v2', version: 1, name: 31
+[4144283.161] wl_registry@2.global(32, &quot;zxdg_importer_v2&quot;, 1)
+interface: 'zxdg_importer_v2', version: 1, name: 32
+[4144283.177] wl_registry@2.global(33, &quot;zwp_virtual_keyboard_manager_v1&quot;, 1)
+interface: 'zwp_virtual_keyboard_manager_v1', version: 1, name: 33
+[4144283.196] wl_registry@2.global(34, &quot;zwlr_virtual_pointer_manager_v1&quot;, 2)
+interface: 'zwlr_virtual_pointer_manager_v1', version: 2, name: 34
+[4144283.212] wl_registry@2.global(35, &quot;zwlr_input_inhibit_manager_v1&quot;, 1)
+interface: 'zwlr_input_inhibit_manager_v1', version: 1, name: 35
+[4144283.229] wl_registry@2.global(36, &quot;zwp_keyboard_shortcuts_inhibit_manager_v1&quot;, 1)
+interface: 'zwp_keyboard_shortcuts_inhibit_manager_v1', version: 1, name: 36
+[4144283.250] wl_registry@2.global(37, &quot;wl_seat&quot;, 7)
+interface: 'wl_seat', version: 7, name: 37
+[4144283.274] wl_registry@2.global(38, &quot;zwp_pointer_gestures_v1&quot;, 1)
+interface: 'zwp_pointer_gestures_v1', version: 1, name: 38
+[4144283.296] wl_registry@2.global(39, &quot;wl_output&quot;, 3)
+interface: 'wl_output', version: 3, name: 39
+[4144283.317] wl_callback@3.done(56994)
+</code></pre>
+<p>这里展示 <code>wayland.xml</code> 协议内的具体定义，可以参考其事件及参数配置如下，可以看到 <code>void *data</code> 和 <code>struct wl_registry *registry</code> 两个参数是固定的，其余参数由文件中的 <code>&lt;arg ... /&gt;</code> 定义。</p>
+<pre><code class="language-xml"> 146   │     &lt;event name=&quot;global&quot;&gt;
+ 147   │       &lt;description summary=&quot;announce global object&quot;&gt;
+ 148   │     Notify the client of global objects.
+ 149   │
+ 150   │     The event notifies the client that a global object with
+ 151   │     the given name is now available, and it implements the
+ 152   │     given version of the given interface.
+ 153   │       &lt;/description&gt;
+ 154   │       &lt;arg name=&quot;name&quot; type=&quot;uint&quot; summary=&quot;numeric name of the global object&quot;/&gt;
+ 155   │       &lt;arg name=&quot;interface&quot; type=&quot;string&quot; summary=&quot;interface implemented by the object&quot;/&gt;
+ 156   │       &lt;arg name=&quot;version&quot; type=&quot;uint&quot; summary=&quot;interface version&quot;/&gt;
+ 157   │     &lt;/event&gt;
+ 158   │
+ 159   │     &lt;event name=&quot;global_remove&quot;&gt;
+ 160   │       &lt;description summary=&quot;announce removal of global object&quot;&gt;
+ 161   │     Notify the client of removed global objects.
+ 162   │
+ 163   │     This event notifies the client that the global identified
+ 164   │     by name is no longer available.  If the client bound to
+ 165   │     the global using the bind request, the client should now
+ 166   │     destroy that object.
+ 167   │
+ 168   │     The object remains valid and requests to the object will be
+ 169   │     ignored until the client destroys it, to avoid races between
+ 170   │     the global going away and a client sending a request to it.
+ 171   │       &lt;/description&gt;
+ 172   │       &lt;arg name=&quot;name&quot; type=&quot;uint&quot; summary=&quot;numeric name of the global object&quot;/&gt;
+ 173   │     &lt;/event&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="注册全局对象"><a class="header" href="#注册全局对象">注册全局对象</a></h1>
+<p>用 <code>libwayland-server</code> 注册全局对象的方式与之前有些不同。当你用<code>wayland-scanner</code> 生成服务端代码时，它会创建接口（类似于监听器）和发送事件的胶水代码。第一项任务是注册全局对象，当全局对象被绑定时，用一个函数来启动资源<sup class="footnote-reference"><a href="#1">1</a></sup>。就代码而言，其结果看起来像这样。</p>
+<pre><code class="language-c">static void
+wl_output_handle_bind(struct wl_client *client, void *data,
+    uint32_t version, uint32_t id)
+{
+    struct my_state *state = data;
+    // TODO
+}
+
+int
+main(int argc, char *argv[])
+{
+    struct wl_display *display = wl_display_create();
+    struct my_state state = { ... };
+    // ...
+    wl_global_create(wl_display, &amp;wl_output_interface,
+        1, &amp;state, wl_output_handle_bind);
+    // ...
+}
+</code></pre>
+<p>如果你采用这段代码，例如把它修补到 4.1 章的服务端示例中，你会让一个 <code>wl_output</code> 全局接口对我们上次写的 &quot;globals&quot; 程序可见<sup class="footnote-reference"><a href="#2">2</a></sup>。然而，任何试图绑定到这个全局接口的对象都会将运行到我们的 TODO 处。为了完善这一点，我们还需要提供一个 <code>wl_output</code> 接口的实现。</p>
+<pre><code class="language-c">static void
+wl_output_handle_resource_destroy(struct wl_resource *resource)
+{
+    struct my_output *client_output = wl_resource_get_user_data(resource);
+
+    // TODO: Clean up resource
+
+    remove_to_list(client_output-&gt;state-&gt;client_outputs, client_output);
+}
+
+static void
+wl_output_handle_release(struct wl_client *client, struct wl_resource *resource)
+{
+    wl_resource_destroy(resource);
+}
+
+static const struct wl_output_interface
+wl_output_implementation = {
+    .release = wl_output_handle_release,
+};
+
+static void
+wl_output_handle_bind(struct wl_client *client, void *data,
+    uint32_t version, uint32_t id)
+{
+    struct my_state *state = data;
+
+    struct my_output *client_output = calloc(1, sizeof(struct client_output));
+
+    struct wl_resource *resource = wl_resource_create(
+        client, &amp;wl_output_implementation, wl_output_interface.version, id);
+
+    wl_resource_set_implementation(resource, &amp;wl_output_implementation,
+        client_output, wl_output_handle_resource_destroy);
+
+    client_output-&gt;resource = resource;
+    client_output-&gt;state = state;
+
+    // TODO: Send geometry event, et al
+
+    add_to_list(state-&gt;client_outputs, client_output);
+}
+</code></pre>
+<p>光这样是很难理解的，因此让我们来逐一解释。在底部，我们已经扩展了我们的 &quot;bind handle&quot;， 以创建一个 <code>wl_resource</code> 来跟踪这个对象的服务端状态（使用客户端 ID）。当我们这样做的时候，我们向 <code>wl_resource_create</code> 提供了一个指向我们的接口实现的指针，即 <code>wl_output_implementation</code>，在这段代码中是一个常量静态结构体。这个类型 (<code>struct wl_output_interface</code>) 是由 <code>wayland-scanner</code> 生成的，包含了这个接口所支持的每个请求的一个函数指针。我们还借此机会分配了一个小容器，用于存储我们需要的，libwayland 不为我们处理的任何额外状态，其具体性质因协议不同而不同。</p>
+<p><strong>注意：</strong> 这里有两个不同的东西，但是使用同一个名字: <code>struct wl_output_interface</code> 是接口的实例，另一个 <code>wl_output_interface</code> 是 <code>wayland-scanner</code> 生成的一个全局常规变量，它包含与实现有关的元数据（比如上面例子中使用的版本）。</p>
+<p>当客户端发送释放请求的时候，我们的 <code>wl_output_handle_release</code> 函数就会被调用，表明它们不再需要这个资源——所以我们应该销毁它。这反过来触发了 <code>wl_output_handle_resource_destroy</code> 函数，稍后我们将扩展该函数以释放我们先前为它本配的所有状态。这个函数也被传递到 <code>wl_resource_create</code> 中作为析构器，如果客户端在没有明确发送释放请求的情况下意外终止，它将会被调用。</p>
+<p>我们代码中剩下的另一个 &quot;TODO&quot; 是发送 &quot;name&quot; 以及其他一些事件。如果我们回顾一下 <code>wayland.xml</code>，我们会在接口上看到这个事件：</p>
+<pre><code class="language-xml">&lt;event name=&quot;geometry&quot;&gt;
+  &lt;description summary=&quot;properties of the output&quot;&gt;
+The geometry event describes geometric properties of the output.
+The event is sent when binding to the output object and whenever
+any of the properties change.
+
+The physical size can be set to zero if it doesn't make sense for this
+output (e.g. for projectors or virtual outputs).
+  &lt;/description&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;physical_width&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;physical_height&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;subpixel&quot; type=&quot;int&quot; enum=&quot;subpixel&quot; /&gt;
+  &lt;arg name=&quot;make&quot; type=&quot;string&quot; /&gt;
+  &lt;arg name=&quot;model&quot; type=&quot;string&quot; /&gt;
+  &lt;arg name=&quot;transform&quot; type=&quot;int&quot; enum=&quot;transform&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>当输出被绑定后，应该交由我们来发送这个事件，这很容易实现：</p>
+<pre><code class="language-c">static void
+wl_output_handle_bind(struct wl_client *client, void *data,
+    uint32_t version, uint32_t id)
+{
+    struct my_state *state = data;
+
+    struct my_output *client_output = calloc(1, sizeof(struct client_output));
+
+    struct wl_resource *resource = wl_resource_create(
+        client, &amp;wl_output_implementation, wl_output_interface.version, id);
+
+    wl_resource_set_implementation(resource, wl_output_implementation,
+        client_output, wl_output_handle_resource_destroy);
+
+    client_output-&gt;resource = resource;
+    client_output-&gt;state = state;
+
+    // 发送事件（对应于 wayland.xml 中声明的 event arg）
+    wl_output_send_geometry(resource, 0, 0, 1920, 1080,
+        WL_OUTPUT_SUBPIXEL_UNKNOWN, &quot;Foobar, Inc&quot;,
+        &quot;Fancy Monitor 9001 4K HD 120 FPS Noscope&quot;,
+        WL_OUTPUT_TRANSFORM_NORMAL);
+
+    add_to_list(state-&gt;client_outputs, client_output);
+}
+</code></pre>
+<p><strong>注意：</strong> 这里所用的 <code>wl_output::geometry</code> 是为了解释说明，但在实践中对它的使用有一些特殊考虑。在你的客户端或服务端中实现这个事件之前，请查看协议的 XML 文件定义。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>资源代表每个客户的对象实例的服务端状态。</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>如果你对更强大的东西感兴趣，可以从 Weston 项目中获得一个稍微复杂的 &quot;globals&quot; 程序版本，名为 <code>weston-info</code>。</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="缓冲区和表面"><a class="header" href="#缓冲区和表面">缓冲区和表面</a></h1>
+<p><em>译注：surface 取了直译，实际上即为像素最后渲染到屏幕前的显示面</em></p>
+<p>显然，这个系统的全部意义在于向用户显示信息，并接收他们的反馈以进行额外处理。在这一章，我们将会探讨这些任务其中之一：在屏幕上显示像素。</p>
+<p>为实现这一目的，我们有两个基本概念需要了解：缓冲区和表面，分别由 <code>wl_buffer</code> 和 <code>wl_surface</code> 接口管理。缓冲区作为一些底层像素的存储，并且由客户端来提供一些实现方法——共享内存缓冲区和 GPU 句柄是最为常见的方法。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="使用-wl_compositor"><a class="header" href="#使用-wl_compositor">使用 wl_compositor</a></h1>
+<p>有人说给事物命名是计算机科学中最为复杂的问题之一，而在这也是如此，并且证据确凿。<code>wl_compositor</code> 是全局的混成器，也是混成器的一部分。通过这个接口，你可以向服务端发送你要展示的窗口，以便与旁边其他的窗口进行混成。混成器有两项工作：创建表面和区域。</p>
+<p>此处引用规范来介绍：一个 Wayland 表面有一个矩形区域，可以显示在 0 号（默认显示器）或者更多的输出设备上，递交缓冲区，接受用户输入，并定义一个相对坐标系。我们将在后期详细讨论这些问题，但从最根本的部分开始：获得一个表面并为其强加缓冲区。要获得一个表面，首先我们要自己的混成器绑定到全局 <code>wl_compositor</code>。通过扩展 5.1 章的例子，我们可以得到如下结果：</p>
+<pre><code class="language-c">struct our_state {
+    // ...
+    struct wl_compositor *compositor;
+    // ...
+};
+
+static void
+registry_handle_global(void *data, struct wl_registry *wl_registry,
+		uint32_t name, const char *interface, uint32_t version)
+{
+    struct our_state *state = data;
+    if (strcmp(interface, wl_compositor_interface.name) == 0) {
+        state-&gt;compositor = wl_registry_bind(
+            wl_registry, name, &amp;wl_compositor_interface, 4);
+    }
+}
+
+int
+main(int argc, char *argv[])
+{
+    struct our_state state = { 0 };
+    // ...
+    wl_registry_add_listener(registry, &amp;registry_listener, &amp;state);
+    // ...
+}
+</code></pre>
+<p>注意，我们在调用 <code>wl_registry_bind</code> 时指定了版本 4，这是写作时的最新版本。有了这个引用的保证，我们就可以创建一个 <code>wl_surface</code>。</p>
+<pre><code class="language-c">struct wl_surface *surface = wl_compositor_create_surface(state.compositor);
+</code></pre>
+<p>在我们能够显示它之前，我们必须首先给它附加一个像素源：一个 <code>wl_buffer</code>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="共享内存缓冲区"><a class="header" href="#共享内存缓冲区">共享内存缓冲区</a></h1>
+<p>从客户端获取像素到混成器最简单，也是唯一被载入 <code>wayland.xml</code> 的方法，就是 <code>wl_shm</code> ——共享内存。简单地说，它允许你为混成器传输一个文件描述符到带有 <code>MAP_SHARED</code> 的内存映射（mmap），然后从这个池中共享像素缓冲区。添加一些简单的同步原语，以防止缓冲区竞争，然后你就有了一个可行且可移植的解决方案。</p>
+<h2 id="绑定到-wl_shm"><a class="header" href="#绑定到-wl_shm">绑定到 wl_shm</a></h2>
+<p>在 5.1 章节中解释的全局注册表监听器将在 <code>wl_shm</code> 全局可用时进行公告。绑定到它是相当直接的。扩展第 5.1 章中的例子，我们可以得到如下结果：</p>
+<pre><code class="language-c">struct our_state {
+    // ...
+    struct wl_shm *shm;
+    // ...
+};
+
+static void
+registry_handle_global(void *data, struct wl_registry *registry,
+		uint32_t name, const char *interface, uint32_t version)
+{
+    struct our_state *state = data;
+    if (strcmp(interface, wl_shm_interface.name) == 0) {
+        state-&gt;shm = wl_registry_bind(
+            wl_registry, name, &amp;wl_shm_interface, 1);
+    }
+}
+
+int
+main(int argc, char *argv[])
+{
+    struct our_state state = { 0 };
+    // ...
+    wl_registry_add_listener(registry, &amp;registry_listener, &amp;state);
+    // ...
+}
+</code></pre>
+<p>一旦绑定，我们可以选择通过 <code>wl_shm_add_listener</code> 添加一个监听器。混成器将通过这个监听器公布器其所支持的像素格式。可用的像素格式的完整列表在 <code>wayland.xml</code> 中给出。有两种格式是必须支持的：ARGB (各 8 位色深) 和 XRGB (各 8 位色深)，它们是 24 位颜色，分别有和没有透明度 (alpha) 通道。</p>
+<h2 id="分配共享内存工具"><a class="header" href="#分配共享内存工具">分配共享内存工具</a></h2>
+<p>可以利用 <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> <code>shm_open</code> 和随即文件名的组合来创建一个适合这一目的的文件，并利用 <code>ftruncate</code> 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：</p>
+<pre><code class="language-c">#define _POSIX_C_SOURCE 200112L
+#include &lt;errno.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;sys/mman.h&gt;
+#include &lt;time.h&gt;
+#include &lt;unistd.h&gt;
+
+static void
+randname(char *buf)
+{
+	struct timespec ts;
+	clock_gettime(CLOCK_REALTIME, &amp;ts);
+	long r = ts.tv_nsec;
+	for (int i = 0; i &lt; 6; ++i) {
+		buf[i] = 'A'+(r&amp;15)+(r&amp;16)*2;
+		r &gt;&gt;= 5;
+	}
+}
+
+static int
+create_shm_file(void)
+{
+	int retries = 100;
+	do {
+		char name[] = &quot;/wl_shm-XXXXXX&quot;;
+		randname(name + sizeof(name) - 7);
+		--retries;
+		int fd = shm_open(name, O_RDWR | O_CREAT | O_EXCL, 0600);
+		if (fd &gt;= 0) {
+			shm_unlink(name);
+			return fd;
+		}
+	} while (retries &gt; 0 &amp;&amp; errno == EEXIST);
+	return -1;
+}
+
+int
+allocate_shm_file(size_t size)
+{
+	int fd = create_shm_file();
+	if (fd &lt; 0)
+		return -1;
+	int ret;
+	do {
+		ret = ftruncate(fd, size);
+	} while (ret &lt; 0 &amp;&amp; errno == EINTR);
+	if (ret &lt; 0) {
+		close(fd);
+		return -1;
+	}
+	return fd;
+}
+</code></pre>
+<p>希望这些代码能浅显易懂。有了这个，客户端可以相当简单地创建一个共享内存池。比如，我们想显示一个 1920x1080 的窗口，我们需要两个缓冲区来进行双缓冲，所以这将是 4,147,200 像素。假设像素格式是 <code>WL_SHM_FORMAT_XRGB8888</code>，那么每个像素将有 4 个字节，总池大小为 16,588,800 字节。如第 5.1 章所述，从注册表中绑定全局 <code>wl_shm</code>，然后像这样来使用它创建一个可以容纳这些缓冲区的共享内存池：</p>
+<pre><code class="language-c">const int width = 1920, height = 1080;
+const int stride = width * 4;
+const int shm_pool_size = height * stride * 2;
+
+int fd = allocate_shm_file(shm_pool_size);
+uint8_t *pool_data = mmap(NULL, shm_pool_size,
+    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+struct wl_shm *shm = ...; // Bound from registry
+struct wl_shm_pool *pool = wl_shm_create_pool(shm, fd, shm_pool_size);
+</code></pre>
+<h2 id="从池中创建缓存区域"><a class="header" href="#从池中创建缓存区域">从池中创建缓存区域</a></h2>
+<p>一旦这个消息传到混成器，它也会对这个文件描述符进行内存映射。不过 Wayland 是异步的，所以我们可以马上开始从这个池子里分配缓冲区。由于我们为两个缓冲区分配了空间，所以需要为每个缓冲区各分配一个索引，并将这些索引转换成池中的字节偏移量。有了这些信息后，我们可以创建一个 <code>wl_buffer</code>：</p>
+<pre><code class="language-c">int index = 0;
+int offset = height * stride * index;
+struct wl_buffer *buffer = wl_shm_pool_create_buffer(pool, offset,
+    width, height, stride, WL_SHM_FORMAT_XRGB8888);
+</code></pre>
+<p>我们现在也可以将图像写入此缓冲区。例如，将其设置为纯白色：</p>
+<pre><code class="language-c">uint32_t *pixels = (uint32_t *)&amp;pool_data[offset];
+memset(pixels, 0, width * height * 4);
+</code></pre>
+<p>或者，为了更有趣，这里有一个棋盘格图案：</p>
+<pre><code class="language-c">uint32_t *pixels = (uint32_t *)&amp;pool_data[offset];
+for (int y = 0; y &lt; height; ++y) {
+  for (int x = 0; x &lt; width; ++x) {
+    if ((x + y / 8 * 8) % 16 &lt; 8) {
+      pixels[y * width + x] = 0xFF666666;
+    } else {
+      pixels[y * width + x] = 0xFFEEEEEE;
+    }
+  }
+}
+</code></pre>
+<p>舞台已经设置好后，我们需要把缓冲区连接到我们的界面，把整个表面标记为 “损坏”<sup class="footnote-reference"><a href="#1">1</a></sup>，并提交：</p>
+<pre><code class="language-c">wl_surface_attach(surface, buffer, 0, 0);
+wl_surface_damage(surface, 0, 0, UINT32_MAX, UINT32_MAX);
+wl_surface_commit(surface);
+</code></pre>
+<p>如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一部——给你的表面分配一个任务。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>“损坏” 意味着 “这个区域需要重新绘制”</p>
+</div>
+<h2 id="服务端的-wl_shm"><a class="header" href="#服务端的-wl_shm">服务端的 wl_shm</a></h2>
+<p>在到达那一步之前，服务端的部分也值得注意。<code>libwayland</code> 提供了一些辅助程序，让 <code>wl_shm</code> 使用起来更容易。若要配置显示器，它只需要以下内容：</p>
+<pre><code class="language-c">int
+wl_display_init_shm(struct wl_display *display);
+
+uint32_t *
+wl_display_add_shm_format(struct wl_display *display, uint32_t format);
+</code></pre>
+<p>前者创建了全局对象，并设置了内部实现，后者添加了一个支持的像素格式（记得至少添加 ARGB8888 和 XRGB8888）。一旦客户端将缓冲区添加到它的一个表面，你就可以将缓冲区资源传入 <code>wl_shm_buffer_get</code> 以获得一个 <code>wl_shm_buffer</code> 引用，并像下面这样利用它：</p>
+<pre><code class="language-c">void
+wl_shm_buffer_begin_access(struct wl_shm_buffer *buffer);
+
+void
+wl_shm_buffer_end_access(struct wl_shm_buffer *buffer);
+
+void *
+wl_shm_buffer_get_data(struct wl_shm_buffer *buffer);
+
+int32_t
+wl_shm_buffer_get_stride(struct wl_shm_buffer *buffer);
+
+uint32_t
+wl_shm_buffer_get_format(struct wl_shm_buffer *buffer);
+
+int32_t
+wl_shm_buffer_get_width(struct wl_shm_buffer *buffer);
+
+int32_t
+wl_shm_buffer_get_height(struct wl_shm_buffer *buffer);
+</code></pre>
+<p>如果你用 <code>begin_access</code> 和 <code>end_access</code> 来保护你对缓冲区数据的访问，<code>libwayland</code> 将会为你处理锁的问题。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="linux-dmabuf"><a class="header" href="#linux-dmabuf">Linux dmabuf</a></h1>
+<p>大多数 Wayland 混成器在 GPU 上进行渲染，而许多 Wayland 客户端也同样在 GPU 上进行渲染。在这种情况下，使用共享内存的方法，从客户端向混成器发送缓冲区是非常低效的。 因为客户端必须将它们的数据从 GPU 读到 CPU，然后混成器必须将其从 CPU 中读回 GPU 以进行渲染。</p>
+<p>Linux 上的 DRM (直接渲染管理器 Direct Rendering Manager) 接口（在一些 BSD 中也有实现）为我们提供了一种向 GPU 资源暴露句柄的方法。Mesa 是用户态 Linux 图形驱动的主要实现方式，它实现了一个协议，允许 EGL 用户将 GPU 缓冲区的句柄从客户端传输到混成器上进行渲染，而无需将数据复制到 CPU 上 <em>（原文此处写成了 GPU）</em>。</p>
+<p>这个协议的内部工作原理不在本书讨论范围内，那些专注于 Mesa 或 Linux DRM 的资源更适合进一步学习。然而，我们也可以提供一个关于使用的简短总结：</p>
+<ol>
+<li>将 <code>eglGetPlatformDisplayEXT</code> 和 <code>EGL_PLATFORM_WAYLAND_KHR</code> 一起使用来创建一个 EGL 显示。</li>
+<li>照常配置显示，选择一个适合自己情况的配置，将 EGL_SURFACE_TYPE 设置成 <code>EGL_WINDOW_BIT</code>。</li>
+<li>使用 <code>wl_egl_window_create</code> 来为一个给定的 <code>wl_surface</code> 创建一个 <code>wl_egl_window</code>。</li>
+<li>使用 <code>eglCreatePlatformWindowSurfaceEXT</code> 为 <code>wl_egl_window</code> 创建一个 <code>EGLSurface</code>。</li>
+<li>照常使用 EGL，例如，使用 <code>eglMakeCurrent</code> 让表面的 EGL 上下文处于当前状态，使用 <code>eglSwapBuffers</code> 向混成器发送最新的缓冲区并提交表面内容。</li>
+</ol>
+<p>如果你之后需要改变 <code>wl_egl_window</code> 的大小，可以使用 <code>wl_egl_window_resize</code> 来实现。</p>
+<h2 id="但我真的想要知道内部实现"><a class="header" href="#但我真的想要知道内部实现">但我真的想要知道内部实现</a></h2>
+<p>一些不使用 <code>libwayland</code> 的 Wayland 程序员抱怨说，这种方法将 Mesa 和 libwayland 捆绑在一起，诚然如此。然而，解偶也并非不能——它只是需要你自己以 linux-dmabuf 的形式做大量的实现。关于协议的细节请参考 Wayland 扩展的 XML，以及 Mesa 在 <code>src/egl/drivers/dri2/platform_wayland.c</code> 的实现（在撰写本文时的文件路径）。祝你好运！</p>
+<h2 id="对于服务端"><a class="header" href="#对于服务端">对于服务端</a></h2>
+<p>不幸的是，混成器的细节既复杂又超出了本书的范围。不过我可以给你指出正确的方向：<code>wlroots</code> 的实现很简单<sup class="footnote-reference"><a href="#1">1</a></sup>，应该可以让你走上正确的道路。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>截至写作时，应该可以在 <code>types/wlr_linux_dmabuf_v1.c</code> 中找到</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="表面的-角色-surface-roles"><a class="header" href="#表面的-角色-surface-roles">表面的 “角色” (Surface roles)</a></h1>
+<p>我们已经创建了一个像素缓冲区，把它送到了服务端上，并将其连接到一个表面，按理说我们可以通过这个表面向用户显示它。然而，要赋予表面意义还缺少一个关键部分：它的角色。</p>
+<p>像素缓冲区可能会向用户表现出许多不同种的情况，而每种情况都需要有不同的语义。例如你的光标图像或是桌面壁纸。为了对比应用程序窗口和光标的语义，我们可以举个例子：你的光标能否被最小化，又或是你的应用窗口是否应该被黏在鼠标上，跟随鼠标移动。出于这个原因，角色提供了另一层抽象，它允许你为表面分配适当的语义。</p>
+<p>在接下来的第 6 章中，你可能想给你的程序分配一个应用程序窗口的角色。下一章节介绍了实现这一目的机制：<code>XDG shell</code>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="xdg-shell-基础"><a class="header" href="#xdg-shell-基础">XDG shell 基础</a></h1>
+<p>XDG (cross-desktop group) shell 是 Wayland 的一个标准扩展协议，描述了应用窗口的语义。它定义了两个 <code>wl_surface</code> 角色：&quot;toplevel&quot; 用于你的顶层应用窗口；&quot;popup&quot; 则用于诸如上下文菜单、下拉菜单、工具提示等等——它们是顶层窗口的子集。有了这些，你可以将其归结于一个树状结构，顶层是根，弹出式或附加式窗口处于顶层的子叶上。该协议还定义了一个定位器接口，用于辅助定位弹窗，并提供有关窗口周围事物的那些信息。</p>
+<p><code>xdg-shell</code>，作为一个扩展协议，它并没有在 <code>wayland.xml</code> 中定义。取而代之的是你将会在 <code>wayland-protocols</code> 包中找到它。在你的系统中，它可能被安装在类似于 <code>/usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml</code> 的路径下。</p>
+<pre><code class="language-xml">...
+1074   │   &lt;interface name=&quot;xdg_popup&quot; version=&quot;3&quot;&gt;
+1075   │     &lt;description summary=&quot;short-lived, popup surfaces for menus&quot;&gt;
+...
+</code></pre>
+<h2 id="xdg_wm_base"><a class="header" href="#xdg_wm_base">xdg_wm_base</a></h2>
+<p><code>xdg_wm_base</code> 是规范中定义的唯一一个全局接口，它提供了创建你所需要的其他每个对象的请求。最基本的实现是从处理 &quot;ping&quot; 事件开始的——当混成器发送该事件时，你应该及时响应 &quot;pong&quot; 请求，以表明你还没有陷入死锁。另一个请求涉及到定位器的创建，也就是先前有提到的，我们将把这些细节留到第十章。首先我们要研究的请求是 <code>get_xdg_surface</code>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="xdg-表面"><a class="header" href="#xdg-表面">XDG 表面</a></h1>
+<p>在 <code>xdg-shell</code> 领域内的表面被称为 <code>xdg_surfaces</code>，这个接口带来了两种 XDG 表面所共有的功能——toplevels 和 popups（也即之前提到的顶层窗口和弹窗）。每种 XDG 表面的语义仍然不同，所以必须通过一个额外的角色来明确指定它们。</p>
+<p><code>xdg_surface</code> 接口提供了额外的请求来分配更具体的 popup 和 toplevel 角色。一旦我们将一个全局对象绑定到全局接口 <code>xdg_wm_base</code>，我们就可以使用 <code>get_xdg_surface</code> 请求来获得一个 <code>wl_suraface</code>。</p>
+<pre><code class="language-xml">&lt;request name=&quot;get_xdg_surface&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;xdg_surface&quot;/&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p><code>xdg_surface</code> 接口除了要求你给表面分配一个更具体的 toplevel 或 popup 角色外，还包括一些两个角色共有的重要功能。在我们继续讨论这二者的具体语义之前，先让我们回顾一下：</p>
+<pre><code class="language-xml">&lt;event name=&quot;configure&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; summary=&quot;serial of the configure event&quot;/&gt;
+&lt;/event&gt;
+
+&lt;request name=&quot;ack_configure&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; summary=&quot;the serial from the configure event&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p><code>xdg-surface</code> 最重要的 API 就是 <code>configure</code> 和 <code>ack_configure</code> 这一对。你可能还记得，Wayland 的一个目标是让每一帧都完美呈现。这意味着没有任何一帧有半应用的状态变化（原子性，避免画面撕裂），为了实现这个目标，我们必须要在客户端和服务端之间同步这些变化。对于 XDG 表面来说，这对消息（这两个 API 传递的内容）正是实现这一目的的机制。</p>
+<p>我们目前只关注基础内容，因此我们会总结这两个事件的重点如下：当来自服务端的事件通知你配置（或重新配置）一个表面时，将它们设置到一个待定状态。当一个 configure 事件到来时，会应用先前准备好的变化，使用 <code>ack_configure</code> 来确定你已经这样做了，然后渲染并提交一个新的帧。我们将在下一章节中展示这一做法，并在 8.1 章中详细解释。</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_window_geometry&quot;&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p><code>set_window_geometry</code> 请求主要用于使用应用程序的 CSD（client-side decorations），以区分其表面上被认为是窗口和不是窗口的部分。它最常用于排除窗口后面渲染的客户端阴影，使其不被视为窗口的一部分（即窗口阴影和窗口本体分离）。混成器可以使用这些信息来管理它自己的行为，以布置窗口和交互。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="应用程序窗口"><a class="header" href="#应用程序窗口">应用程序窗口</a></h1>
+<p>我们历尽艰难终于走到了这里，但现在是时候了：XDG toplevel 是我们最终要来显示一个应用程序的接口。XDG toplevel 接口管理有许多管理应用程序窗口的请求和事件，包括最小化和最大化状态，设置窗口标题等。我们将在以后的章节中详细讨论它的每一部分，因此先让我们来关注最基本的内容。</p>
+<p>基于上一章的知识，我们知道可以从 <code>wl_surface</code> 获得一个 <code>xdg_surface</code>，但这只是第一步：把一个 surface 夹带进 XDG shell。下一步是把 XDG 表面变成一个 XDG toplevel——一个 “顶层” 应用程序窗口，它因最终处于 XDG shell 创建的窗口和弹出菜单的顶层而得名。要创建一个这样的窗口，我们可以使用 <code>xdg_surface</code> 接口来合理请求。</p>
+<pre><code class="language-xml">&lt;request name=&quot;get_toplevel&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;xdg_toplevel&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p>这个新的 <code>xdg_toplevel</code> 接口为我们提供了许多请求和事件，用于管理应用程序窗口的生命周期。第 10 章深入讨论了这些问题，但我知道你很想先在屏幕上得到一些东西。如果你按照这些的步骤，处理好上一章 XDG 表面的 <code>configure</code> 和 <code>ack_configure</code> 上下文，并将一个 <code>wl_buffer</code> 提交到我们的 <code>wl_surface</code>，一个应用程序窗口就会出现，并向用户展示你的缓冲区内容。下一章将提供这样的示例代码，示例还利用了一个额外的 XDG toplevel 请求，我们目前还没有涉及：</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_title&quot;&gt;
+  &lt;arg name=&quot;title&quot; type=&quot;string&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p>不过这应该是不言自明的。还有一个类似的请求我们在示例代码中没有使用，但它可能适合你的应用：</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_app_id&quot;&gt;
+  &lt;arg name=&quot;app_id&quot; type=&quot;string&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p>标题通常显示在窗口装饰，任务栏等地方，而应用 ID 则用于识别你的应用程序或将你的窗口组合到一起。你可以通过将你的窗口标题设置为 &quot;Application windows - The Wayland Protocol - Firefox&quot;，以及将你的应用程序 ID 设为 &quot;firefox&quot; 的方式来使用它。</p>
+<p>总而言之，以下步骤将会带你从零开始创建一个屏幕上的窗口：</p>
+<ol>
+<li>绑定到 <code>wl_compositor</code> 并使用它来创建一个 <code>wl_surface</code></li>
+<li>绑定到 <code>xdg_wm_base</code> 并用它为你的 <code>wl_surface</code> 创建一个 <code>xdg_surface</code></li>
+<li>通过 <code>xdg_surface.get_toplevel</code> 从 <code>xdg_surface</code> 创建一个 <code>xdg_toplevel</code></li>
+<li>为 <code>xdg_surface</code> 创建一个监听器，并且等待 <code>configure</code> 事件的发生。</li>
+<li>绑定到你选择的缓冲区分配机制（如 <code>wl_shm</code>），并分配一个共享缓冲区，然后将你要显示的内容渲染后传入。</li>
+<li>使用 <code>wl_surface.attach</code> 将 <code>wl_buffer</code> 附加到 <code>wl_surface</code> 上。</li>
+<li>使用 <code>xdg_surface.ack_configure</code> 把 <code>configure</code> 的序列信息传给它，确认你已经准备好了一个合适的帧。</li>
+<li>发送一个 <code>wl_surface.commit</code> 请求。</li>
+</ol>
+<p>翻到下一页，可以看到这些步骤的具体操作。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="扩展示例代码"><a class="header" href="#扩展示例代码">扩展示例代码</a></h1>
+<p>利用我们目前为止所学到的知识，我们现在可以写一个 Wayland 客户端，以在屏幕上显示一些东西。下面的代码是一个完整的 Wayland 应用程序，它可以打开一个 XDG 顶层窗口，并在上面显示一个 640x480 像素的棋盘格。</p>
+<p><img src="7.XDG_shell_basics/preview.png" alt="preview" /></p>
+<p>可以像这样编译它：</p>
+<pre><code class="language-bash">wayland-scanner private-code \
+  &lt; /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml \
+  &gt; xdg-shell-protocol.c
+wayland-scanner client-header \
+  &lt; /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml \
+  &gt; xdg-shell-client-protocol.h
+cc -o client client.c xdg-shell-protocol.c -lwayland-client -lrt
+</code></pre>
+<p>然后运行 <code>./client</code> 来查看其情况，或者运行 <code>WAYLAND_DEBUG=1 ./client</code> 来包含更多有用的调试信息。在未来的章节中，我们将在这个客户端的基础上进行开发，所以要将这些代码妥善保管。</p>
+<pre><code class="language-c">#define _POSIX_C_SOURCE 200112L
+#include &lt;errno.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/mman.h&gt;
+#include &lt;time.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;wayland-client.h&gt;
+#include &quot;xdg-shell-client-protocol.h&quot;
+
+/* Shared memory support code */
+static void
+randname(char *buf)
+{
+    // 返回一个随机的名字
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &amp;ts);
+    long r = ts.tv_nsec;
+    for (int i = 0; i &lt; 6; ++i) {
+        buf[i] = 'A'+(r&amp;15)+(r&amp;16)*2;
+        r &gt;&gt;= 5;
+    }
+}
+
+static int
+create_shm_file(void)
+{
+    int retries = 100;
+    do {
+        char name[] = &quot;/wl_shm-XXXXXX&quot;;
+        randname(name + sizeof(name) - 7);
+        --retries;
+        int fd = shm_open(name, O_RDWR | O_CREAT | O_EXCL, 0600);
+        if (fd &gt;= 0) {
+            shm_unlink(name);
+            return fd;
+        }
+    } while (retries &gt; 0 &amp;&amp; errno == EEXIST);
+    return -1;
+}
+
+static int
+allocate_shm_file(size_t size)
+{
+    int fd = create_shm_file();
+    if (fd &lt; 0)
+        return -1;
+    int ret;
+    do {
+        /* 
+        * 关于 ftruncate 的内容可以参考
+        * https://www.man7.org/linux/man-pages/man3/ftruncate.3p.html
+        */
+        ret = ftruncate(fd, size);
+    } while (ret &lt; 0 &amp;&amp; errno == EINTR);
+    if (ret &lt; 0) {
+        close(fd);
+        return -1;
+    }
+    return fd;
+}
+
+/* Wayland code */
+struct client_state {
+    /* Globals */
+    struct wl_display *wl_display;
+    struct wl_registry *wl_registry;
+    struct wl_shm *wl_shm;
+    struct wl_compositor *wl_compositor;
+    struct xdg_wm_base *xdg_wm_base;
+    /* Objects */
+    struct wl_surface *wl_surface;
+    struct xdg_surface *xdg_surface;
+    struct xdg_toplevel *xdg_toplevel;
+};
+
+static void
+wl_buffer_release(void *data, struct wl_buffer *wl_buffer)
+{
+    /* Sent by the compositor when it's no longer using this buffer */
+    wl_buffer_destroy(wl_buffer);
+}
+
+static const struct wl_buffer_listener wl_buffer_listener = {
+    .release = wl_buffer_release,
+};
+
+static struct wl_buffer *
+draw_frame(struct client_state *state)
+{
+    const int width = 640, height = 480;
+    int stride = width * 4;
+    int size = stride * height;
+
+    int fd = allocate_shm_file(size);
+    if (fd == -1) {
+        return NULL;
+    }
+
+    uint32_t *data = mmap(NULL, size,
+            PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    if (data == MAP_FAILED) {
+        close(fd);
+        return NULL;
+    }
+
+    // 创建一个共享内存池
+    struct wl_shm_pool *pool = wl_shm_create_pool(state-&gt;wl_shm, fd, size);
+
+    // 创建一个缓冲区 
+    struct wl_buffer *buffer = wl_shm_pool_create_buffer(pool, 0,
+            width, height, stride, WL_SHM_FORMAT_XRGB8888);
+    wl_shm_pool_destroy(pool);
+    close(fd);
+
+    /* Draw checkerboxed background */
+    for (int y = 0; y &lt; height; ++y) {
+        for (int x = 0; x &lt; width; ++x) {
+            if ((x + y / 8 * 8) % 16 &lt; 8)
+                data[y * width + x] = 0xFF666666;
+            else
+                data[y * width + x] = 0xFFEEEEEE;
+        }
+    }
+
+    munmap(data, size);
+
+    // 添加监听器用于检测释放缓冲区的事件
+    wl_buffer_add_listener(buffer, &amp;wl_buffer_listener, NULL);
+    return buffer;
+}
+
+static void
+xdg_surface_configure(void *data,
+        struct xdg_surface *xdg_surface, uint32_t serial)
+{
+    struct client_state *state = data;
+
+    // 返回一个 ack_configure 以示确认
+    xdg_surface_ack_configure(xdg_surface, serial);
+
+    // 向缓冲区中绘制内容
+    struct wl_buffer *buffer = draw_frame(state);
+
+    // 将缓冲区内容附加到表面
+    wl_surface_attach(state-&gt;wl_surface, buffer, 0, 0);
+
+    // 提交表面
+    wl_surface_commit(state-&gt;wl_surface);
+}
+
+static const struct xdg_surface_listener xdg_surface_listener = {
+    .configure = xdg_surface_configure,
+};
+
+static void
+xdg_wm_base_ping(void *data, struct xdg_wm_base *xdg_wm_base, uint32_t serial)
+{
+    xdg_wm_base_pong(xdg_wm_base, serial);
+}
+
+static const struct xdg_wm_base_listener xdg_wm_base_listener = {
+    .ping = xdg_wm_base_ping,
+};
+
+static void
+registry_global(void *data, struct wl_registry *wl_registry,
+        uint32_t name, const char *interface, uint32_t version)
+{
+    struct client_state *state = data;
+
+    // 绑定到全局
+    if (strcmp(interface, wl_shm_interface.name) == 0) {
+        state-&gt;wl_shm = wl_registry_bind(
+                wl_registry, name, &amp;wl_shm_interface, 1);
+    } else if (strcmp(interface, wl_compositor_interface.name) == 0) {
+        state-&gt;wl_compositor = wl_registry_bind(
+                wl_registry, name, &amp;wl_compositor_interface, 4);
+    } else if (strcmp(interface, xdg_wm_base_interface.name) == 0) {
+        state-&gt;xdg_wm_base = wl_registry_bind(
+                wl_registry, name, &amp;xdg_wm_base_interface, 1);
+        xdg_wm_base_add_listener(state-&gt;xdg_wm_base,
+                &amp;xdg_wm_base_listener, state);
+    }
+}
+
+static void
+registry_global_remove(void *data,
+        struct wl_registry *wl_registry, uint32_t name)
+{
+    /* This space deliberately left blank */
+}
+
+static const struct wl_registry_listener wl_registry_listener = {
+    .global = registry_global,
+    .global_remove = registry_global_remove,
+};
+
+int
+main(int argc, char *argv[])
+{
+    // 初始化状态
+    struct client_state state = { 0 };
+    
+    // 获取默认显示器
+    state.wl_display = wl_display_connect(NULL);
+    
+    // 注册到默认显示器
+    state.wl_registry = wl_display_get_registry(state.wl_display);
+    
+    // 添加事件监听
+    wl_registry_add_listener(state.wl_registry, &amp;wl_registry_listener, &amp;state);
+
+    // 以 wl_display 作为代理连接到混成器
+    wl_display_roundtrip(state.wl_display);
+
+    // 从混成器创建一个表面
+    state.wl_surface = wl_compositor_create_surface(state.wl_compositor);
+
+    // 从 wl_surface 创建一个 xdg_surface
+    state.xdg_surface = xdg_wm_base_get_xdg_surface(
+            state.xdg_wm_base, state.wl_surface);
+
+    // 添加事件监听
+    xdg_surface_add_listener(state.xdg_surface, &amp;xdg_surface_listener, &amp;state);
+
+    // 获得顶层窗口
+    state.xdg_toplevel = xdg_surface_get_toplevel(state.xdg_surface);
+
+    // 设置标题
+    xdg_toplevel_set_title(state.xdg_toplevel, &quot;Example client&quot;);
+
+    // 提交表面
+    wl_surface_commit(state.wl_surface);
+
+    while (wl_display_dispatch(state.wl_display)) {
+        /* This space deliberately left blank */
+    }
+
+    return 0;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="深入理解表面"><a class="header" href="#深入理解表面">深入理解表面</a></h1>
+<p>到目前为止，我们所演示的 Surfaces 基本接口已经足以向用户展示数据，但 Surface 接口还提供了许多额外的请求和事件，以提高使用效率。对于大多数应用来说不需要每一帧都重新绘制整个表面。甚至决定何时绘制下一帧也最好在混成器的协助下完成。本章我们将深入讨论 <code>wl_surface</code> 的特性。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="表面的生命周期"><a class="header" href="#表面的生命周期">表面的生命周期</a></h1>
+<p>我们在前面提到，Wayland 的设计是为了原子化地更新所有的东西，这样就不会有无效或者中间状态的帧出现。正是 <code>wl_surface</code> 本身的机制保障了应用程序窗口和其他表面多种属性配置时原子性。</p>
+<p>每个表面都有一个待定状态和一个应用状态，而在它刚被创建的时候则无任何状态。待定状态是通过客户端的请求和服务端的事件来协商的，当双方都认为它代表一个一致的表面状态时，表面就会被提交——待定状态会被应用到表面的当前状态。在这之前，混成器将继续渲染最后的一致状态；一旦提交，将从下一帧开始使用新的状态。</p>
+<p>其中原子操作更新的状态有：</p>
+<ul>
+<li>所附加的 <code>wl_buffer</code> 或构成表面内容的像素</li>
+<li>在上一帧中被 “破坏” 的区域，需要重新绘制。</li>
+<li>接受输入事件的区域。</li>
+<li>被认为是不透明的区域 <sup class="footnote-reference"><a href="#1">1</a></sup></li>
+<li>对附加的 <code>wl_buffer</code> 进行变换，以旋转或呈现缓冲区的一个子集</li>
+<li>缓冲区的缩放系数，用于高分辨率 (HiDPI) 显示。</li>
+</ul>
+<p>除了表面的这些特征之外，表面的角色还可以有额外的双缓冲区。所有这些状态，以及与角色相关的任何状态，都会在发达送 <code>wl_surface.commit</code> 时应用。如果你改变主意，你可以多次发送这些请求，当表面最终被提交的时候只会考虑这些属性的最新值（即可最后一次提交有效）。</p>
+<p>当你第一次创建表面时，初始状态是无效的。为了使其有效（或映射到表面），你需要提供必要的信息来初次为该曲面建立一致的状态。这包括给它一个角色（比如 <code>xdg_toplevel</code>），分配和附加一个缓冲区，以及配置该表面的任何角色特定状态。当你发送了一个 <code>wl_surface.commit</code> 并正确配置了这个状态时，这个表面就会生效（或被映射）并被混成器呈现。</p>
+<p>下一个问题是：我该合适准备一个新的帧？</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>这是以优化混成器为目的而采取的措施</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="帧回调"><a class="header" href="#帧回调">帧回调</a></h1>
+<p>更新表面最简单的方法是：在需要改变时简单渲染和附加新的帧。这种方法很好用，例如，在事件驱动的应用中，用户按下了一个键，文本框需要重新渲染，那么你就可以立即开始重新渲染，将相应的区域标记为 “损坏”，并附加一个新的缓冲区，在下一帧中呈现。</p>
+<p>然而，有些程序可能希望连续渲染帧率。你可能正在渲染视频游戏的帧、回放视频、或者渲染动画。你的显示器有一个固定的刷新率，或者说它能够显示更新的最快速度（通常是一个数字，如 60Hz、144Hz 等）。超出这个范围渲染帧的速度在快也没有意义，而且这样做会浪费资源——CPU、GPU、甚至是用户的电量。如果你在每次刷新间隔之内发送几个帧，那么除了最后一个帧以外，其它的都会被丢掉，而且是白白地浪费渲染。</p>
+<p>此外，某些情况下，混成器甚至可能不想为你显示新的帧。比如你的应用程序可能已经离开屏幕、被最小化或者隐藏在其它窗口后面、或者只显示了你应用程序的小缩略图，所以混成器可能想以比较低的帧速率渲染你的应用，以节省资源。因此，在 Wayland 客户端中连续渲染帧的最好方法是让混成器告诉你什么时候它准备好接收新的帧：使用帧回调。</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;!-- ... --&gt;
+
+  &lt;request name=&quot;frame&quot;&gt;
+    &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;!-- ... --&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>这一请求将会分配一个 <code>wl_callback</code> 对象，它有一个相当简单的接口：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_callback&quot; version=&quot;1&quot;&gt;
+  &lt;event name=&quot;done&quot;&gt;
+    &lt;arg name=&quot;callback_data&quot; type=&quot;uint&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>当你在一个表面上请求一个帧回调时，一旦这个表面的新帧准备好了，混成器会向回到对象发送一个完成事件。在帧事件的情况下，<code>callback_data</code> 被设置为从一个未指定的时期开始到当前时间，以毫秒为单位计算。你可以将其与上一帧进行比较，以计算动画的进度或对输入事件进行调整。 </p>
+<p>有了帧回调这个工具，我们为什么不更新一下第 7.3 章节中的应用程序，让它每一帧都滚动一下呢？让我们先在我们的 <code>client_state</code> 结构体中添加一点状态：</p>
+<pre><code class="language-c">--- a/client.c
++++ b/client.c
+@@ -71,6 +71,8 @@ struct client_state {
+ 	struct xdg_surface *xdg_surface;
+ 	struct xdg_toplevel *xdg_toplevel;
++	/* State */
++	float offset;
++	uint32_t last_frame;
+ };
+ 
+ static void wl_buffer_release(void *data, struct wl_buffer *wl_buffer) {
+</code></pre>
+<p>然后我们将更新我们的 <code>draw_frame</code> 函数以考虑偏移量。</p>
+<pre><code class="language-c">@@ -107,9 +109,10 @@ draw_frame(struct client_state *state)
+ 	close(fd);
+ 
+ 	/* Draw checkerboxed background */
++	int offset = (int)state-&gt;offset % 8;
+ 	for (int y = 0; y &lt; height; ++y) {
+ 		for (int x = 0; x &lt; width; ++x) {
+-			if ((x + y / 8 * 8) % 16 &lt; 8)
++			if (((x + offset) + (y + offset) / 8 * 8) % 16 &lt; 8)
+ 				data[y * width + x] = 0xFF666666;
+ 			else
+ 				data[y * width + x] = 0xFFEEEEEE;
+</code></pre>
+<p>在主函数中，让我们为我们的第一个新帧注册一个回调。</p>
+<pre><code class="language-c">@@ -195,6 +230,9 @@ main(int argc, char *argv[])
+ 	xdg_toplevel_set_title(state.xdg_toplevel, &quot;Example client&quot;);
+ 	wl_surface_commit(state.wl_surface);
+ 
++	struct wl_callback *cb = wl_surface_frame(state.wl_surface);
++	wl_callback_add_listener(cb, &amp;wl_surface_frame_listener, &amp;state);
++
+ 	while (wl_display_dispatch(state.wl_display)) {
+ 		/* This space deliberately left blank */
+ 	}
+</code></pre>
+<p>然后这样实现它：</p>
+<pre><code class="language-c">@@ -147,6 +150,38 @@ static const struct xdg_wm_base_listener xdg_wm_base_listener = {
+ 	.ping = xdg_wm_base_ping,
+ };
+ 
++static const struct wl_callback_listener wl_surface_frame_listener;
++
++static void
++wl_surface_frame_done(void *data, struct wl_callback *cb, uint32_t time)
++{
++	/* Destroy this callback */
++	wl_callback_destroy(cb);
++
++	/* Request another frame */
++	struct client_state *state = data;
++	cb = wl_surface_frame(state-&gt;wl_surface);
++	wl_callback_add_listener(cb, &amp;wl_surface_frame_listener, state);
++
++	/* Update scroll amount at 24 pixels per second */
++	if (state-&gt;last_frame != 0) {
++		int elapsed = time - state-&gt;last_frame;
++		state-&gt;offset += elapsed / 1000.0 * 24;
++	}
++
++	/* Submit a frame for this event */
++	struct wl_buffer *buffer = draw_frame(state);
++	wl_surface_attach(state-&gt;wl_surface, buffer, 0, 0);
++	wl_surface_damage_buffer(state-&gt;wl_surface, 0, 0, INT32_MAX, INT32_MAX);
++	wl_surface_commit(state-&gt;wl_surface);
++
++	state-&gt;last_frame = time;
++}
++
++static const struct wl_callback_listener wl_surface_frame_listener = {
++	.done = wl_surface_frame_done,
++};
++
+ static void
+ registry_global(void *data, struct wl_registry *wl_registry,
+ 		uint32_t name, const char *interface, uint32_t version)
+</code></pre>
+<p>现在，每一帧中，我们将：</p>
+<ol>
+<li>销毁现在使用的帧回调</li>
+<li>为下一帧请求一个新的回调</li>
+<li>渲染并提交新的帧</li>
+</ol>
+<p>第三步细分为：</p>
+<ol>
+<li>用一个新的偏移量来更新，使用同上一帧一致的速度滚动。</li>
+<li>准备一个新的 <code>wl_buffer</code> 并为其渲染一帧。</li>
+<li>将新的 <code>wl_buffer</code> 附加到我们的表面。</li>
+<li>将整个表面标记为 “损坏”。</li>
+<li>提交表面。</li>
+</ol>
+<p>步骤 3 和 4 更新表面的待定状态，为其赋予一个新的缓冲区，并表示整个表面状态已经改变。第 5 步提交这个待定状态，并在下一帧中使用它。原子化应用这个新的缓冲区意味着我们永远不会只显示最后帧的一半，从而产生一个更好的无撕裂体验。编译并运行更新后的客户端，亲身体验一下吧。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>想要更准确的描述吗？在第 12.1 章中我们谈到了一个扩展协议，它能以纳秒级的分辨率告诉你每一帧画面是何时呈现给用户的。</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="损坏表面"><a class="header" href="#损坏表面">损坏表面</a></h1>
+<p>你可能已经注意到，在上一个例子中，当我们向表面提交一个新的帧的时候，在代码中添加了这样一行：</p>
+<pre><code class="language-c">wl_surface_damage_buffer(state-&gt;wl_surface, 0, 0, INT32_MAX, INT32_MAX);
+</code></pre>
+<p>如果是这样的话，请擦亮眼睛！这段代码损坏了我们的表面，向混成器表明其需要重新被绘制。在这里，我们损坏了整个表面（甚至远远超过其范围），但我们也可以只损坏其中的一部分。</p>
+<p>例如，你写了一个 GUI 工具，用户正在向一个文本框中输入信息。这个文本框可能只占窗口的一小部分，而每个新的字符所占的部分就更小了。当用户按下一个按键，你可以只渲染文本上的新字符，然后只标记表面的那一部分即可。然后，混成器可以只复制表面的一小部分，这可以大大加快速度——特别是对于嵌入式设备。当光标在字符之间闪烁的时候，你仅需要提交更新部分的损坏，而当用户改变视图的时候，才可能会损坏整个表面。这样，每项改动的开销都减少了，并且用户会感谢你提高了他们的电池寿命。</p>
+<p><strong>注意：</strong> Wayland 协议为破坏表面提供了两个请求 <code>damage</code> 和 <code>damage_buffer</code>。前者实际上已经弃用了，你应该只使用后者。二者的区别在于，<code>damage</code> 考虑到了影响曲面的所有变换，比如旋转、缩放比例、缓冲区位置和剪切。后者则是相对于缓冲区标记损坏，这样更容易解释。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="表面区域"><a class="header" href="#表面区域">表面区域</a></h1>
+<p>我们已经通过 <code>wl_compositor</code> 的接口 <code>wl_compositor.create_surface</code> 创建了一个 <code>wl_surfaces</code>。然而，请注意，这里还有第二个请求：<code>create_region</code>。</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_compositor&quot; version=&quot;4&quot;&gt;
+  &lt;request name=&quot;create_surface&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;wl_surface&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;create_region&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;wl_region&quot; /&gt;
+  &lt;/request&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><code>wl_region</code> 接口定义了一组矩形，它们共同组成了一个任意形状的几何区域。其定义的请求允许你对其所定义的几何体进行位操作，即从其中添加或减去矩形。</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_region&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;destroy&quot; type=&quot;destructor&quot; /&gt;
+
+  &lt;request name=&quot;add&quot;&gt;
+    &lt;arg name=&quot;x&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;y&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;width&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;height&quot; type=&quot;int&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;subtract&quot;&gt;
+    &lt;arg name=&quot;x&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;y&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;width&quot; type=&quot;int&quot; /&gt;
+    &lt;arg name=&quot;height&quot; type=&quot;int&quot; /&gt;
+  &lt;/request&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>例如，要制作一个有孔的矩形，你可以这样：</p>
+<ol>
+<li>发送 <code>wl_compositor.create_region</code> 请求来分配一个 <code>wl_region</code> 对象。</li>
+<li>发送 <code>wl_region.add(0, 0, 512, 512)</code> 来创建一个 512x512 的矩形。</li>
+<li>发送 <code>wl_region.subtract(128, 128, 256, 256)</code>，从区域中间移除一个 256x256 的矩形。</li>
+</ol>
+<p>这些区域也可以是没有交集的，它不需要是一个连续的多边形。一旦你创建了这些区域的其中之一，你就可以把它传递给 <code>wl_surface</code> 接口，即用 <code>set_opaque_region</code> 和 <code>set_input_region</code> 请求。</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;request name=&quot;set_opaque_region&quot;&gt;
+    &lt;arg name=&quot;region&quot; type=&quot;object&quot; interface=&quot;wl_region&quot; allow-null=&quot;true&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;set_input_region&quot;&gt;
+    &lt;arg name=&quot;region&quot; type=&quot;object&quot; interface=&quot;wl_region&quot; allow-null=&quot;true&quot; /&gt;
+  &lt;/request&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>不透明区域是给混成器的一个提示，告诉它你的表面哪些部分被认为是不透明的。基于这些信息，混成器可以优化它的渲染过程。例如，你的表面是完全不透明的，并且遮挡了它下面的另一个窗口，那么混成器就不会在重新绘制下面窗口上浪费任何时间。默认情况下是没有这个提示的， 它假定你表面的任何部分都可能是透明的。这使得默认情况下绘制效率最低，但效果也最正确。</p>
+<p>输入区域表示你的表面哪些部分可以接受光标和触摸输入事件。例如，你可以在你的表面下绘制一个下拉阴影，但发生在这个区域的输入事件应该被传递到你内部的的客户端。或者，如果你的窗口是一个不寻常的形状，你也可以在此创建一个符合形状的输入区域。在默认情况下，对于大多数表面类型，你的整个表面都接受输入。</p>
+<p>这两个请求都可以通过传入 null 而不但是 <code>wl_region</code> 对象来设置一个空的区域。它们也都是带有双缓冲区的——所以发送一个 <code>wl_surface.commit</code> 来使得你的改变生效。一旦你发送了 <code>set_opaque_region</code> 或 <code>set_input_region</code> 请求，你就可以销毁 <code>wl_region</code> 对象以释放其资源。在你发送这些请求后，再更新这一区域不会更新表面的状态。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="子表面"><a class="header" href="#子表面">子表面</a></h1>
+<p>在核心 Wayland 协议中，<code>wayland.xml</code> 只定义了一种<sup class="footnote-reference"><a href="#1">1</a></sup>表面角色：子表面。它们拥有一个相对于父表面但并不受到其父表面边界的限制的 X、Y 位置，以及一个相对于其兄弟和父表面的 Z 轴顺序。</p>
+<p>这个功能的一些使用情况包括：以其原始像素格式播放带有视频的表面，并在上面显示 RGBA 用户界面或字幕；使用 OpenGL 表面作为你主要的应用界面，并在软件中使用子表面来渲染窗口装饰，或在用户界面各个部分移动而不必在客户端重新绘制。在硬件表面的帮助下，混成器也可能不需要绘制任何东西来更新你的子表面。特别是在嵌入式系统上，当它符合你的使用情况时，这可能特别有用。一个巧妙设计的应用程序可以利用子表面来提高运行效率。</p>
+<p>用 <code>wl_subcompositor</code> 接口来管理这些请求。<code>get_subcompositor</code> 请求是 <code>subcompositor</code> 的主要接入点：</p>
+<pre><code class="language-xml">&lt;request name=&quot;get_subsurface&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;wl_subsurface&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+  &lt;arg name=&quot;parent&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>一旦你有了一个与 <code>wl_surface</code> 关联的 <code>wl_subsurface</code> 对象，那么它就会成为这个表面的子表面。子表面本身也可以有子表面，从而在任何顶层（top-level）表面下形成一个有序的表面树。对这些子表面的操作是通过 <code>wl_subsurface</code> 接口完成的。 </p>
+<pre><code class="language-xml">&lt;request name=&quot;set_position&quot;&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;int&quot; summary=&quot;x coordinate in the parent surface&quot;/&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;int&quot; summary=&quot;y coordinate in the parent surface&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;place_above&quot;&gt;
+  &lt;arg name=&quot;sibling&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;place_below&quot;&gt;
+  &lt;arg name=&quot;sibling&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;set_sync&quot; /&gt;
+&lt;request name=&quot;set_desync&quot; /&gt;
+</code></pre>
+<p>一个子表面的 Z 轴顺序可以放在任何与它有相同父表面的兄弟或父表面本身的上方或者下方。</p>
+<p><code>wl_subsurface</code> 的各种属性同步在这里需要做出一些解释。这些位置和 Z 轴属性是与父表面的生命周期同步的。当主表面的 <code>wl_surface.commit</code> 请求被发送的时候，它所有的子表面的位置和 Z 轴顺序的变化都会一并被应用。</p>
+<p>然而，与这个子表面相关的 <code>wl_surface</code> 状态，例如，缓冲区的附加和损坏区域的累积，则不需要与父表面的生命周期相联系。这就是 <code>set_sync</code> 和 <code>set_desync</code> 请求的目的。与父表面同步的子表面会在父表面提交时提交其所有的状态。解除同步的表面会像别的表面一样管理自己提交的生命周期。</p>
+<p>简而言之，同步和解同步的请求是无缓冲的，会立即被应用。位置和 Z 轴顺序请求是有缓冲的，并不受曲面的同步或异步属性影响——它们总是和父表面一同提交。在相关的 <code>wl_surface</code> 上，剩下的表面状态，会根据子表面的同步或异步状态来提交。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>忽略弃用的 <code>wl_shell</code> 接口</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="高分辨率表面hidpi"><a class="header" href="#高分辨率表面hidpi">高分辨率表面（HiDPI）</a></h1>
+<p>在过去的几年时间里，高端显示器的像素密度取得了巨大的飞跃，新的显示器在相同的物理显示面积上装入了两倍于我们过去几年所见的像素量。我们称这些显示器为 “HiDPI” 显示器（高分屏），是 “像素每英寸” 的简称。然而这些显示器要远远领先于它们的 “低分屏” 同行，要正确利用它们，必须在应用层面作出改变。通过在相同的空间内将屏幕的分辨率提高一倍，如果我们不特别考虑它们的话，我们所有的用户界面尺寸都会减少一半。对于大多数显示器而言，这将使得文字无法阅读，交互元素也会变得很小，令人不悦。</p>
+<p>然而，作为交换，其为我们的矢量图形提高了图形的保真度，最明显的是在文本渲染方面。Wayland 通过为每个输出添加一个 “比例因子”（scale factor） 来解决这个问题，而客户端也被期望将这个比例因子应用到它们的界面上。此外，没有意识到 HiDPI 的客户端通过无动作来传达这一限制信号，让混成器放大他们的缓冲区来弥补这一限制。混成器通过适当的事件发出每个输出的比例因子信号：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_output&quot; version=&quot;3&quot;&gt;
+  &lt;!-- ... --&gt;
+  &lt;event name=&quot;scale&quot; since=&quot;2&quot;&gt;
+    &lt;arg name=&quot;factor&quot; type=&quot;int&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>请注意，这是在版本 2 中添加的，因此当绑定到 <code>wl_output</code> 全局量的时候你需要将版本至少设置为 2 以接收这些事件。然而， 这还不足以决定你在客户端用上 HiDPI。为了进行这一调用，混成器还必须为你的 <code>wl_surface</code> 发送 <code>enter</code> 事件，以表明它已经 “进入”（正在显示在）一个或多个特定的输出端。</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;!-- ... --&gt;
+  &lt;event name=&quot;enter&quot;&gt;
+    &lt;arg name=&quot;output&quot; type=&quot;object&quot; interface=&quot;wl_output&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>一旦你知道客户端显示的输出集合，就应该取比例因子中的最大值，将其中缓冲区的大小（以像素为单位）乘以这个值，然后以 2 倍或 3 倍（或 N 倍）的比例渲染 UI。然后像这样指出缓冲区准备的比例：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
+  &lt;!-- ... --&gt;
+  &lt;request name=&quot;set_buffer_scale&quot; since=&quot;3&quot;&gt;
+    &lt;arg name=&quot;scale&quot; type=&quot;int&quot; /&gt;
+  &lt;/request&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><strong>注意：</strong> 这需要版本 3 或者更新的 <code>wl_surface</code>。当你与 <code>wl_compositor</code> 绑定时，你应该把这个版本号传递给 <code>wl_registry</code>。</p>
+<p>在下一次 <code>wl_surface.commit</code> 时，你的表面会假定这个比例因子。如果它大于表面显示的比例系数，混成器会将其缩小。如果它小于输出的比例系数，混成器则会将其放大。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="seats-处理输入"><a class="header" href="#seats-处理输入">Seats: 处理输入</a></h1>
+<p>向用户显示你的应用程序只是 I/O 方式中的一半，大多数应用程序还需要处理输入。为此，座位 (Seats) 为 Wayland 上的输入事件提供了一个抽象的概念。从哲学的角度上讲，一个 Wayland 座位是指用户作者操作电脑的一个座位，它与最多一个键盘和最多一个 “指针” 设备（即鼠标或触摸板）相关。类似的关系也被定义为触摸屏、数位板设备等。</p>
+<p>重要的是要记住，这只是一个抽象概念，Wayland 显示屏上显示的座位情况可能与实际情况不完全一致。在实践中，Wayland 会话中很少有超过一个座位的情况。如果你在电脑上插入第二个键盘，它通常会被分配到与第一个键盘相同的座位上，当你开始在每个座位上打字的时候，键盘布局等都会动态地切换。这些是实施细节留给 Wayland 混成器去考虑吧。</p>
+<p>从客户端的角度来看，这是很直接的。如果你绑定了全局的 <code>wl_seat</code>，那么你可以访问以下接口：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;wl_seat&quot; version=&quot;7&quot;&gt;
+  &lt;enum name=&quot;capability&quot; bitfield=&quot;true&quot;&gt;
+    &lt;entry name=&quot;pointer&quot; value=&quot;1&quot; /&gt;
+    &lt;entry name=&quot;keyboard&quot; value=&quot;2&quot; /&gt;
+    &lt;entry name=&quot;touch&quot; value=&quot;4&quot; /&gt;
+  &lt;/enum&gt;
+
+  &lt;event name=&quot;capabilities&quot;&gt;
+    &lt;arg name=&quot;capabilities&quot; type=&quot;uint&quot; enum=&quot;capability&quot; /&gt;
+  &lt;/event&gt;
+
+  &lt;event name=&quot;name&quot; since=&quot;2&quot;&gt;
+    &lt;arg name=&quot;name&quot; type=&quot;string&quot; /&gt;
+  &lt;/event&gt;
+
+  &lt;request name=&quot;get_pointer&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;wl_pointer&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;get_keyboard&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;wl_keyboard&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;get_touch&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;wl_touch&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;release&quot; type=&quot;destructor&quot; since=&quot;5&quot; /&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><strong>注意：</strong> 这个接口已经更新了很多次——当你绑定到全局接口的时候要注意版本。本书假设你绑定的是最新的版本，在撰写本书的时候是第 7 版。</p>
+<p>这个接口相对来说比较简单的。服务端向客户端发送一个能力事件，以表明本座位支持哪些类型的输入设备——用能力值 (capability values) 的位域表示——客户端可以相应地绑定到它希望能够使用的输入设备。例如，如果服务端发送的能力中 <code>(caps &amp; WL_SEAT_CAPABILITY_KEYBOARD) &gt; 0</code> 为真，那么客户端就可以使用 <code>get_keyboard</code> 请求来获取这个座位的 <code>wl_keyboard</code> 对象。每个特定输入设备的语义将在其余章节中介绍。</p>
+<p>在我们讨论这些问题之前，让我们先谈一谈一些常见的语义。</p>
+<h2 id="事件序列"><a class="header" href="#事件序列">事件序列</a></h2>
+<p>Wayland 客户端可能在执行某些操作的时候需要以序列的形式输入事件，以进行一些常用形式的身份验证。例如，一个打开弹窗的客户端（用右键调出的上下文菜单是弹出窗口的一种）可能希望在服务端 “抓取” 受影响座位上的所有输入事件，直到弹窗被取消。为了防止这个功能被滥用，服务端可以给它发送的每个输入事件分配序列，并要求客户端在请求中包括这些序列之一。</p>
+<p>当服务端收到这样的请求时，它会查找与给定序列相关的输入事件，并作出判断。如果该事件发生的事件太长，或是在错误的表面，亦或是事件类型不正确——例如，当你摆动鼠标的时候，拒绝抓取，而当你点击的时候却要允许抓取——这样的请求服务端可以拒绝。</p>
+<p>对于服务端而言，它们可以简单地在每个输入事件中发送一个递增的整数，并记录被认定为对特定使用情况有效的序列，以便以后验证。客户端从它们的输入事件处理程序中收到这些序列，并可以简单地将它们回传，以执行所需要的操作。</p>
+<p>我们将在后面的章节中更详细地讨论这些问题，届时我们将开始涉及需要输入事件序列来验证的具体请求。</p>
+<h2 id="输入帧"><a class="header" href="#输入帧">输入帧</a></h2>
+<p>由于现实原因，一个来自输入设备的单一输入事件可能会被分解成几个 Wayland 事件。例如，当你使用滚轮的时候，一个 <code>wl_pointer</code> 会发出一套轴事件，它会分别发出一个事件告诉你这是哪种轴：滚轮、手指在触摸板上、将滚轮倾斜到一边，等等。如果用户的输入动作足够快的话，来自输入源的同一个输入事件可能还包括鼠标的一些动作，或者点击一个按钮。</p>
+<p>这些相关事件的语义分组在不同的输入类型中略有不同，但帧事件在它们之间通常是相通的。简而言之，如果你把从设备上采集到的所有输入事件都放入缓冲，然后等待帧事件发出信号，表示你已经受到了一个输入 “帧” 的所有事件，你就可以把缓冲区里的 Wayland 事件解释为一整个输入事件，然后重置缓冲区，开始收集下一帧的事件。</p>
+<p>如果这听起来太过复杂，请不要担心。许多应用程序并不需要担心输入帧。只有当你开始做更复杂的输入事件处理的时候，才会想去关心这个。</p>
+<h2 id="释放设备"><a class="header" href="#释放设备">释放设备</a></h2>
+<p>当你使用完一个设备后，每个接口都有一个释放请求，你可以用它们来清理，就像下面这样：</p>
+<pre><code class="language-xml">&lt;request name=&quot;release&quot; type=&quot;destructor&quot; /&gt;
+</code></pre>
+<p>这已经足够简单了。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="光标指针输入"><a class="header" href="#光标指针输入">光标指针输入</a></h1>
+<p>使用 <code>wl_seat.get_pointer</code> 请求，客户端可以获得一个 <code>wl_pointer</code> 对象。只要用户移动他们的指针、按下鼠标按钮、使用滚轮等——只要指针在你的一个表面上，服务端就会向它发送事件。我们可以通过 <code>wl_pointer.enter</code> 事件来判断是否满足条件。</p>
+<pre><code class="language-xml">&lt;event name=&quot;enter&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+  &lt;arg name=&quot;surface_x&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;surface_y&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>当指针在我们的一个表面上移动的时候，服务端将发送这一事件，并指定 “进入” 的表面，以及指针所处的表面本地坐标（从左上角开始）。这里的坐标使用 <code>fixed</code> 类型指定，你可能还记得第 2.1 章节，它代表一个 24 位长度（8 位色深）的固定精度数字（<code>wl_fixed_to_double</code> 会把它转换成 C 语言的 <code>double</code> 类型）。</p>
+<p>当指针从你的表面移开时，相应的事件就会更短小：</p>
+<pre><code class="language-xml">&lt;event name=&quot;leave&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>一旦指针进入到你的表面，你将会接受到它的额外事件，我们将很快对此作出讨论。然而，你可能想做的第一件事是提供一个光标的图像。这个过程如下：</p>
+<ol>
+<li>用 <code>wl_compositor</code> 创建一个新的 <code>wl_surface</code>。</li>
+<li>使用 <code>wl_pointer.set_cursot</code> 将表面附加到指针上。</li>
+<li>将光标图像的 <code>wl_buffer</code> 附加到该表面并提交。</li>
+</ol>
+<p>这里唯一引入的新 API 是 <code>wl_pointer.set_cursor</code>。</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_cursor&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; allow-null=&quot;true&quot; /&gt;
+  &lt;arg name=&quot;hotspot_x&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;hotspot_y&quot; type=&quot;int&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>这里的序列必须来自输入事件。<code>hotspot_x</code> 和 <code>hotspot_y</code> 参数 指定了光标 “热点” 在表面的本地坐标，或者指针在光标图像中的有效位置（例如，在尖头的顶端）。还要注意，表面可以是空的——用它来完全隐藏光标。</p>
+<p>如果你正在寻找一个好的指针图标来源，<code>libwayland</code> 带有一个单独的 <code>wayland-cursor</code> 库，它可以从磁盘上加载 X 光标主题并为它们创建 <code>wl_buffers</code>。详见 <code>wayland-cursor.h</code>，或者参考第 9.5 章中对我们客户端示例的更新。</p>
+<p><em>注意：<code>wayland-cursor</code> 包括处理动画光标的代码，这即便是在 1998 年也不酷。如果我是你，我就不会去管这些。从来没有人抱怨过我的 Wayland 客户端不支持光标动画。</em></p>
+<p>在光标进入你的表面，并且你附加了一个合适的光标图片后，你就可以开始处理输入事件了。有运动、按钮和轴事件。</p>
+<h2 id="指针帧"><a class="header" href="#指针帧">指针帧</a></h2>
+<p>服务端上的一帧输入处理可以携带许多变化的信息——例如，轮询一次鼠标可以在一个数据包中返回一个更新的位置和一个释放的按钮。服务端将这些变化作为单独的 Wayland 事件发送，并使用 “帧” 事件将它们组合在一起。</p>
+<pre><code class="language-xml">&lt;event name=&quot;frame&quot;&gt;&lt;/event&gt;
+</code></pre>
+<p>客户端应该在受到所有 <code>wl_pointer</code> 事件时将它们累积起来，一旦受到 “帧” 事件，就将这些未决的输入作为一二个单一的指针事件来处理。</p>
+<h2 id="运动事件"><a class="header" href="#运动事件">运动事件</a></h2>
+<p>运动事件与进入事件使用的相同坐标空间，并在进入时指定，且其定义也非常直接：</p>
+<pre><code class="language-xml">&lt;event name=&quot;motion&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface_x&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;surface_y&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>就像所有包含时间戳的输入事件一样，时间值是一个与此输入事件相关的，单调增长的，毫秒级的时间戳。</p>
+<h2 id="按键事件"><a class="header" href="#按键事件">按键事件</a></h2>
+<p>按键事件大多数都不言而喻：</p>
+<pre><code class="language-xml">&lt;enum name=&quot;button_state&quot;&gt;
+  &lt;entry name=&quot;released&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;pressed&quot; value=&quot;1&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;button&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;button&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;state&quot; type=&quot;uint&quot; enum=&quot;button_state&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>然而，按键的参数值值得作一些额外的解释。这些数字是一个特定平台的输入事件，尽管注意到 FreeBSD 平台也重用了 Linux 的数值。你可以在 <code>linux/input-event-codes.h</code> （一般由 linux-headers 或者 linux-api-headers 包提供）中找到这些 Linux 下的数值，最有用的数值可能是由常量 <code>BTN_LEFT</code>、<code>BTN_RIGHT</code> 和 <code>BTN_MIDDLE</code> 表示的。除此之外还有更多定义，在你闲暇的时候可以浏览一下头文件。</p>
+<pre><code class="language-c"> 342   │ #define BTN_MISC        0x100
+ 343   │ #define BTN_0           0x100
+ 344   │ #define BTN_1           0x101
+ 345   │ #define BTN_2           0x102
+ 346   │ #define BTN_3           0x103
+ 347   │ #define BTN_4           0x104
+ 348   │ #define BTN_5           0x105
+ 349   │ #define BTN_6           0x106
+ 350   │ #define BTN_7           0x107
+ 351   │ #define BTN_8           0x108
+ 352   │ #define BTN_9           0x109
+</code></pre>
+<h2 id="轴事件"><a class="header" href="#轴事件">轴事件</a></h2>
+<p>轴事件用于描述滚轮动作，例如旋转你的滚轮或者左右摇动它。最基本的形式看起来像这样：</p>
+<pre><code class="language-xml">&lt;enum name=&quot;axis&quot;&gt;
+  &lt;entry name=&quot;vertical_scroll&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;horizontal_scroll&quot; value=&quot;1&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;axis&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;axis&quot; type=&quot;uint&quot; enum=&quot;axis&quot; /&gt;
+  &lt;arg name=&quot;value&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>然而，轴事件是复杂的，这也是 <code>wl_pointer</code> 接口中多年来受到最多关注的部分。有几个额外的事件存在，它们增加了轴事件的特殊性：</p>
+<pre><code class="language-xml">&lt;enum name=&quot;axis_source&quot;&gt;
+  &lt;entry name=&quot;wheel&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;finger&quot; value=&quot;1&quot; /&gt;
+  &lt;entry name=&quot;continuous&quot; value=&quot;2&quot; /&gt;
+  &lt;entry name=&quot;wheel_tilt&quot; value=&quot;3&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;axis_source&quot; since=&quot;5&quot;&gt;
+  &lt;arg name=&quot;axis_source&quot; type=&quot;uint&quot; enum=&quot;axis_source&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p><code>axis_source</code> 事件告诉你哪种轴被驱动了——滚轮、触摸板上的手指移动、向旁边倾斜的摇杆、或更新颖的东西。这个事件本身很简单，但其余的就不那么简单了：</p>
+<pre><code class="language-xml">&lt;event name=&quot;axis_stop&quot; since=&quot;5&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;axis&quot; type=&quot;uint&quot; enum=&quot;axis&quot; /&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;axis_discrete&quot; since=&quot;5&quot;&gt;
+  &lt;arg name=&quot;axis&quot; type=&quot;uint&quot; enum=&quot;axis&quot; /&gt;
+  &lt;arg name=&quot;discrete&quot; type=&quot;int&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>这两个事件的精确语义很复杂，如果你想利用它们，我建议仔细阅读 <code>wayland.xml</code> 中的摘要。简而言之，<code>axis_discrete</code> 事件用于区分任意规模的轴事件和离散的步骤，例如，滚轮的每一次 “点击” 代表书轴值的一次离散的变化。<code>axis_stop</code> 事件标志着一个离散的用户运动行为已经完成，并用于计算发生在几个帧之间的滚动事件。任何未来的事件都应该被解释为一个单独的运动。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="xbk-简介"><a class="header" href="#xbk-简介">XBK 简介</a></h1>
+<blockquote>
+<p><a href="https://wiki.archlinux.org/title/X_keyboard_extension">X_keyboard_extension</a></p>
+</blockquote>
+<p>我们清单上的下一个输入设备是键盘，但在讨论它们之前，我们需要先停下来补充一些额外的背景知识。键位映射 (Keymaps) 是键盘输入中涉及到的一个重要的细节，XKB 是 Wayland 上推荐的处理键盘的方式。</p>
+<p>当你按下键盘上的一个键时，它会向计算机发送一个编码，这只是分配给该物理按键的一个数字，在我的键盘上，编码 1 是 Escape 键，Shift 是 42，以此类推。我使用的是 US ANSI 键盘布局，但还有许多其他的布局，它们的编码也不相同。在我朋友的德国键盘上，编码 12 产生 'ß'，而我的则产生 '-'。</p>
+<p>为了解决这一问题，我们使用了一个叫 &quot;xkbcommon&quot; 的库，它的名字源自于它的作用是将 XKB (X KeyBoard) 的通用编码提取到一个独立的库中。XKB 定义了大量的按键符号，如 <code>XKB_KEY_A</code> 和 <code>XKB_KEY_ssharp</code> （ß，来自德语），以及 <code>XKB_KEY_kana_WO</code> （を，来自日语）。</p>
+<p>然而，识别这些按键并将它们与这样的按键符号联系起来只是问题的其中一部分。如果按住 Shift 键，'a' 可以产生 'A'，'を' 在片假名模式下被写成 'ヲ'，虽然严格来说 'ß' 有一个大写版本，但它几乎不被使用，理所当然也不会被打出来。向 Shift 这样的键被称为修饰键，而像平假名和片假名这样的被称之为组。有些修饰键可以锁定，比如 Caps Lock。XKB 有处理这些情况的基元，并维护一个状态机，跟踪你的键盘在做什么，并准确找出用户试图输入的 Unicode 编码点。</p>
+<h2 id="使用-xkb"><a class="header" href="#使用-xkb">使用 XKB</a></h2>
+<p>那么，<code>xkbcommon</code> 究竟是如何使用的呢？第一步是链接到它，然后抓取头文件 <code>xkbcommon/xkbcommon.h</code><sup class="footnote-reference"><a href="#1">1</a></sup>。</p>
+<p>大多数使用 <code>xkbcommon</code> 的程序都必须管理以下三个对象：</p>
+<ul>
+<li><code>xkb_context:</code> 一个用于配置其他 XKB 资源的句柄</li>
+<li><code>xkb_keymap:</code> 一个从编码到键盘符号的映射</li>
+<li><code>xkb_state:</code> 一个将键盘符号转化为 <code>UTF-8</code> 字符串的状态机</li>
+</ul>
+<p>设置的过程通常如下：</p>
+<ol>
+<li>使用 <code>xkb_context_new</code> 创建一个新的 <code>xkb_context</code>，通常将 <code>XKB_CONTEXT_NO_FLAGS</code> 传递给它，除非你在做一些特殊的事情。</li>
+<li>获取一个字符串形式的键映射（key map）</li>
+<li>使用 <code>xkb_keymap_new_from_string</code> 来为这个键映射创建一个 <code>xkb_keymap</code>。这里只有一种键映射格式：<code>XKB_KEYMAP_FORMAT_TEXT_V1</code>，你将其作为格式参数传给函数。同样，除非你有特殊安排，否则应使用 <code>XKB_KEYMAP_COMPILE_NO_FLAGS</code> 作为标志传入。</li>
+<li>使用 <code>xkb_state_new</code> 为你的键映射创建一个 <code>xkb_state</code>。这个状态会增加键映射的引用计数 （refcount），所以如果你自己已经用完了，请使用 <code>xkb_keymap_unref</code> 来解引用。</li>
+<li>从一个按键上获得编码。</li>
+<li>将扫描到的编码传入 <code>xkb_state_key_get_one_sym</code> 以获得 <a href="https://wiki.linuxquestions.org/wiki/List_of_keysyms"><code>keysyms</code></a>，并传入 <code>xkb_state_key_get_utf8</code> 获得 <code>UTF-8</code> 字符串就大功告成了！</li>
+</ol>
+<p><em>*这些步骤将在下一节中具体讨论。</em></p>
+<p>就代码而言，这个过程看起来如下：</p>
+<pre><code class="language-c">#include &lt;xkbcommon/xkbcommon.h&gt; // -lxkbcommon
+/* ... */
+
+const char *keymap_str = /* ... */;
+
+/* Create an XKB context */
+struct xkb_context *context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+
+/* Use it to parse a keymap string */
+struct xkb_keymap *keymap = xkb_keymap_new_from_string(
+    xkb_context, keymap_str, XKB_KEYMAP_FORMAT_TEXT_V1,
+    XKB_KEYMAP_COMPILE_NO_FLAGS);
+
+/* Create an XKB state machine */
+struct xkb_state *state = xkb_state_new(keymap);
+</code></pre>
+<p>然后处理扫描到的编码：</p>
+<pre><code class="language-c">int scancode = /* ... */;
+
+xkb_keysym_t sym = xkb_state_key_get_one_sym(xkb_state, scancode);
+if (sym == XKB_KEY_F1) {
+    /* Do the thing you do when the user presses F1 */
+}
+
+char buf[128];
+xkb_state_key_get_utf8(xkb_state, scancode, buf, sizeof(buf));
+printf(&quot;UTF-8 input: %s\n&quot;, buf);
+</code></pre>
+<p>有了这些细节，我们已经准备好解决键盘输入的处理问题。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><code>xkbcommon</code> 带有一个 <code>.pc</code> 文件：使用 <code>pkgconf --clflags xkbcommon</code> 和 <code>pkgconf --libs xkbcommon</code>，或是你的编译系统喜欢的方式来获取 <code>pc</code> 文件。</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="键盘输入"><a class="header" href="#键盘输入">键盘输入</a></h1>
+<p>在了解如何使用 XKB 之后，让我们来扩展我们的 Wayland 代码，为我们的键入事件提供输入。与我们获得 <code>wl_pointer</code> 资源的方法类似，我们可以使用 <code>wl_sear.get_keyboard</code> 请求来为一个有着 <code>WL_SEAT_CAPABILITY_KEYBOARD</code> 功能的座位（seat）创建一个 <code>wl_keyboard</code>。当你创建完成后，你应该发送 &quot;release&quot; 来释放请求：</p>
+<pre><code class="language-xml">&lt;request name=&quot;release&quot; type=&quot;destructor&quot; since=&quot;3&quot;&gt;
+&lt;/request&gt;
+</code></pre>
+<p>这将使服务器能够清理与该键盘相关的资源。</p>
+<p>但是，你实际上如何使用它呢？让我们从基础知识开始。</p>
+<h2 id="键位映射"><a class="header" href="#键位映射">键位映射</a></h2>
+<p>当你绑定到 <code>wl_keyboard</code> 时，服务端可能发送的第一个事件是 <code>keymap</code>。</p>
+<pre><code class="language-xml">&lt;enum name=&quot;keymap_format&quot;&gt;
+  &lt;entry name=&quot;no_keymap&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;xkb_v1&quot; value=&quot;1&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;keymap&quot;&gt;
+  &lt;arg name=&quot;format&quot; type=&quot;uint&quot; enum=&quot;keymap_format&quot; /&gt;
+  &lt;arg name=&quot;fd&quot; type=&quot;fd&quot; /&gt;
+  &lt;arg name=&quot;size&quot; type=&quot;uint&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p><code>keymap_format</code> 枚举类型是我们想出一种新的 keymaps 格式的情况下提供的（预留），但在本文撰写时，XKB keymaps 仍旧是服务端可能发送的唯一格式。</p>
+<p>像这样的批量数据是通过文件描述符传输的。我们可以简单地从文件描述符中读取，但一般来说，建议用 <code>mmap</code> 代替。在 C 语言中，类似可能的实现如下：</p>
+<pre><code class="language-c">#include &lt;sys/mman.h&gt;
+// ...
+
+static void wl_keyboard_keymap(void *data, struct wl_keyboard *wl_keyboard,
+        uint32_t format, int32_t fd, uint32_t size) {
+    assert(format == WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1);
+    struct my_state *state = (struct my_state *)data;
+
+    char *map_shm = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+    assert(map_shm != MAP_FAILED);
+
+    struct xkb_keymap *keymap = xkb_keymap_new_from_string(
+        state-&gt;xkb_context, map_shm, XKB_KEYMAP_FORMAT_TEXT_V1,
+        XKB_KEYMAP_COMPILE_NO_FLAGS);
+    munmap(map_shm, size);
+    close(fd);
+
+    // ...do something with keymap...
+}
+</code></pre>
+<p>一旦我们有了一个键位映射，我们就可以为这个 <code>wl_keyboard</code> 解释未来的按键事件。请注意，服务端一可以在任何时候发送一个新的键映射，所有未来的按键事件都应该从这个新的映射来解释。</p>
+<h2 id="键盘焦点"><a class="header" href="#键盘焦点">键盘焦点</a></h2>
+<pre><code class="language-xml">&lt;event name=&quot;enter&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+  &lt;arg name=&quot;keys&quot; type=&quot;array&quot; /&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;leave&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>就像 <code>wl_pointer</code> 里的 &quot;enter&quot; 和 &quot;leave&quot; 事件是当指针在你的表面上移动的时候发出的，服务端在表面收到键盘焦点时发送 <code>wl_keyboard.enter</code>，而失去焦点的时候发送 <code>wl_keyboard.leave</code>。许多应用程序会在这些条件下改变它们的外观——比如，开始绘制一个闪烁的光标。</p>
+<p>&quot;enter&quot; 事件还包括 array 数组，里面涵盖了当前输入的按键。这是一个由 32 位无符号整数组成的数组，每一个都代表一个所按按键的扫描编码 scancode。</p>
+<h2 id="输入事件"><a class="header" href="#输入事件">输入事件</a></h2>
+<p>一旦将键盘进入你的表面，你就可以期待开始接受输入事件。</p>
+<pre><code class="language-xml">&lt;enum name=&quot;key_state&quot;&gt;
+  &lt;entry name=&quot;released&quot; value=&quot;0&quot; /&gt;
+  &lt;entry name=&quot;pressed&quot; value=&quot;1&quot; /&gt;
+&lt;/enum&gt;
+
+&lt;event name=&quot;key&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;key&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;state&quot; type=&quot;uint&quot; enum=&quot;key_state&quot; /&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;modifiers&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;mods_depressed&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;mods_latched&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;mods_locked&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;group&quot; type=&quot;uint&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>&quot;key&quot; 事件在用户按下或者释放一个键的时候被发送。像许多输入事件一样，它包括一个序列，你可以用它来将未来的请求与这个输入事件联系起来。&quot;key&quot; 是所按按键的编码，&quot;state&quot; 是该按键的按下或释放状态。</p>
+<p><strong>重要：</strong> 这个事件的 scancode 是 Linux evdev scancode。若要将其转换为 XKB 的 scancode，你必须在 evdev scancode 中加 8。</p>
+<p>修饰事件包括一个类似的序列，还有按下、锁存和锁定修饰键的掩码，以及当前正在使用的输入组的索引。一个修饰键被按下，就像当你按住 Shift 的时候。修饰键可以锁存，例如启用粘滞键（专为同时按下两个键或多个按键有困难的人而设计的）后先按下一个修饰键 Shift 松开，直到再按下另一个非修饰键时生效。修饰键也可以被锁定，比如当大写锁定开关被打开或关闭时。输入组用于在各种键盘布局之间切换，例如在 ISO 和 ANSI 布局之间，或者用于更多特殊语言的特性。</p>
+<p>修饰键的解释因 keymap 而异。你应该把它们都转发给 XKB 来处理。大多数 “修饰键” 事件的实现是非常直接的：</p>
+<pre><code class="language-c">static void wl_keyboard_modifiers(void *data, struct wl_keyboard *wl_keyboard,
+        uint32_t serial, uint32_t depressed, uint32_t latched,
+        uint32_t locked, uint32_t group) {
+    struct my_state *state = (struct my_state *)data;
+    xkb_state_update_mask(state-&gt;xkb_state,
+        depressed, latched, locked, 0, 0, group);
+}
+</code></pre>
+<h2 id="按键重复"><a class="header" href="#按键重复">按键重复</a></h2>
+<p>最后让我们来考虑 &quot;repeat_info&quot; 事件：</p>
+<pre><code class="language-xml">&lt;event name=&quot;repeat_info&quot; since=&quot;4&quot;&gt;
+  &lt;arg name=&quot;rate&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;delay&quot; type=&quot;int&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>在 Wayland 中，客户端负责实现 “按键重复”——只要你按住按键，就会持续输入字符的功能。发送这个事件是为了将用户对重复事设置的偏好通知给客户端。延迟 &quot;delay&quot; 是指在按键重复启动前的需要保持按下的毫秒数，速率 &quot;rate&quot; 是指直到按键被释放每秒重复输入的字符数。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="触控输入"><a class="header" href="#触控输入">触控输入</a></h1>
+<p>在表面上，触摸屏输入是相当简单的，你的实现也可也非常简单。然而，该协议为你提供了很多深度 (depth)，应用程序可以利用这些深度来提供更细致的触摸驱动手势和反馈。</p>
+<p>大多数触摸屏设备都支持多点触控：它们可以跟踪屏幕被触摸的多个位置。这些 “触摸点” 中的每一个都被分配了一个 ID，这个 ID 在当前所有触摸屏的活动点中是唯一的，但如果你抬起手指再按一次，ID 就可能被重复使用<sup class="footnote-reference"><a href="#1">1</a></sup>。</p>
+<p>与其它输入设备类似，你可以用 <code>wl_sear.get_touch</code> 获得一个 <code>wl_touch</code> 资源，当你用完它时，你应该发送一个 &quot;release&quot; 请求来释放资源。</p>
+<h2 id="触控帧"><a class="header" href="#触控帧">触控帧</a></h2>
+<p>就像光标指针一样，服务端上的一帧触控处理也可能带有许多变化的信息，但服务端会将这些信息作为离散的 Wayland 事件来发送。<code>wl_touch.frame</code> 事件是用来将这些事件组合到一起的。</p>
+<pre><code class="language-xml">&lt;event name=&quot;frame&quot;&gt;&lt;/event&gt;
+</code></pre>
+<p>客户端应该累积所有收到的 <code>wl_touch</code> 事件，然后在收到 &quot;frame&quot; 事件时将待处理的输入作为一个单一的触控事件进行处理。</p>
+<h2 id="触摸和释放"><a class="header" href="#触摸和释放">触摸和释放</a></h2>
+<p>我们要看的第一个事件是 &quot;down&quot; 和 &quot;up&quot;，当你把手指按在设备上，以及把手指从设备上移开的时候，这两个事件分别被触发。</p>
+<pre><code class="language-xml">&lt;event name=&quot;down&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;surface&quot; type=&quot;object&quot; interface=&quot;wl_surface&quot; /&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;up&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;int&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>&quot;x&quot; 和 &quot;y&quot; 坐标是触摸表面所处坐标空间中的定点坐标，在 &quot;surface&quot; 参数中给出。&quot;time&quot; 是一个单调递增的时间戳，具有任意的 epoch，并以毫秒为单位<sup class="footnote-reference"><a href="#2">2</a></sup>。还请注意这里包含了一个序列 &quot;serial&quot;，它可以包含在未来与此输入事件相关联的请求中。</p>
+<h2 id="运动"><a class="header" href="#运动">运动</a></h2>
+<p>在你收到某个特定 ID 触点的 &quot;down&quot; 事件后，你将会开始接收到运动事件，描述该触摸点在设备上的移动。</p>
+<pre><code class="language-xml">&lt;event name=&quot;motion&quot;&gt;
+  &lt;arg name=&quot;time&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>这里的 &quot;x&quot; 和 &quot;y&quot; 坐标是发送 &quot;enter&quot; 事件表面的相对空间坐标。</p>
+<h2 id="手势结束"><a class="header" href="#手势结束">手势结束</a></h2>
+<p>触摸事件在被识别为手势之前，往往必须满足一些阈值。例如，从左到右轻扫屏幕可以被 Wayland 混成器用来在不同的应用程序之间切换。然而，直到越过某些阈值：例如，在一定时间内到达屏幕的中点，混成器才会将这种行为识别为手势。</p>
+<p>到达这个阈值之前，混成器都为被触摸的表面发送正常的触摸事件。一旦手势被识别，混成器将发送一个 &quot;cancel&quot; 事件，让你直到混成器正在接管。</p>
+<pre><code class="language-xml">&lt;event name=&quot;cancel&quot;&gt;&lt;/event&gt;
+</code></pre>
+<p>当你受到这个事件后，所有活动的触点都被取消了。</p>
+<h2 id="形状和方式"><a class="header" href="#形状和方式">形状和方式</a></h2>
+<p>一些高端的触摸硬件能够确定更多用户交互方式信息。对于希望采用更高级的交互或触摸反馈的有合适硬件和应用的用户，提供了 &quot;shape&quot; 和 &quot;orientation&quot; 事件。</p>
+<pre><code class="language-xml">&lt;event name=&quot;shape&quot; since=&quot;6&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;major&quot; type=&quot;fixed&quot; /&gt;
+  &lt;arg name=&quot;minor&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;orientation&quot; since=&quot;6&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;orientation&quot; type=&quot;fixed&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>&quot;shape&quot; 事件定义了一个椭圆值来近似触屏物体的形状，其长轴和短轴在被接触表面坐标空间中的单元表示。方向事件通过指定触摸表面的长轴和 Y 轴之间的夹角来旋转该椭圆。</p>
+<hr />
+<p>触摸是 Wayland 协议所支持的最后一种输入设备。有了这些知识，让我们来更新我们的示例代码。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>强调 “可能” ——不要根据重复使用的一个触点 ID 而作出任何假设。
+<sup class="footnote-reference"><a href="#2">2</a></sup>: 这意味着独立的时间戳可以相互比较，以获得事持续的事件，但不能与壁钟时间 (Wall-Clock Time，即执行时间) 相较。</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="扩展我们的示例代码"><a class="header" href="#扩展我们的示例代码">扩展我们的示例代码</a></h1>
+<p>在前面几章中，我们建立了一个简单的客户端，它可以在显示器上展示其表面。让我们把这个代码扩展一下，建立一个可以接收输入事件的客户端。为了简单起见，我们仅仅将输入事件记录到 stderr。</p>
+<p>这需要更多的代码，而不仅仅是将到目前为止的工作绑在一起。我们需要做的第一件事就是设置座位。</p>
+<h2 id="设置座位"><a class="header" href="#设置座位">设置座位</a></h2>
+<p>我们首先需要的是一个对座位的引用。我们将把它添加到我们的 <code>client_state</code> 结构体中，并添加键盘、指针和触摸对象供后期使用。</p>
+<pre><code class="language-diff">        struct wl_shm *wl_shm;
+        struct wl_compositor *wl_compositor;
+        struct xdg_wm_base *xdg_wm_base;
++       struct wl_seat *wl_seat;
+        /* Objects */
+        struct wl_surface *wl_surface;
+        struct xdg_surface *xdg_surface;
++       struct wl_keyboard *wl_keyboard;
++       struct wl_pointer *wl_pointer;
++       struct wl_touch *wl_touch;
+        /* State */
+        float offset;
+        uint32_t last_frame;
+        int width, height;
+</code></pre>
+<p>我们还需要更新 <code>registry_global</code>，为该座位注册一个监听器。</p>
+<pre><code class="language-diff">                                wl_registry, name, &amp;xdg_wm_base_interface, 1);
+                xdg_wm_base_add_listener(state-&gt;xdg_wm_base,
+                                &amp;xdg_wm_base_listener, state);
++       } else if (strcmp(interface, wl_seat_interface.name) == 0) {
++               state-&gt;wl_seat = wl_registry_bind(
++                               wl_registry, name, &amp;wl_seat_interface, 7);
++               wl_seat_add_listener(state-&gt;wl_seat,
++                               &amp;wl_seat_listener, state);
+        }
+ }
+</code></pre>
+<p>请注意，我们绑定的是最新版本的座位接口，即第 7 版。让我们把监听器也加上：</p>
+<pre><code class="language-c">static void
+wl_seat_capabilities(void *data, struct wl_seat *wl_seat, uint32_t capabilities)
+{
+       struct client_state *state = data;
+       /* TODO */
+}
+
+static void
+wl_seat_name(void *data, struct wl_seat *wl_seat, const char *name)
+{
+       fprintf(stderr, &quot;seat name: %s\n&quot;, name);
+}
+
+static const struct wl_seat_listener wl_seat_listener = {
+       .capabilities = wl_seat_capabilities,
+       .name = wl_seat_name,
+};
+</code></pre>
+<p>如果你现在编译 <code>(cc -o client client.c xdg-shell-protocol.c)</code> 并运行这个，你的座位名字就应该被打印到 stderr。</p>
+<h2 id="接入指针事件"><a class="header" href="#接入指针事件">接入指针事件</a></h2>
+<p>让我们来谈谈光标指针事件。如果你还记得，前面我们提到来自 Wayland 服务端的指针事件会被累积为一个单一逻辑事件。因此，我们需要定义一个结构体来存储这些事件。</p>
+<pre><code class="language-c">enum pointer_event_mask {
+       POINTER_EVENT_ENTER = 1 &lt;&lt; 0,
+       POINTER_EVENT_LEAVE = 1 &lt;&lt; 1,
+       POINTER_EVENT_MOTION = 1 &lt;&lt; 2,
+       POINTER_EVENT_BUTTON = 1 &lt;&lt; 3,
+       POINTER_EVENT_AXIS = 1 &lt;&lt; 4,
+       POINTER_EVENT_AXIS_SOURCE = 1 &lt;&lt; 5,
+       POINTER_EVENT_AXIS_STOP = 1 &lt;&lt; 6,
+       POINTER_EVENT_AXIS_DISCRETE = 1 &lt;&lt; 7,
+};
+
+struct pointer_event {
+       uint32_t event_mask;
+       wl_fixed_t surface_x, surface_y;
+       uint32_t button, state;
+       uint32_t time;
+       uint32_t serial;
+       struct {
+               bool valid;
+               wl_fixed_t value;
+               int32_t discrete;
+       } axes[2];
+       uint32_t axis_source;
+};
+</code></pre>
+<p>这里我们使用一个位掩码来识别我们接受到的单个指针帧中的事件，并将每个事件的相关信息存储到各自的字段中。让我们也将此添加到我们的状态结构体中：</p>
+<pre><code class="language-diff">        /* State */
+        float offset;
+        uint32_t last_frame;
+        int width, height;
+        bool closed;
++       struct pointer_event pointer_event;
+ };
+</code></pre>
+<p>然后我们需要更新我们的 <code>wl_seat_capabilities</code>，为有光标指针输入功能的座位指定指针对象。</p>
+<pre><code class="language-diff"> static void
+ wl_seat_capabilities(void *data, struct wl_seat *wl_seat, uint32_t capabilities)
+ {
+        struct client_state *state = data;
+-       /* TODO */
++
++       bool have_pointer = capabilities &amp; WL_SEAT_CAPABILITY_POINTER;
++
++       if (have_pointer &amp;&amp; state-&gt;wl_pointer == NULL) {
++               state-&gt;wl_pointer = wl_seat_get_pointer(state-&gt;wl_seat);
++               wl_pointer_add_listener(state-&gt;wl_pointer,
++                               &amp;wl_pointer_listener, state);
++       } else if (!have_pointer &amp;&amp; state-&gt;wl_pointer != NULL) {
++               wl_pointer_release(state-&gt;wl_pointer);
++               state-&gt;wl_pointer = NULL;
++       }
+}
+</code></pre>
+<p>这里值得解释一下。回想一下，功能 <code>capabilities</code> 是此座位支持的设备类型的位掩码，即如果支持，则进行位与运算 (&amp;) 将产生非零值。然后，如果我们有一个光标指针，并且还没有配置它，我们就访问第一个分支 (第一个 if)，使用 <code>wl_seat_get_pointer</code> 来分配一个光标指针的引用并将它存储在我们的状态 (state) 中。如果座位不支持光标指针，但我们却已经配置了一个，那么需要使用 <code>wl_pointer_release</code> 来释放这个引用。请记住，一个座位的 <code>capabilities</code> 可能在运行时改变，例如，当用户重新插拔他们的鼠标时座位所拥有的功能就会改变。</p>
+<p>我们还为指针配置了一个监听器。让我们将它也添加到结构体中：</p>
+<pre><code class="language-c">static const struct wl_pointer_listener wl_pointer_listener = {
+       .enter = wl_pointer_enter,
+       .leave = wl_pointer_leave,
+       .motion = wl_pointer_motion,
+       .button = wl_pointer_button,
+       .axis = wl_pointer_axis,
+       .frame = wl_pointer_frame,
+       .axis_source = wl_pointer_axis_source,
+       .axis_stop = wl_pointer_axis_stop,
+       .axis_discrete = wl_pointer_axis_discrete,
+};
+</code></pre>
+<p>指针拥有许多事件，让我们来看看它们。</p>
+<pre><code class="language-c">static void
+wl_pointer_enter(void *data, struct wl_pointer *wl_pointer,
+               uint32_t serial, struct wl_surface *surface,
+               wl_fixed_t surface_x, wl_fixed_t surface_y)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_ENTER;
+       client_state-&gt;pointer_event.serial = serial;
+       client_state-&gt;pointer_event.surface_x = surface_x,
+               client_state-&gt;pointer_event.surface_y = surface_y;
+}
+
+static void
+wl_pointer_leave(void *data, struct wl_pointer *wl_pointer,
+               uint32_t serial, struct wl_surface *surface)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.serial = serial;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_LEAVE;
+}
+</code></pre>
+<p>进入 &quot;enter&quot; 和离开 &quot;leave&quot; 事件是非常直截了当的，它们为其余的执行工作提供了舞台。我们更新事件掩码以包括适当的事件，然后用我们提供的数据填充进去。运动 &quot;motion&quot; 和按钮 &quot;button&quot; 事件也是十分类似的：</p>
+<pre><code class="language-c">static void
+wl_pointer_motion(void *data, struct wl_pointer *wl_pointer, uint32_t time,
+               wl_fixed_t surface_x, wl_fixed_t surface_y)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_MOTION;
+       client_state-&gt;pointer_event.time = time;
+       client_state-&gt;pointer_event.surface_x = surface_x,
+               client_state-&gt;pointer_event.surface_y = surface_y;
+}
+
+static void
+wl_pointer_button(void *data, struct wl_pointer *wl_pointer, uint32_t serial,
+               uint32_t time, uint32_t button, uint32_t state)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_BUTTON;
+       client_state-&gt;pointer_event.time = time;
+       client_state-&gt;pointer_event.serial = serial;
+       client_state-&gt;pointer_event.button = button,
+               client_state-&gt;pointer_event.state = state;
+}
+</code></pre>
+<p>轴事件有点复杂，因为存在两个方向的轴：水平和垂直。因此，我们的 <code>pointer_event</code> 结构体也包含具有两组轴事件的数组。我们处理这些的代码最终如下：</p>
+<pre><code class="language-c">static void
+wl_pointer_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time,
+               uint32_t axis, wl_fixed_t value)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_AXIS;
+       client_state-&gt;pointer_event.time = time;
+       client_state-&gt;pointer_event.axes[axis].valid = true;
+       client_state-&gt;pointer_event.axes[axis].value = value;
+}
+
+static void
+wl_pointer_axis_source(void *data, struct wl_pointer *wl_pointer,
+               uint32_t axis_source)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_AXIS_SOURCE;
+       client_state-&gt;pointer_event.axis_source = axis_source;
+}
+
+static void
+wl_pointer_axis_stop(void *data, struct wl_pointer *wl_pointer,
+               uint32_t time, uint32_t axis)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.time = time;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_AXIS_STOP;
+       client_state-&gt;pointer_event.axes[axis].valid = true;
+}
+
+static void
+wl_pointer_axis_discrete(void *data, struct wl_pointer *wl_pointer,
+               uint32_t axis, int32_t discrete)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;pointer_event.event_mask |= POINTER_EVENT_AXIS_DISCRETE;
+       client_state-&gt;pointer_event.axes[axis].valid = true;
+       client_state-&gt;pointer_event.axes[axis].discrete = discrete;
+}
+</code></pre>
+<p>除了更新受到影响的轴这一主要变化之外，其余部分也同样非常直截了当。请注意 &quot;valid&quot; 布尔值的使用：我们有可能受到更新了一个轴但没更新另一个的指针帧 (pointer frame)，所以我们使用 &quot;valid&quot; 值来确定该帧事件中哪些轴被有效更新。</p>
+<p>说到这里，现在是该集中注意力的地方了：我们的 &quot;frame&quot; 句柄。</p>
+<pre><code class="language-c">static void
+wl_pointer_frame(void *data, struct wl_pointer *wl_pointer)
+{
+       struct client_state *client_state = data;
+       struct pointer_event *event = &amp;client_state-&gt;pointer_event;
+       fprintf(stderr, &quot;pointer frame @ %d: &quot;, event-&gt;time);
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_ENTER) {
+               fprintf(stderr, &quot;entered %f, %f &quot;,
+                               wl_fixed_to_double(event-&gt;surface_x),
+                               wl_fixed_to_double(event-&gt;surface_y));
+       }
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_LEAVE) {
+               fprintf(stderr, &quot;leave&quot;);
+       }
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_MOTION) {
+               fprintf(stderr, &quot;motion %f, %f &quot;,
+                               wl_fixed_to_double(event-&gt;surface_x),
+                               wl_fixed_to_double(event-&gt;surface_y));
+       }
+
+       if (event-&gt;event_mask &amp; POINTER_EVENT_BUTTON) {
+               char *state = event-&gt;state == WL_POINTER_BUTTON_STATE_RELEASED ?
+                       &quot;released&quot; : &quot;pressed&quot;;
+               fprintf(stderr, &quot;button %d %s &quot;, event-&gt;button, state);
+       }
+
+       uint32_t axis_events = POINTER_EVENT_AXIS
+               | POINTER_EVENT_AXIS_SOURCE
+               | POINTER_EVENT_AXIS_STOP
+               | POINTER_EVENT_AXIS_DISCRETE;
+       char *axis_name[2] = {
+               [WL_POINTER_AXIS_VERTICAL_SCROLL] = &quot;vertical&quot;,
+               [WL_POINTER_AXIS_HORIZONTAL_SCROLL] = &quot;horizontal&quot;,
+       };
+       char *axis_source[4] = {
+               [WL_POINTER_AXIS_SOURCE_WHEEL] = &quot;wheel&quot;,
+               [WL_POINTER_AXIS_SOURCE_FINGER] = &quot;finger&quot;,
+               [WL_POINTER_AXIS_SOURCE_CONTINUOUS] = &quot;continuous&quot;,
+               [WL_POINTER_AXIS_SOURCE_WHEEL_TILT] = &quot;wheel tilt&quot;,
+       };
+       if (event-&gt;event_mask &amp; axis_events) {
+               for (size_t i = 0; i &lt; 2; ++i) {
+                       if (!event-&gt;axes[i].valid) {
+                               continue;
+                       }
+                       fprintf(stderr, &quot;%s axis &quot;, axis_name[i]);
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS) {
+                               fprintf(stderr, &quot;value %f &quot;, wl_fixed_to_double(
+                                                       event-&gt;axes[i].value));
+                       }
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS_DISCRETE) {
+                               fprintf(stderr, &quot;discrete %d &quot;,
+                                               event-&gt;axes[i].discrete);
+                       }
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS_SOURCE) {
+                               fprintf(stderr, &quot;via %s &quot;,
+                                               axis_source[event-&gt;axis_source]);
+                       }
+                       if (event-&gt;event_mask &amp; POINTER_EVENT_AXIS_STOP) {
+                               fprintf(stderr, &quot;(stopped) &quot;);
+                       }
+               }
+       }
+
+       fprintf(stderr, &quot;\n&quot;);
+       memset(event, 0, sizeof(*event));
+}
+</code></pre>
+<p>毋庸置疑，这是最长的一串代码了。但愿它不会令人感到困惑。我们在这里所做的就是把这一帧期间累积的状态漂亮地打印到 stderr 上。如果你现在再编译并运行这个程序，你应该可以在窗口上晃动你的鼠标，并看到输入事件被打印出来!</p>
+<h2 id="接入键盘事件"><a class="header" href="#接入键盘事件">接入键盘事件</a></h2>
+<p>让我们用一些字段更新我们的 <code>client_state</code> 结构，以存储 XKB 的状态。</p>
+<pre><code class="language-diff">@@ -105,6 +107,9 @@ struct client_state {
+        int width, height;
+        bool closed;
+        struct pointer_event pointer_event;
++       struct xkb_state *xkb_state;
++       struct xkb_context *xkb_context;
++       struct xkb_keymap *xkb_keymap;
+};
+</code></pre>
+<p>我们需要 <code>xkbcommon</code> 头文件来定义这些。通常当我们这样做的时候，我将会把 <code>assert.h</code> 也拉进来。</p>
+<pre><code class="language-diff">@@ -1,4 +1,5 @@
+ #define _POSIX_C_SOURCE 200112L
++#include &lt;assert.h&gt;
+ #include &lt;errno.h&gt;
+ #include &lt;fcntl.h&gt;
+ #include &lt;limits.h&gt;
+@@ -9,6 +10,7 @@
+ #include &lt;time.h&gt;
+ #include &lt;unistd.h&gt;
+ #include &lt;wayland-client.h&gt;
++#include &lt;xkbcommon/xkbcommon.h&gt;
+ #include &quot;xdg-shell-client-protocol.h&quot;
+</code></pre>
+<p>我们还需要在我们的主函数中初始化 <code>xkb_context</code>:</p>
+<pre><code class="language-diff">@@ -603,6 +649,7 @@ main(int argc, char *argv[])
+        state.height = 480;
+        state.wl_display = wl_display_connect(NULL);
+        state.wl_registry = wl_display_get_registry(state.wl_display);
++       state.xkb_context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+        wl_registry_add_listener(state.wl_registry, &amp;wl_registry_listener, &amp;state);
+        wl_display_roundtrip(state.wl_display);
+</code></pre>
+<p>下一步，让我们来更新我们座位的功能函数，把我们的键盘监听器也接入。</p>
+<pre><code class="language-diff">        } else if (!have_pointer &amp;&amp; state-&gt;wl_pointer != NULL) {
+                wl_pointer_release(state-&gt;wl_pointer);
+                state-&gt;wl_pointer = NULL;
+        }
++
++       bool have_keyboard = capabilities &amp; WL_SEAT_CAPABILITY_KEYBOARD;
++
++       if (have_keyboard &amp;&amp; state-&gt;wl_keyboard == NULL) {
++               state-&gt;wl_keyboard = wl_seat_get_keyboard(state-&gt;wl_seat);
++               wl_keyboard_add_listener(state-&gt;wl_keyboard,
++                               &amp;wl_keyboard_listener, state);
++       } else if (!have_keyboard &amp;&amp; state-&gt;wl_keyboard != NULL) {
++               wl_keyboard_release(state-&gt;wl_keyboard);
++               state-&gt;wl_keyboard = NULL;
++       }
+ }
+</code></pre>
+<p>我们也要在这里定义我们使用的 <code>wl_keyboard_listener</code>。</p>
+<pre><code class="language-c">static const struct wl_keyboard_listener wl_keyboard_listener = {
+       .keymap = wl_keyboard_keymap,
+       .enter = wl_keyboard_enter,
+       .leave = wl_keyboard_leave,
+       .key = wl_keyboard_key,
+       .modifiers = wl_keyboard_modifiers,
+       .repeat_info = wl_keyboard_repeat_info,
+};
+</code></pre>
+<p>现在开始有了一些变化，让我们从 keymap 开始：</p>
+<pre><code class="language-c">static void
+wl_keyboard_keymap(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t format, int32_t fd, uint32_t size)
+{
+       struct client_state *client_state = data;
+       assert(format == WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1);
+
+       char *map_shm = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+       assert(map_shm != MAP_FAILED);
+
+       struct xkb_keymap *xkb_keymap = xkb_keymap_new_from_string(
+                       client_state-&gt;xkb_context, map_shm,
+                       XKB_KEYMAP_FORMAT_TEXT_V1, XKB_KEYMAP_COMPILE_NO_FLAGS);
+       munmap(map_shm, size);
+       close(fd);
+
+       struct xkb_state *xkb_state = xkb_state_new(xkb_keymap);
+       xkb_keymap_unref(client_state-&gt;xkb_keymap);
+       xkb_state_unref(client_state-&gt;xkb_state);
+       client_state-&gt;xkb_keymap = xkb_keymap;
+       client_state-&gt;xkb_state = xkb_state;
+}
+</code></pre>
+<p>现在我们可以看到为什么我们需要添加 <code>assert.h</code>——我们在这里用断言来确保 keymap 的格式是我们所期望的。然后，我们用 mmap 将混成器发送给我们的文件描述符 fd 映射成一个 <code>char*</code> 指针，我们可以将其传入 <code>xkb_keymap_new_from_string</code>。不要忘记 <code>munmap</code> 并在之后关闭这个文件描述符，然后设置我们的 XKB 状态。还要注意的是，我们也用 &quot;*_unref&quot; 去掉了先前在调用此函数时所设置的一切 XKB keymap 或 state 引用，以防混成器在运行时改变 keymap<sup class="footnote-reference"><a href="#1">1</a></sup>。</p>
+<pre><code class="language-c">static void
+wl_keyboard_enter(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, struct wl_surface *surface,
+               struct wl_array *keys)
+{
+       struct client_state *client_state = data;
+       fprintf(stderr, &quot;keyboard enter; keys pressed are:\n&quot;);
+       uint32_t *key;
+       wl_array_for_each(key, keys) {
+               char buf[128];
+               xkb_keysym_t sym = xkb_state_key_get_one_sym(
+                               client_state-&gt;xkb_state, *key + 8);
+               xkb_keysym_get_name(sym, buf, sizeof(buf));
+               fprintf(stderr, &quot;sym: %-12s (%d), &quot;, buf, sym);
+               xkb_state_key_get_utf8(client_state-&gt;xkb_state,
+                               *key + 8, buf, sizeof(buf));
+               fprintf(stderr, &quot;utf8: '%s'\n&quot;, buf);
+       }
+}
+</code></pre>
+<p>当键盘 &quot;进入&quot; 我们的表面时，我们已经获得了键盘的输入焦点。混成器会将这之前所按键的队列转发出来，这里我们只是枚举它们并记录它们的 keysym 名称和 UTF-8 等效值。当按键被按下的时候，我们会做类似如下的事情：</p>
+<pre><code class="language-c">static void
+wl_keyboard_key(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
+{
+       struct client_state *client_state = data;
+       char buf[128];
+       uint32_t keycode = key + 8;
+       xkb_keysym_t sym = xkb_state_key_get_one_sym(
+                       client_state-&gt;xkb_state, keycode);
+       xkb_keysym_get_name(sym, buf, sizeof(buf));
+       const char *action =
+               state == WL_KEYBOARD_KEY_STATE_PRESSED ? &quot;press&quot; : &quot;release&quot;;
+       fprintf(stderr, &quot;key %s: sym: %-12s (%d), &quot;, action, buf, sym);
+       xkb_state_key_get_utf8(client_state-&gt;xkb_state, keycode,
+                       buf, sizeof(buf));
+       fprintf(stderr, &quot;utf8: '%s'\n&quot;, buf);
+}
+</code></pre>
+<p>最后，我们增加了其余三个小事件的实现：</p>
+<pre><code class="language-c">static void
+wl_keyboard_leave(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, struct wl_surface *surface)
+{
+       fprintf(stderr, &quot;keyboard leave\n&quot;);
+}
+
+static void
+wl_keyboard_modifiers(void *data, struct wl_keyboard *wl_keyboard,
+               uint32_t serial, uint32_t mods_depressed,
+               uint32_t mods_latched, uint32_t mods_locked,
+               uint32_t group)
+{
+       struct client_state *client_state = data;
+       xkb_state_update_mask(client_state-&gt;xkb_state,
+               mods_depressed, mods_latched, mods_locked, 0, 0, group);
+}
+
+static void
+wl_keyboard_repeat_info(void *data, struct wl_keyboard *wl_keyboard,
+               int32_t rate, int32_t delay)
+{
+       /* Left as an exercise for the reader */
+}
+</code></pre>
+<p>对于修饰符，我们可以进一步解码，但大多数应用程序不需要这样做。我们只是在这里更新 XKB 的状态。至于处理按键重复，这对于你的应用来说有诸多限制。比如，你想重复输入文本吗，想重复键盘快捷键吗，这些重复的所需的时间如何与你的事件循环进行互动？这些问题的答案需要由你自己来决定。</p>
+<p>如果你再次编译并运行，你应该能够开始在窗口中开始打字，并看到你的输入被打印到终端日志中。这值得欢呼！</p>
+<h2 id="接入触摸事件"><a class="header" href="#接入触摸事件">接入触摸事件</a></h2>
+<p>最后，我们将新增设备的触摸功能支持。就和指针事件一样，触摸设备也存在一个 &quot;frame&quot; 帧事件。然而，由于有多个触摸点可能在一帧内被更新，所以它们可能变得更加复杂。我们将增加一些结构体和枚举类型来表示状态的累积。</p>
+<pre><code class="language-c">enum touch_event_mask {
+       TOUCH_EVENT_DOWN = 1 &lt;&lt; 0,
+       TOUCH_EVENT_UP = 1 &lt;&lt; 1,
+       TOUCH_EVENT_MOTION = 1 &lt;&lt; 2,
+       TOUCH_EVENT_CANCEL = 1 &lt;&lt; 3,
+       TOUCH_EVENT_SHAPE = 1 &lt;&lt; 4,
+       TOUCH_EVENT_ORIENTATION = 1 &lt;&lt; 5,
+};
+
+struct touch_point {
+       bool valid;
+       int32_t id;
+       uint32_t event_mask;
+       wl_fixed_t surface_x, surface_y;
+       wl_fixed_t major, minor;
+       wl_fixed_t orientation;
+};
+
+struct touch_event {
+       uint32_t event_mask;
+       uint32_t time;
+       uint32_t serial;
+       struct touch_point points[10];
+};
+</code></pre>
+<p>请注意，我在这里选择了 10 个触摸点，假设大多数用户只会使用这么多手指。而对于较大的多用户触摸屏，你可能需要一个更高的上限。此外，有些触摸硬件同时支持的触摸点少于十个，仅有八个也是常见的，而支持触摸点数量更少的硬件在老旧设备中也十分常见。</p>
+<p>我们把这个结构体添加到 <code>client_state</code>:</p>
+<pre><code class="language-diff">@@ -110,6 +135,7 @@ struct client_state {
+        struct xkb_state *xkb_state;
+        struct xkb_context *xkb_context;
+        struct xkb_keymap *xkb_keymap;
++       struct touch_event touch_event;
+ };
+</code></pre>
+<p>当触摸支持可用的时候，我们将更新座位的功能句柄，以介入一个监听器。</p>
+<pre><code class="language-diff">        } else if (!have_keyboard &amp;&amp; state-&gt;wl_keyboard != NULL) {
+                wl_keyboard_release(state-&gt;wl_keyboard);
+                state-&gt;wl_keyboard = NULL;
+        }
++
++       bool have_touch = capabilities &amp; WL_SEAT_CAPABILITY_TOUCH;
++
++       if (have_touch &amp;&amp; state-&gt;wl_touch == NULL) {
++               state-&gt;wl_touch = wl_seat_get_touch(state-&gt;wl_seat);
++               wl_touch_add_listener(state-&gt;wl_touch,
++                               &amp;wl_touch_listener, state);
++       } else if (!have_touch &amp;&amp; state-&gt;wl_touch != NULL) {
++               wl_touch_release(state-&gt;wl_touch);
++               state-&gt;wl_touch = NULL;
++       }
+ }
+</code></pre>
+<p>我们对作为上触摸功能的出现和消失也做了同样处理，因此我们的代码在运行时设备热插拔处理方面都很健壮。不过，触摸设备热插拔的情况在实际中不太常见。</p>
+<p>这里是其自身的监听器:</p>
+<pre><code class="language-c">static const struct wl_touch_listener wl_touch_listener = {
+       .down = wl_touch_down,
+       .up = wl_touch_up,
+       .motion = wl_touch_motion,
+       .frame = wl_touch_frame,
+       .cancel = wl_touch_cancel,
+       .shape = wl_touch_shape,
+       .orientation = wl_touch_orientation,
+};
+</code></pre>
+<p>为了解决多点触摸问题，我们需要写一个小的辅助函数:</p>
+<pre><code class="language-c">+static struct touch_point *
++get_touch_point(struct client_state *client_state, int32_t id)
++{
++       struct touch_event *touch = &amp;client_state-&gt;touch_event;
++       const size_t nmemb = sizeof(touch-&gt;points) / sizeof(struct touch_point);
++       int invalid = -1;
++       for (size_t i = 0; i &lt; nmemb; ++i) {
++               if (touch-&gt;points[i].id == id) {
++                       return &amp;touch-&gt;points[i];
++               }
++               if (invalid == -1 &amp;&amp; !touch-&gt;points[i].valid) {
++                       invalid = i;
++               }
++       }
++       if (invalid == -1) {
++               return NULL;
++       }
++       touch-&gt;points[invalid].valid = true;
++       touch-&gt;points[invalid].id = id;
++       return &amp;touch-&gt;points[invalid];
++}
+</code></pre>
+<p>这个函数的基本目的是从我们添加到 <code>touch_event</code> 结构体的数组中，根据我们要接收事件的触摸点 ID，挑选一个触摸点。如果我们找到了该 ID 的现有触摸点，我们就将其返回。如果没有，则会返回第一个可用的触摸点。如果我们都找完了还没有，就会返回 <code>NULL</code>。</p>
+<p>现在我们可以利用这点来实现我们的第一个功能：触摸。</p>
+<pre><code class="language-c">static void
+wl_touch_down(void *data, struct wl_touch *wl_touch, uint32_t serial,
+               uint32_t time, struct wl_surface *surface, int32_t id,
+               wl_fixed_t x, wl_fixed_t y)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_UP;
+       point-&gt;surface_x = wl_fixed_to_double(x),
+               point-&gt;surface_y = wl_fixed_to_double(y);
+       client_state-&gt;touch_event.time = time;
+       client_state-&gt;touch_event.serial = serial;
+}
+</code></pre>
+<p>和指针事件一样，我们也是简单地将这个状态累积起来，以便后续使用。我们还不知道这个事件是否代表一个完整的触摸帧。让我们为触摸添加一些类似的东西：</p>
+<pre><code class="language-c">static void
+wl_touch_up(void *data, struct wl_touch *wl_touch, uint32_t serial,
+               uint32_t time, int32_t id)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_UP;
+}
+</code></pre>
+<p>以及运动：</p>
+<pre><code class="language-c">static void
+wl_touch_motion(void *data, struct wl_touch *wl_touch, uint32_t time,
+               int32_t id, wl_fixed_t x, wl_fixed_t y)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_MOTION;
+       point-&gt;surface_x = x, point-&gt;surface_y = y;
+       client_state-&gt;touch_event.time = time;
+}
+</code></pre>
+<p>触摸事件的取消与之前有所不同，因为它一次性 “取消” 了所有活动的触摸点。我们只需要将其存储在 <code>touch_event</code> 的顶层事件掩码中。</p>
+<pre><code class="language-c">static void
+wl_touch_cancel(void *data, struct wl_touch *wl_touch)
+{
+       struct client_state *client_state = data;
+       client_state-&gt;touch_event.event_mask |= TOUCH_EVENT_CANCEL;
+}
+</code></pre>
+<p>然而，形状和方向事件类似于向上、向下和移动，因为它们告诉我们一个特定触摸点的尺寸。</p>
+<pre><code class="language-c">static void
+wl_touch_shape(void *data, struct wl_touch *wl_touch,
+               int32_t id, wl_fixed_t major, wl_fixed_t minor)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_SHAPE;
+       point-&gt;major = major, point-&gt;minor = minor;
+}
+
+static void
+wl_touch_orientation(void *data, struct wl_touch *wl_touch,
+               int32_t id, wl_fixed_t orientation)
+{
+       struct client_state *client_state = data;
+       struct touch_point *point = get_touch_point(client_state, id);
+       if (point == NULL) {
+               return;
+       }
+       point-&gt;event_mask |= TOUCH_EVENT_ORIENTATION;
+       point-&gt;orientation = orientation;
+}
+</code></pre>
+<p>最后，在收到一个帧事件时，我们可以将所有这些累积的状态解释为一个单一的输入事件，就像我们的光标指针代码一样。</p>
+<pre><code class="language-c">static void
+wl_touch_frame(void *data, struct wl_touch *wl_touch)
+{
+       struct client_state *client_state = data;
+       struct touch_event *touch = &amp;client_state-&gt;touch_event;
+       const size_t nmemb = sizeof(touch-&gt;points) / sizeof(struct touch_point);
+       fprintf(stderr, &quot;touch event @ %d:\n&quot;, touch-&gt;time);
+
+       for (size_t i = 0; i &lt; nmemb; ++i) {
+               struct touch_point *point = &amp;touch-&gt;points[i];
+               if (!point-&gt;valid) {
+                       continue;
+               }
+               fprintf(stderr, &quot;point %d: &quot;, touch-&gt;points[i].id);
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_DOWN) {
+                       fprintf(stderr, &quot;down %f,%f &quot;,
+                                       wl_fixed_to_double(point-&gt;surface_x),
+                                       wl_fixed_to_double(point-&gt;surface_y));
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_UP) {
+                       fprintf(stderr, &quot;up &quot;);
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_MOTION) {
+                       fprintf(stderr, &quot;motion %f,%f &quot;,
+                                       wl_fixed_to_double(point-&gt;surface_x),
+                                       wl_fixed_to_double(point-&gt;surface_y));
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_SHAPE) {
+                       fprintf(stderr, &quot;shape %fx%f &quot;,
+                                       wl_fixed_to_double(point-&gt;major),
+                                       wl_fixed_to_double(point-&gt;minor));
+               }
+
+               if (point-&gt;event_mask &amp; TOUCH_EVENT_ORIENTATION) {
+                       fprintf(stderr, &quot;orientation %f &quot;,
+                                       wl_fixed_to_double(point-&gt;orientation));
+               }
+
+               point-&gt;valid = false;
+               fprintf(stderr, &quot;\n&quot;);
+       }
+}
+</code></pre>
+<p>编译并再次运行这个程序，你就可以看到当你与触摸设备交互时，触摸事件被答应到 stderr （假设你现在有支持触摸的设备）。现在我们的客户端终于了实现输入的支持！</p>
+<h2 id="接下来该做什么"><a class="header" href="#接下来该做什么">接下来该做什么？</a></h2>
+<p>有很多不同种类的输入设备，因此扩展我们的代码以支持这些设备是一项相当庞大的工作——仅在本章中我们的代码量就增加了 2.5 倍。不过收获应该也是相当大的，因为你现在已经熟悉了足够多的 Wayland 概念（和代码），由此你可以实现多种多样的客户端了。</p>
+<p>这之后还有更多的东西要学——在最后几章，我们将介绍弹出窗口、上下文菜单、交互式窗口的移动和大小调整、剪贴板和拖放支持，以及后来的一些有趣的扩展协议，以支持更多小众的使用场景。我强烈建议你在构建自己的客户端之前先读到第 10.1 章，因为它涵盖诸如根据混成器的要求调整窗口大小等内容。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>这种情况在实践中确实发生了！</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="深入理解-xdg-shell"><a class="header" href="#深入理解-xdg-shell">深入理解 XDG shell</a></h1>
+<p>到目前为止，我们已经成功地在屏幕上现实了一些顶层的应用程序窗口，但 XDG shell 还有更多的东西我们还没有完全理解。它让即便是最简单的应用程序也能正确地实现配置生命周期，而且 <code>xdg-shell</code> 也为更复杂的应用程序提供了有用的功能。</p>
+<p><code>xdg-shell</code> 的全部功能包括客户端或服务端协商窗口大小、多窗口的层次结构、客户端装饰 (CSD)、以及诸如上下文菜单窗口一样的语义定位。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="配置和生命周期"><a class="header" href="#配置和生命周期">配置和生命周期</a></h1>
+<p>先前，按我们的选择创建了一个固定尺寸的窗口：640x480。然而，混成器往往会对我们的窗口应假设什么样的尺寸有意见，而我们可能也想传达自己的偏好尺寸。未能这样做往往会导致非预期行为，比如你窗口的一部分被混成器裁切掉，而混成器试图告诉你让你的表面尺寸缩小。</p>
+<p>混成器可以为应用程序提供额外的线索，了解其显示的上下文。它可以让你知道应用是否正处于最大化或者全屏状态，亦或其窗口边的一个或多个边缘正与其他窗口或显示器的边缘平铺、正处于焦点还是后台空闲状态，等等。由于 <code>wl_surface</code> 是用来在客户端和服务端之间原子化交流表面的变化，<code>xdg_surface</code> 提供接口提供了一下两个消息，供混成器建议一些变化和客户端确认：</p>
+<pre><code class="language-xml">&lt;request name=&quot;ack_configure&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+&lt;/request&gt;
+
+&lt;event name=&quot;configure&quot;&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+&lt;/event&gt;
+</code></pre>
+<p>就它们本身而言，这些消息只能携带很小的信息量。然而，<code>xdg_surface</code> 的每个子类 (<code>xdg_toplevel</code> 和 <code>xdg_popup</code>) 都有额外的事件，服务端可以在 &quot;configure&quot; 配置事件之前发送，以提出到目前为止所提到的各种建议。服务端将发送这些状态，如最大化、焦点、尺寸建议等，然后用 <code>serial</code> 来配置事件。当客户端的状态与这些建议一致的时候，它将嘎送一个带有相同序列的 <code>ack_configure</code> 请求来表明这一点。在下次提交到相关的 <code>wl_surface</code> 时，混成器将认为该状态是一致的。</p>
+<h2 id="xdg-顶层窗口的生命周期"><a class="header" href="#xdg-顶层窗口的生命周期">XDG 顶层窗口的生命周期</a></h2>
+<p>我们第 7 章的示例代码虽然可以工作，但它不是桌面的最佳范式。它并没有假定混成器推荐的尺寸，而且如果用户试图关闭窗口，它也不会消失。若要响应这些由混成器提供的事件，这里涉及到两个 Wayland <code>事件：configure</code> 和 <code>close</code> 即配置和关闭。</p>
+<pre><code class="language-xml">&lt;event name=&quot;configure&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;states&quot; type=&quot;array&quot;/&gt;
+&lt;/event&gt;
+
+&lt;event name=&quot;close&quot; /&gt;
+</code></pre>
+<p>这里的宽度 <code>width</code> 和高度 <code>height</code> 是混成器为窗口推荐的首选尺寸<sup class="footnote-reference"><a href="#1">1</a></sup>，而状态 <code>states</code> 则是由以下数值构成的数组:</p>
+<pre><code class="language-xml">&lt;enum name=&quot;state&quot;&gt;
+  &lt;entry name=&quot;maximized&quot; /&gt;
+  &lt;entry name=&quot;fullscreen&quot; /&gt;
+  &lt;entry name=&quot;resizing&quot; /&gt;
+  &lt;entry name=&quot;activated&quot; /&gt;
+  &lt;entry name=&quot;tiled_left&quot; /&gt;
+  &lt;entry name=&quot;tiled_right&quot; /&gt;
+  &lt;entry name=&quot;tiled_top&quot; /&gt;
+  &lt;entry name=&quot;tiled_bottom&quot; /&gt;
+&lt;/enum&gt;
+</code></pre>
+<p>关闭事件有时可以被忽略，一个典型的原因是向用户显示一个确认对话框，以保存他们还未保存的工作。我们可以很轻松地更新第 7 章中的示例代码，以支持这些事件。</p>
+<pre><code class="language-diff">diff --git a/client.c b/client.c
+--- a/client.c
++++ b/client.c
+@@ -70,9 +70,10 @@ struct client_state {
+ 	struct xdg_surface *xdg_surface;
+ 	struct xdg_toplevel *xdg_toplevel;
+ 	/* State */
+-	bool closed;
+ 	float offset;
+ 	uint32_t last_frame;
++	int width, height;
++	bool closed;
+ };
+ 
+ static void wl_buffer_release(void *data, struct wl_buffer *wl_buffer) {
+@@ -86,7 +87,7 @@ static const struct wl_buffer_listener wl_buffer_listener = {
+ static struct wl_buffer *
+ draw_frame(struct client_state *state)
+ {
+-	const int width = 640, height = 480;
++	int width = state-&gt;width, height = state-&gt;height;
+ 	int stride = width * 4;
+ 	int size = stride * height;
+ 
+@@ -124,6 +125,32 @@ draw_frame(struct client_state *state)
+ 	return buffer;
+ }
+ 
++static void
++xdg_toplevel_configure(void *data,
++		struct xdg_toplevel *xdg_toplevel, int32_t width, int32_t height,
++		struct wl_array *states)
++{
++	struct client_state *state = data;
++	if (width == 0 || height == 0) {
++		/* Compositor is deferring to us */
++		return;
++	}
++	state-&gt;width = width;
++	state-&gt;height = height;
++}
++
++static void
++xdg_toplevel_close(void *data, struct xdg_toplevel *toplevel)
++{
++	struct client_state *state = data;
++	state-&gt;closed = true;
++}
++
++static const struct xdg_toplevel_listener xdg_toplevel_listener = {
++	.configure = xdg_toplevel_configure,
++	.close = xdg_toplevel_close,
++};
++
+ static void
+ xdg_surface_configure(void *data,
+ 		struct xdg_surface *xdg_surface, uint32_t serial)
+@@ -163,7 +190,7 @@ wl_surface_frame_done(void *data, struct wl_callback *cb, uint32_t time)
+ 	cb = wl_surface_frame(state-&gt;wl_surface);
+ 	wl_callback_add_listener(cb, &amp;wl_surface_frame_listener, state);
+ 
+-	/* Update scroll amount at 8 pixels per second */
++	/* Update scroll amount at 24 pixels per second */
+ 	if (state-&gt;last_frame != 0) {
+ 		int elapsed = time - state-&gt;last_frame;
+ 		state-&gt;offset += elapsed / 1000.0 * 24;
+@@ -217,6 +244,8 @@ int
+ main(int argc, char *argv[])
+ {
+ 	struct client_state state = { 0 };
++	state.width = 640;
++	state.height = 480;
+ 	state.wl_display = wl_display_connect(NULL);
+ 	state.wl_registry = wl_display_get_registry(state.wl_display);
+ 	wl_registry_add_listener(state.wl_registry, &amp;wl_registry_listener, &amp;state);
+@@ -227,6 +256,8 @@ main(int argc, char *argv[])
+ 			state.xdg_wm_base, state.wl_surface);
+ 	xdg_surface_add_listener(state.xdg_surface, &amp;xdg_surface_listener, &amp;state);
+ 	state.xdg_toplevel = xdg_surface_get_toplevel(state.xdg_surface);
++	xdg_toplevel_add_listener(state.xdg_toplevel,
++			&amp;xdg_toplevel_listener, &amp;state);
+ 	xdg_toplevel_set_title(state.xdg_toplevel, &quot;Example client&quot;);
+ 	wl_surface_commit(state.wl_surface);
+</code></pre>
+<p>如果你再次编译并运行这个客户端，你会注意到它的行为表现得比之前更加完善了。</p>
+<h2 id="请求改变状态"><a class="header" href="#请求改变状态">请求改变状态</a></h2>
+<p>客户端也可以向混成器请求将自己置入这些状态中（最大、最小化等等），或者对窗口的大小进行限制。</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_max_size&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;set_min_size&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;set_maximized&quot; /&gt;
+
+&lt;request name=&quot;unset_maximized&quot; /&gt;
+
+&lt;request name=&quot;set_fullscreen&quot; /&gt;
+  &lt;arg name=&quot;output&quot;
+    type=&quot;object&quot;
+    interface=&quot;wl_output&quot;
+    allow-null=&quot;true&quot;/&gt;
+&lt;/request&gt;
+
+&lt;request name=&quot;unset_fullscreen&quot; /&gt;
+
+&lt;request name=&quot;set_minimized&quot; /&gt;
+</code></pre>
+<p>混成器通过发送一个相应的 <code>configure</code> 配置事件来表明它对这些请求的确认。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>这考虑到了客户端 <code>set_window_geometry</code> 请求所发送的窗口的几何形状。建议的尺寸仅包括窗口几何形状所代表的空间（即外接矩形）。</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="弹出窗口"><a class="header" href="#弹出窗口">弹出窗口</a></h1>
+<p>在设计有应用程序窗口的软件时，存在许多较小的辅助表面被用于各种目的。例如，右键显示的上下文菜单，从一系列选项中选择一个值的下拉菜单，当你鼠标悬停在 UI 元素上时显示的上下文提示，或者贴着窗口顶部和底部的弹出的菜单栏和工具栏。通常这些都是嵌套的窗口，例如按照 “文件 → 最近的文档 → 例子.odt” 这样的路径。</p>
+<p>Wayland 环境下，XDG shell 提供了管理这些弹出式窗口的工具。我们在前面看到了 <code>xdg_surface</code> 的 <code>get_toplevel</code> 请求，用于创建顶层的应用程序窗口。在弹出式窗口的的情况下，使用 <code>get_popup</code> 请求代替。</p>
+<pre><code class="language-xml">&lt;request name=&quot;get_popup&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;xdg_popup&quot;/&gt;
+  &lt;arg name=&quot;parent&quot; type=&quot;object&quot; interface=&quot;xdg_surface&quot; allow-null=&quot;true&quot;/&gt;
+  &lt;arg name=&quot;positioner&quot; type=&quot;object&quot; interface=&quot;xdg_positioner&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p>第一个和第二个参数是不言而喻的，但第三个参数引入了一个新的概念：定位器。定位器的实现目的正如其名，是为了定位新的弹出式窗口。这是用来让混成器使用器特权信息参与弹出窗口的定位，例如避免弹出窗口延伸到显示器的边缘之外。我们将在第 10.4 章节中讨论定位器，现在你在没有进一步配置的情况下简单地创建一个定位器，并实现适当的 <code>xdg_wm_base</code> 请求。</p>
+<pre><code class="language-xml">&lt;request name=&quot;create_positioner&quot;&gt;
+  &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;xdg_positioner&quot;/&gt;
+&lt;/request&gt;
+</code></pre>
+<p>简而言之我们可以：</p>
+<ol>
+<li>创建一个新的 <code>wl_surface</code></li>
+<li>为其分配一个 <code>xdg_surface</code></li>
+<li>创建一个新的 <code>xdg_positioner</code> 定位器，并按 10.4 章节中那样保存它的配置</li>
+<li>从我们的 XDG 表面和定位器创建一个 <code>xdg_popup</code> 弹窗，将其父级分配给我们先前创建的 <code>xdg_toplevel</code> 顶层窗口</li>
+</ol>
+<p>然后，我们可以通过先前讨论过的相同生命周期实现来渲染和附加缓冲区。我们还可以访问其他一些弹窗特有的功能。</p>
+<h2 id="配置"><a class="header" href="#配置">配置</a></h2>
+<p>就像 XDG toplevel 顶层窗口的配置事件一样，它可以用来建议你弹出窗口的尺寸。然而，与 toplevel 不同的是，它还包括一个定位事件，用于通知客户端弹出窗口相对于其父表面的位置。</p>
+<pre><code class="language-xml">&lt;event name=&quot;configure&quot;&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;int&quot;
+ summary=&quot;x position relative to parent surface window geometry&quot;/&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;int&quot;
+ summary=&quot;y position relative to parent surface window geometry&quot;/&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot; summary=&quot;window geometry width&quot;/&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot; summary=&quot;window geometry height&quot;/&gt;
+&lt;/event&gt;
+</code></pre>
+<p>客户端可以通过 XDG 定位器来影响这些值，这也将在第 10.4 章节中讨论。</p>
+<h2 id="弹出式窗口输入抓取"><a class="header" href="#弹出式窗口输入抓取">弹出式窗口输入抓取</a></h2>
+<p>弹出式界面通常希望能 “抓取” 所有的输入，例如允许用户使用方向键来选择不同的菜单项目。这可以通过抓取请求来实现。</p>
+<pre><code class="language-xml">&lt;request name=&quot;grab&quot;&gt;
+  &lt;arg name=&quot;seat&quot; type=&quot;object&quot; interface=&quot;wl_seat&quot; /&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>响应这个请求的前提是接收到一个合格的输入事件，比如右键。这个输入事件的序列应该被用于该请求中。这些语义将在第 9 章中详细介绍。混成器可以在其后取消这个抓取，例如用户按了 escape 按键或者点击了弹出窗口之外的地方。</p>
+<h2 id="驳回弹窗-dismissal"><a class="header" href="#驳回弹窗-dismissal">驳回弹窗 (Dismissal)</a></h2>
+<p>在这种情况下，混成器会驳回你的弹出窗口，例如按下 escape 键之后，会发送以下事件：</p>
+<pre><code class="language-xml">&lt;event name=&quot;popup_done&quot; /&gt;
+</code></pre>
+<p>为了避免发生竞争条件，混成器将弹出式窗口的结构体保留在内存中，即便弹出式窗口驳回后也会为它们的请求提供服务。关于对象的寿命和竞争条件的更多细节在第 2.4 章节中阐述过了。</p>
+<h2 id="销毁弹窗"><a class="header" href="#销毁弹窗">销毁弹窗</a></h2>
+<p>客户端实现销毁弹窗是非常直截了当的：</p>
+<pre><code class="language-xml">&lt;request name=&quot;destroy&quot; type=&quot;destructor&quot; /&gt;
+</code></pre>
+<p>然而，有一个细节值得一提：你必须自顶向下销毁弹出窗口。在任何时候，你唯一可以销毁的弹出窗口只能是最上层的那个。如果不这样做，你就会因为协议错误而被断开连接。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="交互式移动和尺寸调整"><a class="header" href="#交互式移动和尺寸调整">交互式移动和尺寸调整</a></h1>
+<p>许多应用程序窗口都有交互式 UI 元素，用户可以用它来拖动或者调整窗口大小。在默认情况下，许多 Wayland 客户端都希望负责自己的窗口装饰，并提供这些交互元素。在 X11 上，应用程序窗口可以在屏幕上的任何地方自行定位（即知道自己的绝对位置），并以此来推动这些交互。</p>
+<p>然而，Wayland 的一个设计特性是让应用程序窗口不知道它们在屏幕上的确切位置或是与其他窗口的相对位置。这一决定为 Wayland 混成器提供了更多的灵活性，例如：窗口可以同时显示在几个地方，排列在 VR 场景的 3D 空间中，或以任何其他新颖的方式呈现。Wayland 的设计旨在通用，广泛适用与许多设备和不同外形。</p>
+<p>为了平衡移动和调整尺寸这两种需要，XDG toplevels 提供了两个请求，可以用来要求混成器执行一个交互式移动或者调整大小的操作。部分相关接口如下：</p>
+<pre><code class="language-xml">&lt;request name=&quot;move&quot;&gt;
+  &lt;arg name=&quot;seat&quot; type=&quot;object&quot; interface=&quot;wl_seat&quot; /&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>就像上一章节解释的弹出式窗口里创建请求一样，你必须提供一个输入事件序列来执行一个交互式操作。例如，当你收到一个向下的鼠标移动的事件时，你可以使用该事件的序列来执行交互式移动操作。混成器将从此处接管，并且在其内部的坐标空间中对窗口进行交互式操作。</p>
+<p>调整尺寸则相对复杂一些，因为需要指定操作中涉及到窗口的哪些边或角。</p>
+<pre><code class="language-xml">&lt;enum name=&quot;resize_edge&quot;&gt;
+  &lt;entry name=&quot;none&quot; value=&quot;0&quot;/&gt;
+  &lt;entry name=&quot;top&quot; value=&quot;1&quot;/&gt;
+  &lt;entry name=&quot;bottom&quot; value=&quot;2&quot;/&gt;
+  &lt;entry name=&quot;left&quot; value=&quot;4&quot;/&gt;
+  &lt;entry name=&quot;top_left&quot; value=&quot;5&quot;/&gt;
+  &lt;entry name=&quot;bottom_left&quot; value=&quot;6&quot;/&gt;
+  &lt;entry name=&quot;right&quot; value=&quot;8&quot;/&gt;
+  &lt;entry name=&quot;top_right&quot; value=&quot;9&quot;/&gt;
+  &lt;entry name=&quot;bottom_right&quot; value=&quot;10&quot;/&gt;
+&lt;/enum&gt;
+
+&lt;request name=&quot;resize&quot;&gt;
+  &lt;arg name=&quot;seat&quot; type=&quot;object&quot; interface=&quot;wl_seat&quot; /&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;edges&quot; type=&quot;uint&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>但除此之外，它的功能大致相同。如果用户沿着你窗口的左下角点击并拖动，你可能想发送一个交互式调整大小的请求，并将边缘参数设置为 <code>buttom_left</code>。</p>
+<p>对于自行实现 CSD 的客户端来说，有一个必要的额外请求：</p>
+<pre><code class="language-xml">&lt;request name=&quot;show_window_menu&quot;&gt;
+  &lt;arg name=&quot;seat&quot; type=&quot;object&quot; interface=&quot;wl_seat&quot; /&gt;
+  &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; /&gt;
+  &lt;arg name=&quot;x&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;y&quot; type=&quot;int&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p>当点击窗口装饰时，通常会出现一个提供窗口操作的上下文菜单，例如关闭或最小化窗口。对于窗口装饰由其自行管理的客户端来说，这有助于将客户端驱动的交互事件与混成器驱动的元操作（如最小化窗口）联系起来。如果你的客户端使用了 CSD，则可以为此目的使用此请求。</p>
+<h2 id="xdg-decoration"><a class="header" href="#xdg-decoration">xdg-decoration</a></h2>
+<p>在讨论客户端 CSD 的行为时，最后一个值得一提的细节是管理其初次用于协商的协议。不同的 Wayland 客户端和服务端可能对 CSD (client-side decoration) 或 SSD (server-side decoration) 有不同的偏好。为了表达这一意图，我们使用了一个扩展协议：<code>xdg-decoration</code>。它可以在 <code>wayland-protocols</code> 中找到，该协议提供了一个全局的接口：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;zxdg_decoration_manager_v1&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;destroy&quot; type=&quot;destructor&quot; /&gt;
+
+  &lt;request name=&quot;get_toplevel_decoration&quot;&gt;
+    &lt;arg name=&quot;id&quot; type=&quot;new_id&quot; interface=&quot;zxdg_toplevel_decoration_v1&quot;/&gt;
+    &lt;arg name=&quot;toplevel&quot; type=&quot;object&quot; interface=&quot;xdg_toplevel&quot;/&gt;
+  &lt;/request&gt;
+&lt;/interface&gt;
+</code></pre>
+<p>你可以将你的 <code>xdg_toplevel</code> 对象传递到 <code>get_toplevel_decoration</code> 请求中，以获得一个具有以下接口的对象：</p>
+<pre><code class="language-xml">&lt;interface name=&quot;zxdg_toplevel_decoration_v1&quot; version=&quot;1&quot;&gt;
+  &lt;request name=&quot;destroy&quot; type=&quot;destructor&quot; /&gt;
+
+  &lt;enum name=&quot;mode&quot;&gt;
+    &lt;entry name=&quot;client_side&quot; value=&quot;1&quot; /&gt;
+    &lt;entry name=&quot;server_side&quot; value=&quot;2&quot; /&gt;
+  &lt;/enum&gt;
+
+  &lt;request name=&quot;set_mode&quot;&gt;
+    &lt;arg name=&quot;mode&quot; type=&quot;uint&quot; enum=&quot;mode&quot; /&gt;
+  &lt;/request&gt;
+
+  &lt;request name=&quot;unset_mode&quot; /&gt;
+
+  &lt;event name=&quot;configure&quot;&gt;
+    &lt;arg name=&quot;mode&quot; type=&quot;uint&quot; enum=&quot;mode&quot; /&gt;
+  &lt;/event&gt;
+&lt;/interface&gt;
+</code></pre>
+<p><code>set_mode</code> 请求用于表达客户端的偏好，<code>unset_mode</code> 用于表达没有偏好。然后，混成器将使用 <code>configure</code> 事件来告知客户端是否使用 CSD。更多细节请查阅完整的 XML。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="指针"><a class="header" href="#指针">指针</a></h1>
+<p>当我们在前几页介绍弹出式窗口的时候，我们注意到创建弹出式窗口时你必须提供一个定位器对象。之所以我们告诉你不必担心这个问题，只需要使用默认值，是因为这是一个复杂的接口，在当时是无关紧要的。现在，我们将深入探讨这个复杂的接口。</p>
+<p>当你打开一个弹窗时候，它是在一个窗口系统中显示的，该系统有些你客户端不知道的限制。例如，Wayland 客户端不知道它们在屏幕上显示的位置。因此，如果右键单机窗口，则客户端缺失了必要信息来进行决策，可能出现弹窗越过屏幕边缘的情况。定位器就是为了解决这些问题而设计的，它让客户端指定弹出式窗口移动方式或调整大小的某些约束条件，然后混成器在完全掌握全局的情况下，可以对如何使用作出最终决定。</p>
+<h2 id="基本请求"><a class="header" href="#基本请求">基本请求</a></h2>
+<pre><code class="language-xml">&lt;request name=&quot;destroy&quot; type=&quot;destructor&quot;&gt;&lt;/request&gt;
+</code></pre>
+<p>当你完成的时候，这个请求会销毁定位器。你可以在创建弹出窗口后调用此功能。</p>
+<pre><code class="language-xml">&lt;request name=&quot;set_size&quot;&gt;
+  &lt;arg name=&quot;width&quot; type=&quot;int&quot; /&gt;
+  &lt;arg name=&quot;height&quot; type=&quot;int&quot; /&gt;
+&lt;/request&gt;
+</code></pre>
+<p><code>set_size</code> 请求用于设置正在创建的弹出窗口的大小。</p>
+<p>所有使用使用定位器的客户端都将会用到这两个请求。现在，让我们来看一个更有趣的请求。</p>
+<h2 id="锚定"><a class="header" href="#锚定">锚定</a></h2>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+    </body>
+</html>
