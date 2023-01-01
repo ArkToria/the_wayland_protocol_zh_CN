@@ -1,11 +1,12 @@
 ![banner](banner.png)
+
 # 介绍
 
-Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 系统的下一代显示服务。并自称是将应用程序窗口显示在用户屏幕上的最佳方法。过去曾经使用过 X11 的读者会对 Wayland 的改进感到惊喜，而 Unix 上的图形新手将发现它是一个灵活而强大的系统，可用于构建图形应用程序和桌面。
+Wayland 是 Unix 操作系统的下一代图像显示服务架构。该项目由经典 Xorg 的原班人马打造，是将应用程序的图形界面显示在用户屏幕的最佳选择。之前使用过 X11 的读者会对 Wayland 的改进感到惊喜，而之前未接触过 Unix 图像学的新手，也会发现 Wayland 系统在构建图形显示方面的强大、灵活之处。
 
-这本书将会帮助您深入理解 Wayland 的概念、设计和实现，并为您提供构建自行构建 Wayland 客户端和服务端所需的工具。在阅读过程中，我们将构建 Wayland 的理想模型，并建立对其原理的认知。在这本书中，你能发现许多令你恍然大悟的时刻，Wayland 直观的设计让选择变得更加明确，有利于保持顺畅的阅读体验。欢迎来到开源图形的未来！
+这本书将会帮助您深入理解 Wayland 的概念、设计和实现，并为您提供构建构建 Wayland 客户端和合成器所需的工具。随着阅读的进行，我们会建立起 Wayland 的架构模型、理解其设计理念。在书中，你会恍然大悟，Wayland 的设计是那么的清晰、直观，然后被吸引着一直看下去。欢迎探索开源图形学的未来！
 
-**注意：** 这还只是草案。第一到第十章基本已完成，可能后续会有所更新。第十一章及后续内容大部分有待撰写。
+**注意：** 这还是个草稿，1-10 章基本完善，不过后续会有所更新，11 章后很多内容有待撰写。
 
 ### TODO
 
@@ -17,29 +18,25 @@ Wayland 是一个为了替代 Xorg 服务而设计和构建的，用于类 Unix 
 - Prepare PDFs and EPUBs
 
 ## 关于这本书
-本书采用 [mdbook](https://github.com/rust-lang/mdBook) 构建，译者翻译水平有限，疑问请自寻原书解答，许可同源。
 
-自译项目地址：[https://github.com/axionl/the_wayland_protocol_zh_CN](https://github.com/axionl/the_wayland_protocol_zh_CN)
+本书采用 [mdbook](https://github.com/rust-lang/mdBook) 构建，译者翻译水平有限，疑问请自寻原书解答，许可[Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/)同源。
 
-阅读地址：[https://wayland.axionl.me](https://wayland.axionl.me)
+自译项目仓库地址：[https://github.com/axionl/the_wayland_protocol_zh_CN](https://github.com/axionl/the_wayland_protocol_zh_CN)  
+本译在线阅读地址 [https://wayland.axionl.me](https://wayland.axionl.me)
 
-原书：[https://wayland-book.com](https://wayland-book.com/introduction.html)
+### 英文原版
 
-许可：[Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/)
-
-源码：[https://git.sr.ht/~sircmpwn/wayland-book](https://git.sr.ht/~sircmpwn/wayland-book)
-
-## 电子版
-
-- EPUB 格式：由于 github page 页面目录结构配置问题，暂时无法提供，可以自行 `cargo install mdbook-epub` 安装最新版构建。
-- PDF 格式：页面右上角打印
+阅读地址 [https://wayland-book.com](https://wayland-book.com)  
+项目仓库 [https://git.sr.ht/~sircmpwn/wayland-book](https://git.sr.ht/~sircmpwn/wayland-book)
 
 ## 关于作者
-用 Drew 紧密合作者 Preston Carpenter 的话来说：
 
-Drew DeVault 从 [sway](https://swaywm.org/)（一个对广受欢迎的平铺式窗口管理器 i3wm 的克隆） 开启了自己的 Wayland 之路。 目前它俨然成为 Wayland 下最受欢迎的平铺式窗口管理器，无论是用户、提交数量还是影响力。随着它的成功，Drew 回到 Wayland 社区并开始 wlroots 的工作：一个用于构建 Wayland 混成器的灵活可组合的模块。如今它已经成为数十个混成器的基础，并且在 Wayland 领域 Drew 成为最重要的专家之一。
+用 Drew 的密切合作者 Preston Carpenter 的话来说：
+
+Drew DeVault 从 [sway](https://swaywm.org/) 的建造开始，逐渐进入到 Wayland 的世界。sway 是 X11 最受欢迎的平铺式窗口管理器 i3wm 在 Wayland 的克隆，从用户、开发提交数、影响力等角度来看，sway 都是目前 Wayland 下最受欢迎的平铺式窗口管理器。随着 sway 的成功，Drew 回到 Wayland 社区开始 wlroots 的工作：可用于构建 Wayland 合成器的定制化、组件化基础库。现今，已有数十个不同的合成器在 wlroots 基础之上而构造，而 Drew 也成为 Wayland 领域的重要专家之一。
 
 ## 扩展阅读
 
+- [Wayland 官网](https://wayland.freedesktop.org/)
 - [桌面系统的混成器简史](https://farseerfc.me/zhs/brief-history-of-compositors-in-desktop-os.html)
 - [X 中的混成器与 Composite 扩展](https://farseerfc.me/zhs/compositor-in-X-and-compositext.html)
