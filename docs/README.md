@@ -20,7 +20,7 @@ Wayland 是 C/S 模型工作的，文中所说 client、客户端……都指 Ap
 
 在另一端的 Wayland server，不仅负责与 client 通信，更要把接收到来的图像，合成后呈现到显示器上，也就是说
 
-> 在 Wayland 中 server、window manager 是二位一体的
+**在 Wayland 中 server、window manager 是二位一体的**
 
 因此文中的 server、服务端、合成器、混成器、窗口管理器……所指相同。
 
@@ -30,8 +30,8 @@ https://wayland.freedesktop.org/ 项目官网，除了代码仓库和邮箱列�
 
 本文原作者 Drew DeVault 是 sway 及 wlroots 的创始人，他现在致力于开发 sr.ht 代码协作平台（GitHub 类似）、hare 编程语言（C 语言类似）等，Wayland 已经交给其他人来做，所以本书在停更状态。作者的博客 https://drewdevault.com/ 对于基于 wlroots 开发合成器有很多参考内容。
 
-- [_An introduction to Wayland - Drew DeVault_](https://drewdevault.com/2017/06/10/Introduction-to-Wayland.html)
-- [_Wayland (protocol) - Wikipedia_](<https://en.wikipedia.org/wiki/Wayland_(protocol)>)
-- [_(7) Wayland client basics How to natively speak Wayland in your application, from the bottom up - YouTube_](https://www.youtube.com/watch?v=KbryyNrMYl4)
-- [_Coelacanthus - X11 与 Wayland - 20220518 - PLCT 实验室（内部报告，仅用于关系者交流技术进展）- 哔哩哔哩_](https://www.bilibili.com/video/BV1sS4y187Vr/)
-- [_桌面系统的混成器简史 - Farseerfc 的小窝_](https://farseerfc.me/zhs/brief-history-of-compositors-in-desktop-os.html)
+- [An introduction to Wayland - Drew DeVault](https://drewdevault.com/2017/06/10/Introduction-to-Wayland.html)
+- [Wayland (protocol) - Wikipedia](<https://en.wikipedia.org/wiki/Wayland_(protocol)>)
+- [(7) Wayland client basics How to natively speak Wayland in your application, from the bottom up - YouTube](https://www.youtube.com/watch?v=KbryyNrMYl4)
+- [Coelacanthus - X11 与 Wayland - 20220518 - PLCT 实验室（内部报告，仅用于关系者交流技术进展）- 哔哩哔哩](https://www.bilibili.com/video/BV1sS4y187Vr/)
+- [桌面系统的混成器简史 - Farseerfc 的小窝](https://farseerfc.me/zhs/brief-history-of-compositors-in-desktop-os.html)
