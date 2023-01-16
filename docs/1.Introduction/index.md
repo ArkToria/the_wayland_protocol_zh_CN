@@ -34,9 +34,3 @@ Wayland 是 Unix 操作系统的下一代图像显示服务架构。该项目由
 用 Drew 的密切合作者 Preston Carpenter 的话来说：
 
 Drew DeVault 从 [sway](https://swaywm.org/) 的建造开始，逐渐进入到 Wayland 的世界。sway 是 X11 最受欢迎的平铺式窗口管理器 i3wm 在 Wayland 的克隆，从用户、开发提交数、影响力等角度来看，sway 都是目前 Wayland 下最受欢迎的平铺式窗口管理器。随着 sway 的成功，Drew 回到 Wayland 社区开始 wlroots 的工作：可用于构建 Wayland 合成器的定制化、组件化基础库。现今，已有数十个不同的合成器在 wlroots 基础之上而构造，而 Drew 也成为 Wayland 领域的重要专家之一。
-
-## 扩展阅读
-
-- [Wayland 官网](https://wayland.freedesktop.org/)
-- [桌面系统的混成器简史](https://farseerfc.me/zhs/brief-history-of-compositors-in-desktop-os.html)
-- [X 中的混成器与 Composite 扩展](https://farseerfc.me/zhs/compositor-in-X-and-compositext.html)
