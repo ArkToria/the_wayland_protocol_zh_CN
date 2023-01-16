@@ -1,1 +1,0 @@
-C:/Land/the_wayland_protocol_zh_CN/README.md
