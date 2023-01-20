@@ -1,0 +1,19 @@
+{
+  "name": "zeroknow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs"
+  },
+  "author": "qaqland",
+  "license": "ISC",
+  "devDependencies": {
+    "vitepress": "latest"
+  },
+  "dependencies": {
+    "markdown-it-footnote": "^3.0.3"
+  }
+}
