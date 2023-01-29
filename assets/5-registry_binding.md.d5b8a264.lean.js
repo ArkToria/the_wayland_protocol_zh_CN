@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,d as l}from"./app.700cfe46.js";const F=JSON.parse('{"title":"绑定到全局","description":"","frontmatter":{},"headers":[],"relativePath":"5-registry/binding.md","lastUpdated":1674200399000}'),p={name:"5-registry/binding.md"},o=l("",17),e=[o];function t(r,c,i,y,D,C){return a(),n("div",null,e)}const _=s(p,[["render",t]]);export{F as __pageData,_ as default};
