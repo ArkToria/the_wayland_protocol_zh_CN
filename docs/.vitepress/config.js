@@ -22,7 +22,7 @@ export default {
         items: [
           { text: '引言', link: '/1-introduction/' },
           { text: 'Wayland 上层设计', link: '/1-introduction/high-level-design' },
-          { text: '学习目标', link: '/1-introduction/goals' },
+          { text: '目标和受众', link: '/1-introduction/goals' },
           { text: 'wayland packages', link: '/1-introduction/package' }
         ]
       }, {
