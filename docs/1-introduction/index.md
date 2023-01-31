@@ -25,7 +25,7 @@ Wayland 是 _类 Unix_ 操作系统的新一代图像显示服务。该项目由
 
 译者翻译水平有限，疑问请自寻原书解答，许可同源[^1]。
 
-在线阅读 [wayland.axionl.me](https://wayland.axionl.me)  
+在线阅读 [wayland.arktoria.org](https://wayland.arktoria.org)  
 项目地址 [github.com/axionl/the_wayland_protocol_zh_CN](https://github.com/axionl/the_wayland_protocol_zh_CN)
 
 ## 关于原版

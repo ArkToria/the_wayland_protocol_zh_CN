@@ -11,10 +11,10 @@ export default {
   },
   themeConfig: {
     editLink: {
-      pattern: 'https://github.com/axionl/the_wayland_protocol_zh_CN/edit/main/docs/:path'
+      pattern: 'https://github.com/ArkToria/the_wayland_protocol_zh_CN/edit/main/docs/:path'
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/axionl/the_wayland_protocol_zh_CN' },
+      { icon: 'github', link: 'https://github.com/ArkToria/the_wayland_protocol_zh_CN' },
     ],
     sidebar: [
       {
