@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,d as l}from"./app.679b0eea.js";const C=JSON.parse('{"title":"代理与资源","description":"","frontmatter":{},"headers":[],"relativePath":"3-libwayland/proxies.md","lastUpdated":1674200399000}'),o={name:"3-libwayland/proxies.md"},e=l("",5),p=[e];function t(c,r,y,i,d,A){return n(),a("div",null,p)}const D=s(o,[["render",t]]);export{C as __pageData,D as default};
