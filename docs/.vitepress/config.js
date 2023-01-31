@@ -16,6 +16,10 @@ export default {
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ArkToria/the_wayland_protocol_zh_CN' },
     ],
+    nav: [
+      { text: '英文原版', link: 'https://wayland-book.com/' },
+      { text: '协议在线版', link: 'https://wayland.app/' },
+    ],
     sidebar: [
       {
         text: '1. 绪论',
@@ -23,7 +27,7 @@ export default {
           { text: '引言', link: '/1-introduction/' },
           { text: 'Wayland 上层设计', link: '/1-introduction/high-level-design' },
           { text: '目标和受众', link: '/1-introduction/goals' },
-          { text: 'wayland packages', link: '/1-introduction/package' }
+          { text: 'Wayland 软件包', link: '/1-introduction/package' }
         ]
       }, {
         text: '2. 协议设计',
