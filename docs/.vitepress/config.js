@@ -33,7 +33,7 @@ export default {
         text: '2. 协议设计',
         items: [
           { text: '引言', link: '/2-protocol-design/' },
-          { text: '基础协议', link: '/2-protocol-design/wire-protocol' },
+          { text: '基础 Wire 协议', link: '/2-protocol-design/wire-protocol' },
           { text: '接口与事件请求', link: '/2-protocol-design/interfaces-reqs-events' },
           { text: '上层协议', link: '2-protocol-design/high-level' },
           { text: '协议设计规范', link: '/2-protocol-design/design-patterns' }
