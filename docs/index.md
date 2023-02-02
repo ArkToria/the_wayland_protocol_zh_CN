@@ -4,11 +4,13 @@
 英文原版：https://wayland-book.com/  
 版权许可：[Creative Commons Attribution-ShareAlike 4.0 International License][copyright]
 
-# 开始之前
-
+::: warning
 译者水平有限，出现问题首先怀疑翻译，其次怀疑版本太老，欢迎提出质疑。
+:::
 
-以下几点需要明确一下，避免造成学习阻碍。
+::: info
+以下几点需要明确一下，避免造成阅读阻碍。
+:::
 
 ## 1. Wayland 是下一代图形显示协议
 
@@ -20,7 +22,7 @@
 
 Wayland 是 C/S 模型工作的，文中所说 client、客户端……都指 Application 应用程序，如火狐浏览器。
 
-在另一端的 Wayland server，不仅负责与 client 通信，更要把接收到来的图像，合成后呈现到显示器上，也就是说
+在另一端的 Wayland server，不仅负责与 clients 通信，更要把接收到来的图像，合成后呈现到显示器上，也就是说
 
 **在 Wayland 中 server、window manager 是二位一体的**
 
@@ -28,9 +30,10 @@ Wayland 是 C/S 模型工作的，文中所说 client、客户端……都指 Ap
 
 ## 3. 有关 Wayland 的更多资料
 
-项目官网 [wayland.freedesktop.org][wayland-offical] 上除了代码仓库和邮箱列表，其它每一个链接前期都值得看看
+项目官网 [wayland.freedesktop.org][wayland] 上除了代码仓库和邮箱列表，其它每一个链接前期都值得一看。
 
-本文原作者 Drew DeVault 是 sway 及 wlroots 的创始人，他现在致力于开发 sr.ht 代码协作平台（GitHub 类似）、hare 编程语言（C 语言类似）等，Wayland 已经交给其他人来做，所以本书在停更状态。作者的博客 [drewdevault.com][drewdevault] 对于基于 wlroots 开发合成器有很多参考内容。
+本文原作者 Drew DeVault 是 sway 及 wlroots 的创始人，他现在致力于开发 sr.ht 代码协作平台（GitHub 类似）、hare 编程语言（C 语言类似）等项目，Wayland 项目已交由其他人来做，**因此本书在停更状态**。
+他的博客 [drewdevault.com][drewdevault] 上对基于 wlroots 开发合成器，有很多参考内容。
 
 - [An introduction to Wayland - Drew DeVault][1]
 - [Wayland (protocol) - Wikipedia][2]
@@ -39,7 +42,7 @@ Wayland 是 C/S 模型工作的，文中所说 client、客户端……都指 Ap
 - [桌面系统的混成器简史 - Farseerfc 的小窝][5]
 
 [copyright]: http://creativecommons.org/licenses/by-sa/4.0/
-[wayland-offical]: https://wayland.freedesktop.org/
+[wayland]: https://wayland.freedesktop.org/
 [drewdevault]: https://drewdevault.com/
 [1]: https://drewdevault.com/2017/06/10/Introduction-to-Wayland.html
 [2]: https://en.wikipedia.org/wiki/Wayland_(protocol)
