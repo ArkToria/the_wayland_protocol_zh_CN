@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,d as l}from"./app.7c3264b1.js";const u=JSON.parse('{"title":"全局和注册","description":"","frontmatter":{},"headers":[],"relativePath":"5-registry/index.md","lastUpdated":1674200399000}'),o={name:"5-registry/index.md"},p=l("",10),t=[p];function e(D,c,r,F,y,i){return n(),a("div",null,t)}const A=s(o,[["render",e]]);export{u as __pageData,A as default};
