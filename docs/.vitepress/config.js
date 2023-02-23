@@ -70,7 +70,45 @@ export default {
           { text: 'Linux dmabuf', link: '/6-surfaces/dmabuf' },
           { text: 'Surface roles', link: '/6-surfaces/roles' },
         ]
-      }
+      }, {
+        text: '7. XDG Shell 基础',
+        items: [
+          { text: '引言', link: '/7-xdg-shell-basics/' },
+          { text: 'XDG 表面', link: '/7-xdg-shell-basics/xdg-surface' },
+          { text: '应用程序窗口', link: '/7-xdg-shell-basics/xdg-toplevel' },
+          { text: '扩展示例代码', link: '/7-xdg-shell-basics/example-code' },
+        ]
+      }, {
+        text: '8. 深入理解表面',
+        items: [
+          { text: '引言', link: '/8-surfaces-in-depth/' },
+          { text: '表面的生命周期', link: '/8-surfaces-in-depth/lifecycle' },
+          { text: '帧回调', link: '/8-surfaces-in-depth/frame-callbacks' },
+          { text: '损坏表面', link: '/8-surfaces-in-depth/damaging-surfaces' },
+          { text: '表面区域', link: '/8-surfaces-in-depth/surface-regions' },
+          { text: '子表面', link: '/8-surfaces-in-depth/subsurfaces' },
+          { text: '高分辨率表面（HiDPI）', link: '/8-surfaces-in-depth/hidpi' },
+        ]
+      }, {
+        text: '9. Seats 处理输入',
+        items: [
+          { text: '引言', link: '/9-seat/' },
+          { text: '光标指针输入', link: '/9-seat/pointer' },
+          { text: 'XBK 简介', link: '/9-seat/xkb' },
+          { text: '键盘输入', link: '/9-seat/keyboard' },
+          { text: '触控输入', link: '/9-seat/touch' },
+          { text: '扩展示例代码', link: '/9-seat/example' },
+        ]
+      }, {
+        text: '10. 深入理解 XDG Shell',
+        items: [
+          { text: '引言', link: '/10-xdg-shell-in-depth/' },
+          { text: '配置和生命周期', link: '/10-xdg-shell-in-depth/configuration' },
+          { text: '弹出窗口', link: '/10-xdg-shell-in-depth/popups' },
+          { text: '交互式移动和尺寸调整', link: '/10-xdg-shell-in-depth/interactive' },
+          { text: '指针', link: '/10-xdg-shell-in-depth/positioners' },
+        ]
+      },
     ]
   }
 }
