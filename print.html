@@ -406,9 +406,9 @@ Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文�
 让我们来考虑一个简单的示例接口：<code>wl_surface</code></p>
 <p><img src="2-protocol-design/wl_surface.png" alt="wl_surface" /></p>
 <h2 id="requests-请求"><a class="header" href="#requests-请求">Requests 请求</a></h2>
-<p>Surface 是可以在屏幕上显示的像素区域。
-它是我们构建应用程序之类窗口的基本元素之一。
-它有个请求名为“damage”（销毁），客户端使用这个请求表示一个 surface 的某些部分发生了变化，需要重绘。
+<p>Surface 是可以在屏幕上显示的像素区域，
+是我们构建应用程序之类窗口的基本元素之一。
+它有个请求名为“damage”（损坏），客户端发送这个请求表示某个 surface 的某些部分发生了变化，需要重绘。
 下面是 Wire 中的一个 damage 消息的注释示例（16 进制）：</p>
 <pre><code>0000000A    Object ID (10)
 00180002    Message length (24) and request opcode (2)
