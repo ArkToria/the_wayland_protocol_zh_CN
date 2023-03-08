@@ -1,0 +1,12 @@
+[book]
+authors = ["qaqland", "ArielAxionL"]
+language = "zh-CN"
+multilingual = false
+src = "docs"
+title = "The Wayland Protocol 中文版"
+description = "The Wayland Protocol 中文版"
+
+[output.html]
+git-repository-url = "https://github.com/ArkToria/the_wayland_protocol_zh_CN"
+edit-url-template = "https://github.com/ArkToria/the_wayland_protocol_zh_CN/edit/master/guide/{path}"
+cname = "wayland.arktoria.org"

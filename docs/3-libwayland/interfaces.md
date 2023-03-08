@@ -1,26 +1,34 @@
-# 接口与监听器
+# 接口与监听
 
-终于，我们到达了 libwayland 抽象的顶层：接口和监听器。这一想法在先前的 wl_proxy, wl_resource 和原语一章中提到过，它们是 libwayland 中的单一实现，为这一层提供支持。当你通过 wayland-scanner 运行一个 XML 文件，它会生成接口和监听器，以及它们与底层接口之间的胶水代码，所有具体的实现都在包含高级协议所定义的每个接口中。
+终于，我们到达了 libwayland 顶层的抽象：接口与监听。
+前几章讨论的 wl_proxy、wl_resource 以及原语是 libwayland 中的单一实现，它们的存在是为了支持本层抽象。
+调用 wayland-scanner 处理 XML 文件时，它会针对高级协议中的每个接口，生成接口、监听及其与底层 Wire 协议之间的胶水代码。
 
-回想一下，Wayland 连接上的每个参与者都可以接受和发送消息。客户端监听事件并发送请求，服务端监听请求并发送事件。各方都使用特定名称的 wl_listener 监听另一方的消息。下面是这个接口的一个例子：
+回想一下，Wayland 连接上的每个参与者都可以接受和发送消息。客户端监听事件并发送请求，服务端监听请求并发送事件。
+各方都使用特定名称的 wl_listener 监听另一方的消息。
+下面是这个接口的一个例子：
 
-> 译者注：surface 有多重含义，但就 wayland 的使用场景来说往往指代窗口上的内容，而 shell surface 实际上就指代传统意义上的窗口。下面这个监听器包含进入和离开事件
+> 译者注：surface 有多重含义，但就 wayland 的使用场景来说往往指代窗口上的内容，而 shell surface 实际上就指代传统意义上的窗口。
+> 下面这个监听器包含进入和离开事件
 
 ```c
 struct wl_surface_listener {
-	/** surface enters an output */
-	void (*enter)(void *data,
-		      struct wl_surface *wl_surface,
-		      struct wl_output *output);
+    /** surface enters an output */
+    void (*enter)(
+        void *data,
+        struct wl_surface *wl_surface,
+        struct wl_output *output);
 
-	/** surface leaves an output */
-	void (*leave)(void *data,
-		      struct wl_surface *wl_surface,
-		      struct wl_output *output);
+    /** surface leaves an output */
+    void (*leave)(
+        void *data,
+        struct wl_surface *wl_surface,
+        struct wl_output *output);
 };
 ```
 
-这是客户端 wl_surface 对应的监听器。wayland-scanner 生成要用到的 XML 文件如下：
+这是客户端 wl_surface 对应的监听。
+用来生成该片段的 XML 如下：
 
 ```xml
 <interface name="wl_surface" version="4">
@@ -37,20 +45,24 @@ struct wl_surface_listener {
   </event>
   <!-- additional details omitted for brevity -->
 </interface>
-``` 
+```
 
-这下清楚了这些事件是如何构成一个监听接口的。每个函数指针接受任意一些用户数据，以及对所属资源的引用和该事件的参数，我们可以像这样将监听器绑定到 wl_surface：
-
-> listener 结构体内带有对应的函数指针，将 listener 添加到 surface
+应该非常清晰地可以看到事件是如何转变成监听接口的：
+每个函数指针接收用户数据、事件涉及资源的引用、事件的参数。
+我们可以像这样将监听绑定到 wl_surface 上：
 
 ```c
-static void wl_surface_enter(void *data,
-        struct wl_surface *wl_surface, struct wl_output *output) {
+static void wl_surface_enter(
+    void *data,
+    struct wl_surface *wl_surface,
+    struct wl_output *output) {
     // ...
 }
 
-static void wl_surface_leave(void *data,
-        struct wl_surface *wl_surface, struct wl_output *output) {
+static void wl_surface_leave(
+    void *data,
+    struct wl_surface *wl_surface,
+    struct wl_output *output) {
     // ...
 }
 
@@ -59,13 +71,13 @@ static const struct wl_surface_listener surface_listener = {
     .leave = wl_surface_leave,
 };
 
-// ...cotd...
+// ...略...
 
 struct wl_surface *surf;
 wl_surface_add_listener(surf, &surface_listener, NULL);
 ```
 
-wl_surface 接口也为客户端定义了一些可用的请求：
+wl_surface 接口也定义了客户端可以进行的一些请求：
 
 ```xml
 <interface name="wl_surface" version="4">
@@ -81,13 +93,20 @@ wl_surface 接口也为客户端定义了一些可用的请求：
 </interface>
 ```
 
-wayland-scanner 生成以下原型，以及编组此消息的胶水代码。
+wayland-scanner 生成以下原型，以及序列化消息的胶水代码：
 
 ```c
-void wl_surface_attach(struct wl_surface *wl_surface,
-    struct wl_buffer *buffer, int32_t x, int32_t y);
+void wl_surface_attach(
+    struct wl_surface *wl_surface,
+    struct wl_buffer *buffer,
+    int32_t x, int32_t y);
 ```
 
-接口和监听器的服务端代码是相同的，不同的是它为请求生成监听器而为事件生成代码。当 libwayland 受到一条消息时，它会查找对象 ID 及其接口，然后使用它来解码消息的剩余部分。再在对象上寻找监听器并用消息的参数来调用你的函数。（传入的函数指针）
+服务端接口和监听的代码是相同的，但要逆转过来——为请求生成监听，为事件生成胶水代码。
+当 libwayland 收到消息时，它会查找对象的 ID、接口，然后用找到的接口解码消息的剩余部分。
+再寻找这个对象上的监听，用消息上带的参数调用监听函数。
 
-这便是它的全貌了！我们用了几个抽象层才到达这一步，因此你现在应该了解一个事件是如何从你的服务端代码开始，在线路上变成一条消息，再到被客户端解读，并被分派到你的客户端代码。然而，还有一个未解决的问题。所有这些都假设你已经拥有了对 Wayland 对象的引用，而它又是如何得到的呢？
+这便是 libwayland 的全貌！
+我们花了好几层抽象才到这一步，您现在应该了解事件如何从服务端开始，成为 Wire 的消息，再被客户端理解并分派。
+然而，还有一个悬而未决的问题：
+所有这些都假设你已经拥有了对 Wayland 对象的引用，而它又是如何得到的呢？

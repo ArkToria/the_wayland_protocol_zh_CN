@@ -1,24 +1,39 @@
 # wayland-scanner
 
-Wayland 包中含有一个二进制文件：`wayland-scanner`。该工具基于 2.3 节中所提及的定义 Wayland 协议的 XML 文件来生成 C 头文件和对应的胶水代码。生成的头文件为 `wayland-client-protocol.h` 和 `wayland-server-protocol.h`，此外通常还包括对协议进行封装的头文件 `wayland-client.h` 和 `wayland-server.h` ，而不是直接使用它们。
+Wayland 包里有一个二进制可执行文件：wayland-scanner。
+该工具负责预处理，读取 Wayland 协议的 XML 文件生成 C 语言头文件和对应的胶水代码。
+生成的头文件为 `wayland-client-protocol.h` 和 `wayland-server-protocol.h`，此外通常还包括对协议进行封装的头文件 `wayland-client.h` 和 `wayland-server.h`，通常可以直接 include 它们而不是手动使用它们。
 
-该工具的用法非常简单（并可以在 `wayland-scanner -h` 看到用法总结），但仍可概述如下：
+该工具的用法非常简单（见 `wayland-scanner -h`），可概述如下：
 
-- 生成客户端头文件
+生成客户端头文件：
+
 ```shell
 $ wayland-scanner client-header < protocol.xml > protocol_client.h
 ```
 
-- 生成服务端头文件
+生成服务端头文件：
+
 ```shell
 $ wayland-scanner server-header < protocol.xml > protocol_server.h
 ```
 
-- 生成胶水代码
+生成胶水代码：
+
 ```shell
 $ wayland-scanner private-code < protocol.xml > protocol.c
 ```
 
-不同的构建系统将使用不同的方法来自定义命令——请查阅构建系统的文档。一般来说，您将需要在构建时运行 `wayland-scanner`，然后编译并将你的应用程序链接到胶水代码。
+不同的构建系统有不同的方法来配置命令，具体查阅您的工具链文档。
+一般来说，您需要在构建时运行 wayland-scanner，然后编译并链接您的程序到胶水代码。
 
-如果你方便的话可以立即尝试任意的 Wayland 协议（示例 `wayland.xml` 可能在 `/usr/share/wayland`）。打开胶水代码和头文件，并在阅读下面的章节时进行参考，以了解 `libwayland` 提供的原语在生成的代码中如何实际应用。
+如果条件允许，现在就能用任意的一个 Wayland 协议来执行此操作（如 `wayland.xml` 基本上在 `/usr/share/wayland`）。
+阅读后续章节时，记得随时查看这些胶水代码和头文件，以了解 libwayland 原语生成的代码如何实际应用。
+
+---
+
+以下内容来自 [wlroots/tinywl/Makefile](https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/tinywl/Makefile) 供参考
+
+```makefile
+{{#include Makefile}}
+```

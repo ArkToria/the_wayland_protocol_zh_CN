@@ -1,8 +1,6 @@
 # 基础 Wire 协议
 
-::: tip
-如果仅仅打算使用 `libwayland`，那么本节选读，直接跳至下节。
-:::
+> 如果仅仅打算使用 libwayland，那么本节选读并可以直接跳至下节。
 
 Wire 协议是由 32 位值所组成的流，使用当前机器的字节顺序进行编码（例如 x86 系列 CPU 上的小端序）。
 其中包含以下几种基础类型：
@@ -27,7 +25,7 @@ Wire 协议是由 32 位值所组成的流，使用当前机器的字节顺序�
   任意数据的二进制块，以 32 位整数开头，指定块长度（以字节为单位），
   然后是数组的逐字内容，最后用未定义数据对齐 32 位。
 - **fd**  
-  主传输上的 0 位值，在 Unix socket 消息（msg_control）中使用辅助数据，将文件描述符从一端传输到另一端。
+  主传输上的 0 位值，在 Unix Socket 消息（msg_control）中使用辅助数据，将文件描述符从一端传输到另一端。
 - **enum**  
   一个单独的值（或 bitmap），用于已知常量的枚举，编码为 32 位整型。
 
@@ -59,14 +57,14 @@ ID 从低位边界开始，并随每次新对象的分配递增。
 
 ## 传输
 
-迄今为止，所有的 Wayland 实现均通过 Unix socket 工作。
+迄今为止，所有的 Wayland 实现均通过 Unix Socket 工作。
 这有个很特别的原因：文件描述符消息。
-Unix socket 是最实用的跨进程文件描述符传输方法，它对大文件传输（如键盘映射、像素缓冲区、剪切板）非常必要。
+Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文件传输（如键盘映射、像素缓冲区、剪切板）非常必要。
 理论上其它传输协议（比 TCP）可行，但是需要开发者实现大文件传输的替代方案。
 
-为了找到 Unix socket 连接，大部分实现和 libwayland 操作一样：
+为了找到 Unix Socket 连接，大部分实现和 libwayland 操作一样：
 
 1. 如果 `WAYLAND_SOCKET` 已设置，则假设父进程已经为我们配置了连接，将 `WAYLAND_SOCKET` 解析为文件描述符。
-2. 如果 `WAYLAND_DISPLAY` 已设置，则与 `XDG_RUNTIME_DIR` 路径连接，尝试建立 Unix socket。
-3. 假设 socket 名称为 `wayland-0` 并连接 `XDG_RUNTIME_DIR` 为路径，尝试建立 Unix socket。
+2. 如果 `WAYLAND_DISPLAY` 已设置，则与 `XDG_RUNTIME_DIR` 路径连接，尝试建立 Unix Socket。
+3. 假设 Socket 名称为 `wayland-0` 并连接 `XDG_RUNTIME_DIR` 为路径，尝试建立 Unix Socket。
 4. 失败放弃。

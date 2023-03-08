@@ -3,15 +3,9 @@
 在 1.3 节有说，`wayland.xml` 基本上会随着 Wayland 包安装在你的系统里，找到并用文本编辑器打开这个文件。
 就是通过此类文件，我们定义了 Wayland 客户端或服务端所支持的接口。
 
-::: tip
-本页右上角有协议在线版查看入口，即 https://waayland.app/
+> 协议在线版查看：<https://waayland.app/>
 
-```shell
-# Arch Linux
-$ pacman -F wayland.xml usr/share/wayland/wayland.xml
-```
-
-:::
+> Linux 大概路径：`/usr/share/wayland/wayland.xml`
 
 此文件使用 XML 格式，其中定义了每个接口，以及对应的请求、事件和各自的签名。
 看看上一章中讨论的 `wl_surface` 示例：
@@ -31,9 +25,7 @@ $ pacman -F wayland.xml usr/share/wayland/wayland.xml
 </interface>
 ```
 
-::: info
-片段为了简洁有删减，如果你有找到本机的 `wayland.xml` 文件，请找到这个接口并亲自检查一下，其中有额外的文档，这些文档解释了每个请求事件的目的、准确语义。
-:::
+片段为了简洁有删减，如果你有找到本机的 `wayland.xml` 文件，请亲自查看这个接口，它带有额外的文档，这些文档解释了每个请求事件的目的、准确语义。
 
 在处理此 XML 文件时，我们按照它们出现的顺序给每个请求和事件分配一个操作码（都是从 0 开始编号，依次递增）。
 结合参数列表，我们可以解码 Wire 协议传输来的请求和事件，并且基于 XML 文档，决定如何进行软件编程以得体行事。
