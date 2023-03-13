@@ -16,7 +16,7 @@
   - [wayland-scanner](./3-libwayland/wayland-scanner.md)
   - [资源与代理](./3-libwayland/proxies.md)
   - [接口与监听](./3-libwayland/interfaces.md)
-- [wayland display](./4-wayland-display/index.md)
+- [Wayland Display](./4-wayland-display/index.md)
   - [display 创建](./4-wayland-display/creation.md)
   - [加入事件循环](./4-wayland-display/event-loop.md)
 - [全局变量与注册](./5-registry/index.md)

@@ -3,7 +3,7 @@
 在 1.3 节有说，`wayland.xml` 基本上会随着 Wayland 包安装在你的系统里，找到并用文本编辑器打开这个文件。
 就是通过此类文件，我们定义了 Wayland 客户端或服务端所支持的接口。
 
-> 协议在线版查看：<https://waayland.app/>
+> 协议在线版查看：<https://wayland.app/>
 
 > Linux 大概路径：`/usr/share/wayland/wayland.xml`
 
