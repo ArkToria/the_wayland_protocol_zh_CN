@@ -131,8 +131,6 @@ wl_output_handle_bind(struct wl_client *client, void *data,
 
 **注意：** 这里所用的 `wl_output::geometry` 是为了解释说明，但在实践中对它的使用有一些特殊考虑。在你的客户端或服务端中实现这个事件之前，请查看协议的 XML 文件定义。
 
-[^1]: 
-资源代表每个客户的对象实例的服务端状态。
+[^1]: 资源代表每个客户端对象实例的服务器端状态。
 
-[^2]:
-如果你对更强大的东西感兴趣，可以从 Weston 项目中获得一个稍微复杂的 "globals" 程序版本，名为 `weston-info`。
+[^2]: 如果你对更为健壮的程序有兴趣，我们还可以从 Weston 项目中获取一种稍微复杂一些的"globals"程序版本，名为 `weston-info`。
