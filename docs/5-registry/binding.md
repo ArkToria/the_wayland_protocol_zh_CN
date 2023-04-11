@@ -1,10 +1,16 @@
-# 绑定到全局
+# 绑定全局变量
 
-创建注册表对象后，服务端将为服务器上每个可用的全局对象发起全局事件。然后，您可以绑定到所需要的全局对象。
+创建注册表对象后，服务端将为服务器上每个可用的全局对象发起全局事件。
+然后，您可以绑定到所需要的全局对象。
 
-这个为已知对象分配 ID 的过程称为对象绑定。一旦客户端像这样绑定到注册表，服务器就会多次发起全局事件，以告知它支持的接口。每个全局对象都有一个独一无二的ID名称，这个ID名称是一个无符号整数。接口字符串映射到协议中找到的接口名称：在上面 XML 中的 `wl_display` 就是这样一个名称的示例。此外，版本号也在这里定义——关于接口版本的更多信息，请查看附录 C。
+这个为已知对象分配 ID 的过程称为对象绑定。
+一旦客户端像这样绑定到注册表，服务器就会多次发起全局事件，以告知它支持的接口。
+每个全局对象都有一个独一无二的 ID 名称，这个 ID 名称是一个无符号整数。
+接口字符串映射到协议中找到的接口名称：在上面 XML 中的 `wl_display` 就是这样一个名称的示例。
+此外，版本号也在这里定义——关于接口版本的更多信息，请查看附录 C。
 
-要绑定到任意一个接口时，我们需要使用绑定请求，其工作方式类似于我们绑定到 `wl_registry` 的神奇过程。例如，考虑下面的通信协议交换：
+要绑定到任意一个接口时，我们需要使用绑定请求，其工作方式类似于我们绑定到 `wl_registry` 的神奇过程。
+例如，考虑下面的通信协议交换：
 
 ```
 C->S    00000001 000C0001 00000002            .... .... ....
@@ -16,11 +22,20 @@ S->C    00000002 001C0000 00000001 00000007   .... .... .... ....
 C->S    00000002 00100000 00000001 00000003   .... .... .... ....
 ```
 
-第一个消息与我们已经剖析过的消息相同。第二个消息是来自服务端的事件：对象 2 （客户端在第一个消息中分配了 `wl_registry`）操作码 0（"global"），参数 1、`wl_shm` 和 1 分别是这个全局对象的名称、接口和版本。客户端通过调用对象ID 2（`wl_registry::bind`）的操作码 0 进行响应，并将对象 ID 3 分配给全局名称 1 ——即绑定到全局的 `wl_shm `。这个对象的未来事件和请求是由 `wl_shm` （shared memory support）协议定义，你可以在 `wayland.xml` (`/usr/share/wayland/wayland.xml`) 中找到。
+第一个消息与我们已经剖析过的消息相同。
+第二个消息是来自服务端的事件：对象 2 （客户端在第一个消息中分配了 `wl_registry`）操作码 0（"global"），
+参数 1、`wl_shm` 和 1 分别是这个全局对象的名称、接口和版本。
+客户端通过调用对象 ID 2（`wl_registry::bind`）的操作码 0 进行响应，
+并将对象 ID 3 分配给全局名称 1 ——即绑定到全局的 `wl_shm`。
+这个对象的未来事件和请求是由 `wl_shm` （shared memory support）协议定义，
+你可以在 `wayland.xml` (`/usr/share/wayland/wayland.xml`) 中找到。
 
-一旦您创建了这个对象，你就可以利用其接口来完成各种任务——在 `wl_shm` 的例子中，管理客户端和服务端之间的共享内存。本书剩下的大部分内容都致力于解释这些全局对象的用法。
+一旦您创建了这个对象，你就可以利用其接口来完成各种任务——在 `wl_shm` 的例子中，
+管理客户端和服务端之间的共享内存。
+本书剩下的大部分内容都致力于解释这些全局对象的用法。
 
-有了这些信息，我们就可以写出我们第一个有用的 Wayland 客户端：它可以简单地打印出服务端上所有可用的全局接口。
+有了这些信息，我们就可以写出我们第一个有用的 Wayland 客户端：
+它可以简单地打印出服务端上所有可用的全局接口。
 
 ```c
 #include <stdint.h>
@@ -29,37 +44,40 @@ C->S    00000002 00100000 00000001 00000003   .... .... .... ....
 
 static void
 registry_handle_global(void *data, struct wl_registry *registry,
-		uint32_t name, const char *interface, uint32_t version)
+        uint32_t name, const char *interface, uint32_t version)
 {
-	printf("interface: '%s', version: %d, name: %d\n",
-			interface, version, name);
+    printf("interface: '%s', version: %d, name: %d\n",
+            interface, version, name);
 }
 
 static void
 registry_handle_global_remove(void *data, struct wl_registry *registry,
-		uint32_t name)
+        uint32_t name)
 {
-	// This space deliberately left blank
+    // This space deliberately left blank
 }
 
 static const struct wl_registry_listener
 registry_listener = {
-	.global = registry_handle_global,
-	.global_remove = registry_handle_global_remove,
+    .global = registry_handle_global,
+    .global_remove = registry_handle_global_remove,
 };
 
 int
 main(int argc, char *argv[])
 {
-	struct wl_display *display = wl_display_connect(NULL);
-	struct wl_registry *registry = wl_display_get_registry(display);
-	wl_registry_add_listener(registry, &registry_listener, NULL);
-	wl_display_roundtrip(display);
-	return 0;
+    struct wl_display *display = wl_display_connect(NULL);
+    struct wl_registry *registry = wl_display_get_registry(display);
+    wl_registry_add_listener(registry, &registry_listener, NULL);
+    wl_display_roundtrip(display);
+    return 0;
 }
 ```
 
-请参考之前的章节来解释这个程序。我们连接到显示器（4.1 章），获得注册表（本章），然后给它添加一个监听器（3.4 章），最后打印这个混成器上可用的全局接口来处理全局事件。自己试试吧。
+请参考之前的章节来解释这个程序。
+我们连接到显示器（4.1 章），获得注册表（本章），然后给它添加一个监听器（3.4 章），
+最后打印这个混成器上可用的全局接口来处理全局事件。
+自己试试吧。
 
 ```bash
 $ cc -o globals -lwayland-client globals.c
@@ -74,7 +92,10 @@ interface: 'zwp_linux_dmabuf_v1', version: 3, name: 3
 ...
 ```
 
-注意：本章是我们最后一次展示线程协议输出到十六进制，可能也是你最后一次在文中看到它们总体的情况。追踪你的 Wayland 客户端或服务端的一个更好的方法是，在运行你的程序之前，将环境中的 `WAYLAND_DEBUG` 变量设为 1。现在就用 `globals` 程序试试吧!
+注意：本章是我们最后一次展示线程协议输出到十六进制，可能也是你最后一次在文中看到它们总体的情况。
+追踪你的 Wayland 客户端或服务端的一个更好的方法是，在运行你的程序之前，
+将环境中的 `WAYLAND_DEBUG` 变量设为 1。
+现在就用 `globals` 程序试试吧!
 
 ```
 [4144282.115]  -> wl_display@1.get_registry(new id wl_registry@2)
@@ -161,8 +182,9 @@ interface: 'wl_output', version: 3, name: 39
 [4144283.317] wl_callback@3.done(56994)
 ```
 
-
-这里展示 `wayland.xml` 协议内的具体定义，可以参考其事件及参数配置如下，可以看到 `void *data` 和 `struct wl_registry *registry` 两个参数是固定的，其余参数由文件中的 `<arg ... />` 定义。
+这里展示 `wayland.xml` 协议内的具体定义，可以参考其事件及参数配置如下，
+可以看到 `void *data` 和 `struct wl_registry *registry` 两个参数是固定的，
+其余参数由文件中的 `<arg ... />` 定义。
 
 ```xml
  146   │     <event name="global">
