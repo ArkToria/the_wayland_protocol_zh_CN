@@ -151,7 +151,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="注册全局对象"><a class="header" href="#注册全局对象">注册全局对象</a></h1>
-<p>用 <code>libwayland-server</code> 注册全局对象的方式与之前有些不同。当你用<code>wayland-scanner</code> 生成服务端代码时，它会创建接口（类似于监听器）和发送事件的胶水代码。第一项任务是注册全局对象，当全局对象被绑定时，用一个函数来启动资源<sup class="footnote-reference"><a href="#1">1</a></sup>。就代码而言，其结果看起来像这样。</p>
+<p>用 <code>libwayland-server</code> 注册全局对象的方式与之前有些不同。
+当你用<code>wayland-scanner</code> 生成服务端代码时，它会创建接口（类似于监听器）和发送事件的胶水代码。
+第一项任务是注册全局对象，当全局对象被绑定时，用一个函数来启动资源<sup class="footnote-reference"><a href="#1">1</a></sup>。
+就代码而言，其结果看起来像这样。</p>
 <pre><code class="language-c">static void
 wl_output_handle_bind(struct wl_client *client, void *data,
     uint32_t version, uint32_t id)
@@ -171,7 +174,10 @@ main(int argc, char *argv[])
     // ...
 }
 </code></pre>
-<p>如果你采用这段代码，例如把它修补到 4.1 章的服务端示例中，你会让一个 <code>wl_output</code> 全局接口对我们上次写的 &quot;globals&quot; 程序可见<sup class="footnote-reference"><a href="#2">2</a></sup>。然而，任何试图绑定到这个全局接口的对象都会将运行到我们的 TODO 处。为了完善这一点，我们还需要提供一个 <code>wl_output</code> 接口的实现。</p>
+<p>如果你采用这段代码，例如把它修补到 4.1 章的服务端示例中，
+你会让一个 <code>wl_output</code> 全局接口对我们上次写的 &quot;globals&quot; 程序可见<sup class="footnote-reference"><a href="#2">2</a></sup>。
+然而，任何试图绑定到这个全局接口的对象都会将运行到我们的 TODO 处。
+为了完善这一点，我们还需要提供一个 <code>wl_output</code> 接口的实现。</p>
 <pre><code class="language-c">static void
 wl_output_handle_resource_destroy(struct wl_resource *resource)
 {
@@ -215,10 +221,25 @@ wl_output_handle_bind(struct wl_client *client, void *data,
     add_to_list(state-&gt;client_outputs, client_output);
 }
 </code></pre>
-<p>光这样是很难理解的，因此让我们来逐一解释。在底部，我们已经扩展了我们的 &quot;bind handle&quot;， 以创建一个 <code>wl_resource</code> 来跟踪这个对象的服务端状态（使用客户端 ID）。当我们这样做的时候，我们向 <code>wl_resource_create</code> 提供了一个指向我们的接口实现的指针，即 <code>wl_output_implementation</code>，在这段代码中是一个常量静态结构体。这个类型 (<code>struct wl_output_interface</code>) 是由 <code>wayland-scanner</code> 生成的，包含了这个接口所支持的每个请求的一个函数指针。我们还借此机会分配了一个小容器，用于存储我们需要的，libwayland 不为我们处理的任何额外状态，其具体性质因协议不同而不同。</p>
-<p><strong>注意：</strong> 这里有两个不同的东西，但是使用同一个名字: <code>struct wl_output_interface</code> 是接口的实例，另一个 <code>wl_output_interface</code> 是 <code>wayland-scanner</code> 生成的一个全局常规变量，它包含与实现有关的元数据（比如上面例子中使用的版本）。</p>
-<p>当客户端发送释放请求的时候，我们的 <code>wl_output_handle_release</code> 函数就会被调用，表明它们不再需要这个资源——所以我们应该销毁它。这反过来触发了 <code>wl_output_handle_resource_destroy</code> 函数，稍后我们将扩展该函数以释放我们先前为它本配的所有状态。这个函数也被传递到 <code>wl_resource_create</code> 中作为析构器，如果客户端在没有明确发送释放请求的情况下意外终止，它将会被调用。</p>
-<p>我们代码中剩下的另一个 &quot;TODO&quot; 是发送 &quot;name&quot; 以及其他一些事件。如果我们回顾一下 <code>wayland.xml</code>，我们会在接口上看到这个事件：</p>
+<p>光这样是很难理解的，因此让我们来逐一解释。
+在底部，我们已经扩展了我们的 &quot;bind handle&quot;，以创建一个 <code>wl_resource</code> 来跟踪这个对象的服务端状态（使用客户端 ID）。
+当我们这样做的时候，我们向 <code>wl_resource_create</code> 提供了一个指向我们的接口实现的指针，即 <code>wl_output_implementation</code>，
+在这段代码中是一个常量静态结构体。
+这个类型 (<code>struct wl_output_interface</code>) 是由 <code>wayland-scanner</code> 生成的，包含了这个接口所支持的每个请求的一个函数指针。
+我们还借此机会分配了一个小容器，
+用于存储我们需要的、libwayland 不为我们处理的、任何额外状态，其具体性质因协议不同而不同。</p>
+<p><strong>注意：</strong> 这里有两个不同的东西，但是使用同一个名字：
+<code>struct wl_output_interface</code> 是接口的实例，
+另一个 <code>wl_output_interface</code> 是 <code>wayland-scanner</code> 生成的一个全局常规变量，
+它包含与实现有关的元数据（比如上面例子中使用的版本）。</p>
+<p>当客户端发送释放请求的时候，我们的 <code>wl_output_handle_release</code> 函数就会被调用，
+表明它们不再需要这个资源——所以我们应该销毁它。
+这反过来触发了 <code>wl_output_handle_resource_destroy</code> 函数，
+稍后我们将扩展该函数以释放我们先前为它本配的所有状态。
+这个函数也被传递到 <code>wl_resource_create</code> 中作为析构器，
+如果客户端在没有明确发送释放请求的情况下意外终止，它将会被调用。</p>
+<p>我们代码中剩下的另一个 &quot;TODO&quot; 是发送 &quot;name&quot; 以及其他一些事件。
+如果我们回顾一下 <code>wayland.xml</code>，我们会在接口上看到这个事件：</p>
 <pre><code class="language-xml">&lt;event name=&quot;geometry&quot;&gt;
   &lt;description summary=&quot;properties of the output&quot;&gt;
 The geometry event describes geometric properties of the output.
@@ -267,10 +288,10 @@ wl_output_handle_bind(struct wl_client *client, void *data,
 </code></pre>
 <p><strong>注意：</strong> 这里所用的 <code>wl_output::geometry</code> 是为了解释说明，但在实践中对它的使用有一些特殊考虑。在你的客户端或服务端中实现这个事件之前，请查看协议的 XML 文件定义。</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>资源代表每个客户的对象实例的服务端状态。</p>
+<p>资源代表每个客户端对象实例的服务器端状态。</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>如果你对更强大的东西感兴趣，可以从 Weston 项目中获得一个稍微复杂的 &quot;globals&quot; 程序版本，名为 <code>weston-info</code>。</p>
+<p>如果你对更为健壮的程序有兴趣，我们还可以从 Weston 项目中获取一种稍微复杂一些的&quot;globals&quot;程序版本，名为 <code>wayland-info</code>。</p>
 </div>
 
                     </main>

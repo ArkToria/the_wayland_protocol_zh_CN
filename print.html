@@ -870,10 +870,16 @@ int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
 &lt;/interface&gt;
 </code></pre>
 <p>这些接口我们将在后续的章节中讨论。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="绑定到全局"><a class="header" href="#绑定到全局">绑定到全局</a></h1>
-<p>在创建一个注册表对象时，服务端将为服务端上每个可用的全局对象发起全局事件。然后你可以与你需要的全局对象进行绑定。</p>
-<p>这个为已知对象分配 ID 的过程称为对象绑定。一旦客户端像这样绑定到注册表，服务器就会多次发起全局事件，以告知它支持哪些接口。每一个全局对象都有一个独一无二的名字，是一个无符号整数。接口字符串映射到协议中的接口名称：上面 XML 中的 <code>wl_display</code> 就是这样一个名称的例子。版本号也在这里定义——关于接口版本的更多信息，详见附录 C。</p>
-<p>为了绑定任意这些接口，我们需要使用绑定请求，其工作原理类似于我们绑定到 <code>wl_registry</code> 的神奇过程。例如，考虑这个线协议交换：</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="绑定全局变量"><a class="header" href="#绑定全局变量">绑定全局变量</a></h1>
+<p>创建注册表对象后，服务端将为服务器上每个可用的全局对象发起全局事件。
+然后，您可以绑定到所需要的全局对象。</p>
+<p>这个为已知对象分配 ID 的过程称为对象绑定。
+一旦客户端像这样绑定到注册表，服务器就会多次发起全局事件，以告知它支持的接口。
+每个全局对象都有一个独一无二的 ID 名称，这个 ID 名称是一个无符号整数。
+接口字符串映射到协议中找到的接口名称：在上面 XML 中的 <code>wl_display</code> 就是这样一个名称的示例。
+此外，版本号也在这里定义——关于接口版本的更多信息，请查看附录 C。</p>
+<p>要绑定到任意一个接口时，我们需要使用绑定请求，其工作方式类似于我们绑定到 <code>wl_registry</code> 的神奇过程。
+例如，考虑下面的通信协议交换：</p>
 <pre><code>C-&gt;S    00000001 000C0001 00000002            .... .... ....
 
 S-&gt;C    00000002 001C0000 00000001 00000007   .... .... .... ....
@@ -882,45 +888,57 @@ S-&gt;C    00000002 001C0000 00000001 00000007   .... .... .... ....
 
 C-&gt;S    00000002 00100000 00000001 00000003   .... .... .... ....
 </code></pre>
-<p>第一个消息与我们已经剖析过的消息相同。第二个消息是来自服务端的事件：对象 2 （客户端在第一个消息中分配了 <code>wl_registry</code>）操作码 0（全局），参数 1、<code>wl_shm</code> 和 1 分别是这个全局对象的名字、接口和版本。客户端通过调用对象ID 2（<code>wl_registry::bind</code>）的操作码 0 进行响应，并将对象 ID 3 分配给全局名称 1 ——即绑定到全局的 <code>wl_shm </code>。这个对象未来的事件和请求是由 <code>wl_shm</code> （shared memory support）协议定义的，你可以在 <code>wayland.xml</code> (<code>/usr/share/wayland/wayland.xml</code>) 中找到。</p>
-<p>一旦你创建了这个对象，你就可以利用其接口来完成各种任务——在 <code>wl_shm</code> 的例子中，管理客户端和服务端之间的共享内存。本书剩下的大部分内容是用来解释这些全局对象的用法。</p>
-<p>有了这些信息，我们就可以写出我们第一个有用的 Wayland 客户端：它可以简单地打印出服务端上所有可用的全局接口。</p>
+<p>第一个消息与我们已经剖析过的消息相同。
+第二个消息是来自服务端的事件：对象 2 （客户端在第一个消息中分配了 <code>wl_registry</code>）操作码 0（&quot;global&quot;），
+参数 1、<code>wl_shm</code> 和 1 分别是这个全局对象的名称、接口和版本。
+客户端通过调用对象 ID 2（<code>wl_registry::bind</code>）的操作码 0 进行响应，
+并将对象 ID 3 分配给全局名称 1 ——即绑定到全局的 <code>wl_shm</code>。
+这个对象的未来事件和请求是由 <code>wl_shm</code> （shared memory support）协议定义，
+你可以在 <code>wayland.xml</code> (<code>/usr/share/wayland/wayland.xml</code>) 中找到。</p>
+<p>一旦您创建了这个对象，你就可以利用其接口来完成各种任务——在 <code>wl_shm</code> 的例子中，
+管理客户端和服务端之间的共享内存。
+本书剩下的大部分内容都致力于解释这些全局对象的用法。</p>
+<p>有了这些信息，我们就可以写出我们第一个有用的 Wayland 客户端：
+它可以简单地打印出服务端上所有可用的全局接口。</p>
 <pre><code class="language-c">#include &lt;stdint.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;wayland-client.h&gt;
 
 static void
 registry_handle_global(void *data, struct wl_registry *registry,
-		uint32_t name, const char *interface, uint32_t version)
+        uint32_t name, const char *interface, uint32_t version)
 {
-	printf(&quot;interface: '%s', version: %d, name: %d\n&quot;,
-			interface, version, name);
+    printf(&quot;interface: '%s', version: %d, name: %d\n&quot;,
+            interface, version, name);
 }
 
 static void
 registry_handle_global_remove(void *data, struct wl_registry *registry,
-		uint32_t name)
+        uint32_t name)
 {
-	// This space deliberately left blank
+    // This space deliberately left blank
 }
 
 static const struct wl_registry_listener
 registry_listener = {
-	.global = registry_handle_global,
-	.global_remove = registry_handle_global_remove,
+    .global = registry_handle_global,
+    .global_remove = registry_handle_global_remove,
 };
 
 int
 main(int argc, char *argv[])
 {
-	struct wl_display *display = wl_display_connect(NULL);
-	struct wl_registry *registry = wl_display_get_registry(display);
-	wl_registry_add_listener(registry, &amp;registry_listener, NULL);
-	wl_display_roundtrip(display);
-	return 0;
+    struct wl_display *display = wl_display_connect(NULL);
+    struct wl_registry *registry = wl_display_get_registry(display);
+    wl_registry_add_listener(registry, &amp;registry_listener, NULL);
+    wl_display_roundtrip(display);
+    return 0;
 }
 </code></pre>
-<p>请参考之前的章节来解释这个程序。我们连接到显示器（4.1 章），获得注册表（本章），然后给它添加一个监听器（3.4 章），最后打印这个混成器上可用的全局接口来处理全局事件。自己试试吧。</p>
+<p>请参考之前的章节来解释这个程序。
+我们连接到显示器（4.1 章），获得注册表（本章），然后给它添加一个监听器（3.4 章），
+最后打印这个混成器上可用的全局接口来处理全局事件。
+自己试试吧。</p>
 <pre><code class="language-bash">$ cc -o globals -lwayland-client globals.c
 </code></pre>
 <p>执行程序后输出结果如下：</p>
@@ -929,7 +947,10 @@ interface: 'wl_drm', version: 2, name: 2
 interface: 'zwp_linux_dmabuf_v1', version: 3, name: 3
 ...
 </code></pre>
-<p>注意：本章是我们最后一次展示线程协议输出到十六进制，可能也是你最后一次在文中看到它们总体的情况。追踪你的 Wayland 客户端或服务端的一个更好的方法是，在运行你的程序之前，将环境中的 <code>WAYLAND_DEBUG</code> 变量设为 1。现在就用 <code>globals</code> 程序试试吧!</p>
+<p>注意：本章是我们最后一次展示线程协议输出到十六进制，可能也是你最后一次在文中看到它们总体的情况。
+追踪你的 Wayland 客户端或服务端的一个更好的方法是，在运行你的程序之前，
+将环境中的 <code>WAYLAND_DEBUG</code> 变量设为 1。
+现在就用 <code>globals</code> 程序试试吧!</p>
 <pre><code>[4144282.115]  -&gt; wl_display@1.get_registry(new id wl_registry@2)
 [4144282.149]  -&gt; wl_display@1.sync(new id wl_callback@3)
 [4144282.551] wl_display@1.delete_id(3)
@@ -1013,7 +1034,9 @@ interface: 'zwp_pointer_gestures_v1', version: 1, name: 38
 interface: 'wl_output', version: 3, name: 39
 [4144283.317] wl_callback@3.done(56994)
 </code></pre>
-<p>这里展示 <code>wayland.xml</code> 协议内的具体定义，可以参考其事件及参数配置如下，可以看到 <code>void *data</code> 和 <code>struct wl_registry *registry</code> 两个参数是固定的，其余参数由文件中的 <code>&lt;arg ... /&gt;</code> 定义。</p>
+<p>这里展示 <code>wayland.xml</code> 协议内的具体定义，可以参考其事件及参数配置如下，
+可以看到 <code>void *data</code> 和 <code>struct wl_registry *registry</code> 两个参数是固定的，
+其余参数由文件中的 <code>&lt;arg ... /&gt;</code> 定义。</p>
 <pre><code class="language-xml"> 146   │     &lt;event name=&quot;global&quot;&gt;
  147   │       &lt;description summary=&quot;announce global object&quot;&gt;
  148   │     Notify the client of global objects.
@@ -1044,7 +1067,10 @@ interface: 'wl_output', version: 3, name: 39
  173   │     &lt;/event&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="注册全局对象"><a class="header" href="#注册全局对象">注册全局对象</a></h1>
-<p>用 <code>libwayland-server</code> 注册全局对象的方式与之前有些不同。当你用<code>wayland-scanner</code> 生成服务端代码时，它会创建接口（类似于监听器）和发送事件的胶水代码。第一项任务是注册全局对象，当全局对象被绑定时，用一个函数来启动资源<sup class="footnote-reference"><a href="#1">1</a></sup>。就代码而言，其结果看起来像这样。</p>
+<p>用 <code>libwayland-server</code> 注册全局对象的方式与之前有些不同。
+当你用<code>wayland-scanner</code> 生成服务端代码时，它会创建接口（类似于监听器）和发送事件的胶水代码。
+第一项任务是注册全局对象，当全局对象被绑定时，用一个函数来启动资源<sup class="footnote-reference"><a href="#1">1</a></sup>。
+就代码而言，其结果看起来像这样。</p>
 <pre><code class="language-c">static void
 wl_output_handle_bind(struct wl_client *client, void *data,
     uint32_t version, uint32_t id)
@@ -1064,7 +1090,10 @@ main(int argc, char *argv[])
     // ...
 }
 </code></pre>
-<p>如果你采用这段代码，例如把它修补到 4.1 章的服务端示例中，你会让一个 <code>wl_output</code> 全局接口对我们上次写的 &quot;globals&quot; 程序可见<sup class="footnote-reference"><a href="#2">2</a></sup>。然而，任何试图绑定到这个全局接口的对象都会将运行到我们的 TODO 处。为了完善这一点，我们还需要提供一个 <code>wl_output</code> 接口的实现。</p>
+<p>如果你采用这段代码，例如把它修补到 4.1 章的服务端示例中，
+你会让一个 <code>wl_output</code> 全局接口对我们上次写的 &quot;globals&quot; 程序可见<sup class="footnote-reference"><a href="#2">2</a></sup>。
+然而，任何试图绑定到这个全局接口的对象都会将运行到我们的 TODO 处。
+为了完善这一点，我们还需要提供一个 <code>wl_output</code> 接口的实现。</p>
 <pre><code class="language-c">static void
 wl_output_handle_resource_destroy(struct wl_resource *resource)
 {
@@ -1108,10 +1137,25 @@ wl_output_handle_bind(struct wl_client *client, void *data,
     add_to_list(state-&gt;client_outputs, client_output);
 }
 </code></pre>
-<p>光这样是很难理解的，因此让我们来逐一解释。在底部，我们已经扩展了我们的 &quot;bind handle&quot;， 以创建一个 <code>wl_resource</code> 来跟踪这个对象的服务端状态（使用客户端 ID）。当我们这样做的时候，我们向 <code>wl_resource_create</code> 提供了一个指向我们的接口实现的指针，即 <code>wl_output_implementation</code>，在这段代码中是一个常量静态结构体。这个类型 (<code>struct wl_output_interface</code>) 是由 <code>wayland-scanner</code> 生成的，包含了这个接口所支持的每个请求的一个函数指针。我们还借此机会分配了一个小容器，用于存储我们需要的，libwayland 不为我们处理的任何额外状态，其具体性质因协议不同而不同。</p>
-<p><strong>注意：</strong> 这里有两个不同的东西，但是使用同一个名字: <code>struct wl_output_interface</code> 是接口的实例，另一个 <code>wl_output_interface</code> 是 <code>wayland-scanner</code> 生成的一个全局常规变量，它包含与实现有关的元数据（比如上面例子中使用的版本）。</p>
-<p>当客户端发送释放请求的时候，我们的 <code>wl_output_handle_release</code> 函数就会被调用，表明它们不再需要这个资源——所以我们应该销毁它。这反过来触发了 <code>wl_output_handle_resource_destroy</code> 函数，稍后我们将扩展该函数以释放我们先前为它本配的所有状态。这个函数也被传递到 <code>wl_resource_create</code> 中作为析构器，如果客户端在没有明确发送释放请求的情况下意外终止，它将会被调用。</p>
-<p>我们代码中剩下的另一个 &quot;TODO&quot; 是发送 &quot;name&quot; 以及其他一些事件。如果我们回顾一下 <code>wayland.xml</code>，我们会在接口上看到这个事件：</p>
+<p>光这样是很难理解的，因此让我们来逐一解释。
+在底部，我们已经扩展了我们的 &quot;bind handle&quot;，以创建一个 <code>wl_resource</code> 来跟踪这个对象的服务端状态（使用客户端 ID）。
+当我们这样做的时候，我们向 <code>wl_resource_create</code> 提供了一个指向我们的接口实现的指针，即 <code>wl_output_implementation</code>，
+在这段代码中是一个常量静态结构体。
+这个类型 (<code>struct wl_output_interface</code>) 是由 <code>wayland-scanner</code> 生成的，包含了这个接口所支持的每个请求的一个函数指针。
+我们还借此机会分配了一个小容器，
+用于存储我们需要的、libwayland 不为我们处理的、任何额外状态，其具体性质因协议不同而不同。</p>
+<p><strong>注意：</strong> 这里有两个不同的东西，但是使用同一个名字：
+<code>struct wl_output_interface</code> 是接口的实例，
+另一个 <code>wl_output_interface</code> 是 <code>wayland-scanner</code> 生成的一个全局常规变量，
+它包含与实现有关的元数据（比如上面例子中使用的版本）。</p>
+<p>当客户端发送释放请求的时候，我们的 <code>wl_output_handle_release</code> 函数就会被调用，
+表明它们不再需要这个资源——所以我们应该销毁它。
+这反过来触发了 <code>wl_output_handle_resource_destroy</code> 函数，
+稍后我们将扩展该函数以释放我们先前为它本配的所有状态。
+这个函数也被传递到 <code>wl_resource_create</code> 中作为析构器，
+如果客户端在没有明确发送释放请求的情况下意外终止，它将会被调用。</p>
+<p>我们代码中剩下的另一个 &quot;TODO&quot; 是发送 &quot;name&quot; 以及其他一些事件。
+如果我们回顾一下 <code>wayland.xml</code>，我们会在接口上看到这个事件：</p>
 <pre><code class="language-xml">&lt;event name=&quot;geometry&quot;&gt;
   &lt;description summary=&quot;properties of the output&quot;&gt;
 The geometry event describes geometric properties of the output.
@@ -1160,10 +1204,10 @@ wl_output_handle_bind(struct wl_client *client, void *data,
 </code></pre>
 <p><strong>注意：</strong> 这里所用的 <code>wl_output::geometry</code> 是为了解释说明，但在实践中对它的使用有一些特殊考虑。在你的客户端或服务端中实现这个事件之前，请查看协议的 XML 文件定义。</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>资源代表每个客户的对象实例的服务端状态。</p>
+<p>资源代表每个客户端对象实例的服务器端状态。</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>如果你对更强大的东西感兴趣，可以从 Weston 项目中获得一个稍微复杂的 &quot;globals&quot; 程序版本，名为 <code>weston-info</code>。</p>
+<p>如果你对更为健壮的程序有兴趣，我们还可以从 Weston 项目中获取一种稍微复杂一些的&quot;globals&quot;程序版本，名为 <code>wayland-info</code>。</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="缓冲区和表面"><a class="header" href="#缓冲区和表面">缓冲区和表面</a></h1>
 <p><em>译注：surface 取了直译，实际上即为像素最后渲染到屏幕前的显示面</em></p>
