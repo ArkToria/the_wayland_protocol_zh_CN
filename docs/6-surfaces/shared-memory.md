@@ -38,7 +38,7 @@ main(int argc, char *argv[])
 
 ## 分配共享内存工具
 
-可以利用 [POSIX](https://en.wikipedia.org/wiki/POSIX) `shm_open` 和随即文件名的组合来创建一个适合这一目的的文件，并利用 `ftruncate` 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：
+可以利用 [POSIX](https://en.wikipedia.org/wiki/POSIX) `shm_open` 和随机文件名的组合来创建一个适合这一目的的文件，并利用 `ftruncate` 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：
 
 ```c
 #define _POSIX_C_SOURCE 200112L
@@ -151,7 +151,7 @@ wl_surface_damage(surface, 0, 0, UINT32_MAX, UINT32_MAX);
 wl_surface_commit(surface);
 ```
 
-如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一部——给你的表面分配一个任务。
+如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一步——给你的表面分配一个角色（role）。
 
 [^1]: “损坏” 意味着 “这个区域需要重新绘制”
 

@@ -154,4 +154,4 @@ wl_output_handle_bind(struct wl_client *client, void *data,
 
 [^1]: 资源代表每个客户端对象实例的服务器端状态。
 
-[^2]: 如果你对更为健壮的程序有兴趣，我们还可以从 Weston 项目中获取一种稍微复杂一些的"globals"程序版本，名为 `wayland-info`。
+[^2]: 如果你对更为健壮的程序有兴趣，我们还可以从 Wayland-utils （之前在 Weston） 项目中获取一种稍微复杂一些的"globals"程序版本，名为 `wayland-info`。

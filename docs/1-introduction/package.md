@@ -9,7 +9,7 @@ libwayland-client、libwayland-server、wayland-scanner 和 wayland.xml。
 ## wayland.xml
 
 Wayland 协议通过 XML 文件进行定义。
-如果能够定位并以文本格式打开 "wayland.xml" 文件，您将会发现 Wayland 核心协议 XML 规范。
+如果能够定位并以文本格式打开 "wayland.xml" 文件，您将会找到 Wayland 核心协议 XML 规范。
 这是一个高级协议，它建立在我们将在下一章要讨论的 wire 协议之上。
 本书的大部分内容致力于解释该文件。
 
