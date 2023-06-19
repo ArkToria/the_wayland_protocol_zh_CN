@@ -1,6 +1,7 @@
 # 加入一个事件循环
 
 `libwayland` 为 Wayland 服务端提供了自己的事件循环实现，但维护者需要知道这是一种设计上的僭越行为。
+对于客户端，没有这样的等价物。无论如何，Wayland 服务端事件循环已经足够有用了。
 
 ## Wayland 服务端事件循环
 
@@ -9,7 +10,7 @@
 可以根据你的喜好配置事件循环，以监控混成器所需响应的全部事件。你可以通过调用 `wl_display_run` 来一次性处理事件和调度 Wayland 客户端。它将处理并陷入事件循环，直到通过 `wl_display_terminate` 进行终止。大多数 Wayland 混成器从一开始就考虑到 Wayland 的这种用法（而不是从 X11 移植过来）。
 
 
-然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。`wl_display` 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 `wl_event_loop_get_fd` 来过的一个可以回调的文件描述符，然后在该文件描述符发生活动时调用 `wl_event_loop_dispatch` 来处理事件。当你有数据需要写入客户端时，你也需要调用 `wl_display_flush_clients`。 
+然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。`wl_display` 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 `wl_event_loop_get_fd` 来过的一个可以[回调](https://pubs.opengroup.org/onlinepubs/009695399/functions/poll.html)的文件描述符，然后在该文件描述符发生活动时调用 `wl_event_loop_dispatch` 来处理事件。当你有数据需要写入客户端时，你也需要调用 `wl_display_flush_clients`。 
 
 ## Wayland 客户端事件循环
 
