@@ -152,8 +152,8 @@
                     <main>
                         <h1 id="wayland-scanner"><a class="header" href="#wayland-scanner">wayland-scanner</a></h1>
 <p>Wayland 包里有一个二进制可执行文件：wayland-scanner。
-该工具负责预处理，读取 Wayland 协议的 XML 文件生成 C 语言头文件和对应的胶水代码。
-生成的头文件为 <code>wayland-client-protocol.h</code> 和 <code>wayland-server-protocol.h</code>，此外通常还包括对协议进行封装的头文件 <code>wayland-client.h</code> 和 <code>wayland-server.h</code>，通常可以直接 include 它们而不是手动使用它们。</p>
+正如本书 2.3 章所说，该工具负责预处理，读取 Wayland 协议的 XML 文件生成 C 语言头文件和对应的胶水代码。
+该工具在 Wayland 包的构建过程中会处理核心协议 wayland.xml，并生成名为 <code>wayland-client-protocol.h</code> 和 <code>wayland-server-protocol.h</code> 的头文件以及胶水代码，此外 Wayland 包中通常还包括对协议进行封装的头文件： <code>wayland-client.h</code> 和 <code>wayland-server.h</code>，一般直接 include 后者而不是手动使用前者。</p>
 <p>该工具的用法非常简单（见 <code>wayland-scanner -h</code>），可概述如下：</p>
 <p>生成客户端头文件：</p>
 <pre><code class="language-shell">$ wayland-scanner client-header &lt; protocol.xml &gt; protocol_client.h

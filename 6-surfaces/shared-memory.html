@@ -182,7 +182,7 @@ main(int argc, char *argv[])
 </code></pre>
 <p>一旦绑定，我们可以选择通过 <code>wl_shm_add_listener</code> 添加一个监听器。混成器将通过这个监听器公布器其所支持的像素格式。可用的像素格式的完整列表在 <code>wayland.xml</code> 中给出。有两种格式是必须支持的：ARGB (各 8 位色深) 和 XRGB (各 8 位色深)，它们是 24 位颜色，分别有和没有透明度 (alpha) 通道。</p>
 <h2 id="分配共享内存工具"><a class="header" href="#分配共享内存工具">分配共享内存工具</a></h2>
-<p>可以利用 <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> <code>shm_open</code> 和随即文件名的组合来创建一个适合这一目的的文件，并利用 <code>ftruncate</code> 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：</p>
+<p>可以利用 <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> <code>shm_open</code> 和随机文件名的组合来创建一个适合这一目的的文件，并利用 <code>ftruncate</code> 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：</p>
 <pre><code class="language-c">#define _POSIX_C_SOURCE 200112L
 #include &lt;errno.h&gt;
 #include &lt;fcntl.h&gt;
@@ -276,7 +276,7 @@ for (int y = 0; y &lt; height; ++y) {
 wl_surface_damage(surface, 0, 0, UINT32_MAX, UINT32_MAX);
 wl_surface_commit(surface);
 </code></pre>
-<p>如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一部——给你的表面分配一个任务。</p>
+<p>如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一步——给你的表面分配一个角色（role）。</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>“损坏” 意味着 “这个区域需要重新绘制”</p>
 </div>

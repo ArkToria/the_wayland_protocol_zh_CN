@@ -167,7 +167,7 @@
   &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; summary=&quot;the serial from the configure event&quot;/&gt;
 &lt;/request&gt;
 </code></pre>
-<p><code>xdg-surface</code> 最重要的 API 就是 <code>configure</code> 和 <code>ack_configure</code> 这一对。你可能还记得，Wayland 的一个目标是让每一帧都完美呈现。这意味着没有任何一帧有半应用的状态变化（原子性，避免画面撕裂），为了实现这个目标，我们必须要在客户端和服务端之间同步这些变化。对于 XDG 表面来说，这对消息（这两个 API 传递的内容）正是实现这一目的的机制。</p>
+<p><code>xdg-surface</code> 最重要的 API 就是 <code>configure</code> 和 <code>ack_configure</code> 这一对。你可能还记得，Wayland 的一个目标是让每一帧都完美呈现。这意味着任何一帧都没有应用了一半的状态变化（原子性，避免画面撕裂），为了实现这个目标，我们必须要在客户端和服务端之间同步这些变化。对于 XDG 表面来说，这对消息（这两个 API 传递的内容）正是实现这一目的的机制。</p>
 <p>我们目前只关注基础内容，因此我们会总结这两个事件的重点如下：当来自服务端的事件通知你配置（或重新配置）一个表面时，将它们设置到一个待定状态。当一个 configure 事件到来时，会应用先前准备好的变化，使用 <code>ack_configure</code> 来确定你已经这样做了，然后渲染并提交一个新的帧。我们将在下一章节中展示这一做法，并在 8.1 章中详细解释。</p>
 <pre><code class="language-xml">&lt;request name=&quot;set_window_geometry&quot;&gt;
   &lt;arg name=&quot;x&quot; type=&quot;int&quot;/&gt;

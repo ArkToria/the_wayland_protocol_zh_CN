@@ -153,7 +153,7 @@
                         <h1 id="wayland-display-显示"><a class="header" href="#wayland-display-显示">Wayland Display 显示</a></h1>
 <p>到目前为止，我们在解释 Wayland 如何管理客户端和服务器之间对象的所有权时，遗漏了一个关键细节：
 对象首先是如何创建出来的？
-Wayland Display 显示，即 <code>wl_display</code> 隐式存在于每次 Wayland 连接中，它具有以下接口：</p>
+Wayland Display，即 <code>wl_display</code> 隐式存在于每次 Wayland 连接中，它具有以下接口：</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
   &lt;request name=&quot;sync&quot;&gt;
     &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot;
@@ -184,7 +184,7 @@ Wayland Display 显示，即 <code>wl_display</code> 隐式存在于每次 Wayla
   &lt;!-- event 相当于接口的声明，其内部指定了变量名称，类型和说明 --&gt;
 &lt;/interface&gt;
 </code></pre>
-<p>对于大部分 Wayland 受众来说，其中最有趣的是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。
+<p>对于普通 Wayland 用户来说，其中最有趣的是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。
 简而言之，registry 注册函数是用来分配其他对象的。
 其余接口用于连接的状态维护，通常不重要，除非您想编写自己的 libwayland 替代实现。</p>
 <p>所以，本章会关注 libwayland 中一些与 <code>wl_display</code> 有关——用于建立和维护 Wayland 连接的函数。

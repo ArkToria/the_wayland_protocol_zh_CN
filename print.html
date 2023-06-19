@@ -183,12 +183,11 @@
 <div style="break-before: page; page-break-before: always;"></div><p><img src="1-introduction/banner.png" alt="banner" /></p>
 <h1 id="绪论"><a class="header" href="#绪论">绪论</a></h1>
 <p>Wayland 是类 UNIX 系统的新一代图像显示服务。
-该项目由经典 Xorg 的原班人马打造，是将应用程序的图形化界面（GUI）显示到用户屏幕的最佳选择。
+该项目由经典的 Xorg 的原班人马打造，是将应用程序的图形化界面（GUI）显示到用户屏幕的最佳选择。
 之前使用过 X11 的读者会对 Wayland 的改进感到惊喜，而之前未接触过 Unix 图形学的新人，也会发现 Wayland 在构建 GUI 显示方面的强大、灵活之处。</p>
 <p>这本书将会帮助您深入理解 Wayland 的概念、设计和实现，并为您提供构建构建 Wayland 客户端 和 Wayland 合成器所需的工具。
-随着阅读的进行，我们会建立起 Wayland 的理论架构及其设计理念。
-在书中，你会恍然大悟，因为 Wayland 的直观的设计特别清晰，然后被吸引着继续看下去。
-欢迎探索开源图形学的未来！</p>
+随着阅读的进行，我们会建立起 Wayland 的理论架构并了解其设计理念。
+在阅读中，你会感到惊喜，因为 Wayland 的设计非常的直观而且清晰的，这应该有助于你继续看下去。欢迎探索开源图形学的未来！</p>
 <blockquote>
 <p>这还是个草稿，1-10 章基本完善，不过会有后续更新，11 章后很多内容有待撰写。</p>
 </blockquote>
@@ -221,7 +220,7 @@ sway 是最受欢迎的平铺式窗口管理器 i3wm 在 Wayland 的克隆，从
 <li>数位板</li>
 </ul>
 <p>输出设备一般是桌面上的显示器、笔记本或其他移动设备的屏幕。
-应用程序之间将会共享这些屏幕，而“Wayland 合成器”的作用便是分配输入事件到正确的“Wayland 客户端”，并将他们的程序窗口恰当地显示在您的显示器上。
+应用程序之间将会共享这些屏幕，而<code>Wayland 合成器</code>的作用便是分配输入事件到正确的<code>Wayland 客户端</code>，并将他们的程序窗口恰当地显示在您的显示器上。
 将所有应用程序的窗口组合起来，一起显示在屏幕上的过程被称为“合成”，而执行这一过程的程序被称作“合成器”。</p>
 <blockquote>
 <p>Wayland Compositor，“合成器”、“混成器”只是不同翻译</p>
@@ -229,9 +228,9 @@ sway 是最受欢迎的平铺式窗口管理器 i3wm 在 Wayland 的克隆，从
 <h2 id="具体实践"><a class="header" href="#具体实践">具体实践</a></h2>
 <p>桌面生态系统包含有许多程序组件，比如渲染用的 Mesa（及其驱动）、Linux KMS/DRM 子系统、负责缓冲区分配的 GBM、用户态的 libdrm、libinput、evdev 等。
 不用担心，理解 Wayland 几乎不需要这些专业知识，何况这些内容都远超本书范围。</p>
-<p>实际上，Wayland 协议是相当保守和高度封装的，很容易就能构建出一个 Wayland 桌面并成功运行多数应用程序，无需担心与不同应用程序的具体纠缠。
-话虽如此，浅浅了解这些东西，它们是什么以及它们如何工作，仍非常有用。
-让我们自下而上展开。</p>
+<p>实际上，Wayland 协议是相当谨慎和高度封装的，很容易就能构建出一个 Wayland 桌面，并在其上面成功运行多数的应用程序，而无需牵连这些应用程序。
+话虽如此，大致了解这些东西是什么以及它们是如何工作的，仍非常有用。
+让我们从底层开始，逐步向上展开。</p>
 <h2 id="硬件部分"><a class="header" href="#硬件部分">硬件部分</a></h2>
 <p>一台典型的计算机配备了一些重要的硬件。
 在机箱外面，我们有显示器、键盘、鼠标，或许还有麦克风和一个可爱的 USB 加热杯垫。
@@ -239,8 +238,8 @@ sway 是最受欢迎的平铺式窗口管理器 i3wm 在 Wayland 的克隆，从
 例如，如果您的电脑有 USB 接口 - 那您的键鼠大概率会插在 USB 接口上，显示器正连接着显卡 GPU。</p>
 <p>这些硬件各司其职。
 例如，GPU 有以显存形式提供的像素缓冲区，并将这些像素扫描输出到显示器上。
-GPU 还提供经过特调整的处理器，它们虽然在其他方面有所不如，但可以很好地处理高度并行的任务（例如为 1080P 显示器上的 2,073,600 个像素计算正确的颜色）。
-USB 控制器的工作同样复杂的令人称奇，它要实现枯燥的 USB 协议，接受来自键盘的输入事件，或精心调控杯垫的温度，从而避免投诉和令人不快的冷咖啡。</p>
+GPU 还提供特制的处理器，可以很好地处理高度并行的任务（例如为 1080P 显示器上的 2,073,600 个像素计算正确的颜色），但除此之外的任务都不擅长。
+USB 控制器的工作同样复杂的令人称奇，它要实现枯燥的 USB 协议，接受来自键盘的输入事件，或精心调控杯垫的温度，从而避免被人投诉做出了令人不快的冷咖啡。</p>
 <p>在这个层面上，硬件几乎不了解系统上正在运行着哪些应用程序。
 硬件提供了执行工作的指令接口，并被告知相应的操作的指令，但不在乎指令是谁发出的。
 基于此，只有一个组件被允许和硬件交流。</p>
@@ -248,9 +247,9 @@ USB 控制器的工作同样复杂的令人称奇，它要实现枯燥的 USB �
 <p>这一任务落归内核组件。
 内核是一头复杂的“野兽”，因此我们只关注与 Wayland 相关的部分。
 Linux 内核的任务是给硬件提供一个抽象，这样在用户态可以安全的访问它们，我们的 Wayland 合成器也运行在用户态。
-对于图形子系统 DRM（direct rendering manager）来说，就可以在用户态有效地给 GPU 分配任务。
-另一个重要的子系统是 KMS（kernel mode setting），用于枚举显示设备并设置其属性，比如选定的分辨率（也称为“模式”）等。
-输入设备通过名为 evdev 的接口进行抽象。</p>
+对于 Display 框架, 被称为 <strong>DRM</strong>（direct rendering manager），可以在用户态有效地给 GPU 分配任务。
+DRM 有一个重要的子系统 <strong>KMS</strong>（kernel mode setting），用于遍历计算机中所有连接的显示器并设置其属性，比如他们选定的分辨率（也称为“模式”）等。
+输入设备通过名为 <strong>evdev</strong> 的接口进行抽象。</p>
 <p>大多数内核接口都以特殊文件的形式存在于 <code>/dev</code> 供用户态调用。
 以 DRM 为例，这些文件位于 <code>/dev/dri/</code>，通常，以主要节点 primary node（如 card0）的形式进行模式设置等特权操作，以渲染节点 render node（如 renderD128）的形式进行渲染、视频解码等非特权操作，而对于设备节点 device nodes 则位于 <code>/dev/input/event*</code>。</p>
 <pre><code class="language-shell">$ ls /dev/dri/
@@ -258,33 +257,33 @@ by-path  card0  renderD128
 </code></pre>
 <h2 id="用户态"><a class="header" href="#用户态">用户态</a></h2>
 <p>现在我们来看用户态。
-在这里，应用程序与硬件隔离，必须通过内核提供的设备节点 device nodes 才能运行。</p>
+在这里，应用程序与硬件隔离，必须通过内核提供的设备节点（device nodes）进行工作。</p>
 <h3 id="libdrm"><a class="header" href="#libdrm">libdrm</a></h3>
-<p>大多数 Linux 内核接口都有一个对应的用户态，它为使用这些设备节点提供了令人满意的 C 语言 API。
+<p>大多数 Linux 内核接口都有一个对应的用户态接口，为使用这些设备节点（device nodes）提供合适的 C 语言 API。
 libdrm 库是其中之一，它是 DRM 子系统的用户态部分。
-Wayland 混成器使用它进行模式设置和其他 DRM 操作，但 Wayland 客户端通常不直接使用 libdrm。</p>
+Wayland 混成器使用它进行模式设置（modesetting）和其他 DRM 操作，但 Wayland 客户端通常不会直接使用 libdrm。</p>
 <h3 id="mesa"><a class="header" href="#mesa">Mesa</a></h3>
 <p>Mesa 是 Linux 图形栈中最为重要的部分之一。
 它除了为 Linux 提供 OpenGL（和 Vulkan）的厂家优化实现之外，还提供了 GBM（Generic Buffer Management）库，这是一种在 libdrm 之上的抽象层，用于在 GPU 上分配缓冲区。
-大多数 Wayland 混成器将通过 Mesa 同时使用 GBM 和 OpenGL，多数客户端至少使用 OpenGL 或 Vulkan 其中一种。</p>
+大多数 Wayland 混成器会通过 Mesa 同时使用 GBM 和 OpenGL，多数 Wayland 客户端至少使用 OpenGL 或 Vulkan 其中一种。</p>
 <h3 id="libinput"><a class="header" href="#libinput">libinput</a></h3>
 <p>如同 libdrm 是 DRM 子系统的抽象那样，libinput 提供了 evdev 用户态的抽象。
 它负责从内核接收输入设备的输入事件，将其解码为可用的形式，并传递给 Wayland 混成器。
-混成器需要特殊的权限才能使用 evdev 设备文件，从而迫使 Wayland 客户端通过混成器接收输入事件，这样可以防止键盘被记录日志等。</p>
+混成器需要特殊的权限才能使用 evdev 设备文件，强制要求 Wayland 客户端通过混成器接收输入事件，这样可以防止键盘使用日志被记录等。</p>
 <h3 id="eudev"><a class="header" href="#eudev">(e)udev</a></h3>
 <p>用户态还要负责协调来自内核的新设备、配置 <code>/dev</code> 的设备节点的权限、并将事件变动发送给系统上正在运行的程序。
 大多数系统使用 udev（或 eudev）以进行这项工作。
-Wayland 就是用 udev 来枚举输入设备和 GPU，并在出现变动时接收通知。</p>
+Wayland 就是用 udev 来遍历输入设备和 GPU，并在设备变动（比如插入新设备或拔出旧设备）时接收通知。</p>
 <h3 id="xkbcommon"><a class="header" href="#xkbcommon">xkbcommon</a></h3>
 <p>XKB（X Keyboard）最初是 Xorg 服务处理键盘的子系统。
 几年前开发者将它从 Xorg 代码中分离出来，成为了一个独立的键盘处理库，从此不再与 X 有任何实际的联系。
-Libinput（以及 Wayland 混成器）以扫描码的形式提供键盘事件，扫描码的准确含义因键盘而异。
+Libinput（以及 Wayland 混成器）以扫描码（scancodes）的形式提供键盘事件，扫描码的准确含义因键盘而异。
 xkbcommon 负责将这些扫描码转化为更有意义的通用键盘信号，如 <code>65</code> 转化为 <code>XKB_KEY_Space</code>。
 它还包含了一个状态机，负责将在按住 shift 键的时的 <code>1</code> 会变成 <code>！</code>。</p>
 <h3 id="pixman"><a class="header" href="#pixman">pixman</a></h3>
-<p>这是一个简单的、客户端和混成器都使用的像素操作（pixel manipulation）库，它可以有效的处理像素缓冲区、处理图像矩形的数学运算，以及执行其他相关的像素操作任务。</p>
+<p>这是一个简单的像素操作（pixel manipulation）库，Wayland 客户端和混成器都会使用，它可以高效的处理像素缓冲区、处理图像相关的数学运算，比如矩阵相交，以及执行其他类似的像素操作任务。</p>
 <h3 id="libwayland"><a class="header" href="#libwayland">libwayland</a></h3>
-<p>libwayland 是 Wayland 协议最常用的 C 语言实现，能处理大部分的底层传输协议。
+<p>libwayland 是 Wayland 协议最常用的实现，它由 C 语言编写，能处理大部分的底层传输协议。
 libwayland 同时也提供了一个从 Wayland 协议（XML 文件）生成高级代码的工具。
 我们将从第 1.3 章开始，在本书中详细讨论 libwayland。</p>
 <h3 id="其它"><a class="header" href="#其它">其它</a></h3>
@@ -295,10 +294,10 @@ libwayland 同时也提供了一个从 Wayland 协议（XML 文件）生成高�
 <p>本书的目标是让您了解 Wayland 协议及其高级用法。
 您将会对 Wayland 核心协议的所有内容有扎实的了解，同时掌握实际生产、评估和实现各种扩展协议所需的必要知识。
 首先，本书通过 Wayland 的客户端来介绍其架构。
-此外，它也会为 Wayland 合成器的开发提供一些实用的工具组件。</p>
-<p>自由系统的桌面生态十分复杂，它由许多分离的部分组成。
+此外，它也会为 Wayland 合成器的开发提供一些实用的工具。</p>
+<p>自由系统桌面（freedesktop）生态十分复杂，它由许多分离的部分组成。
 我们将很少讨论 libdrm、libinput、evdev 等部分内容，本书不是构建 Wayland 混成器的详尽指南。
-在本书中你也找不到图像绘制技术的相关信息，比如 Cairo、Pango、GTK+ 等，尽管他们对 Wayland 客户端的开发非常有帮助。
+在本书中你也找不到图像绘制技术的相关信息，比如 Cairo、Pango、GTK+ 等，尽管他们对开发 Wayland 客户端非常有帮助。
 因此，本书同样不是一个完备的 Wayland 客户端实现指南。
 相反，我们只专注于 Wayland 协议的细节。</p>
 <p>本书仅涵盖 Wayland 协议和 libwayland。
@@ -312,7 +311,7 @@ libwayland-client、libwayland-server、wayland-scanner 和 wayland.xml。
 本书第三章详细介绍这种实现；这本书其余部分同样适用于 Wayland 的任何实现。</p>
 <h2 id="waylandxml"><a class="header" href="#waylandxml">wayland.xml</a></h2>
 <p>Wayland 协议通过 XML 文件进行定义。
-如果能够定位并以文本格式打开 &quot;wayland.xml&quot; 文件，您将会发现 Wayland 核心协议 XML 规范。
+如果能够定位并以文本格式打开 &quot;wayland.xml&quot; 文件，您将会找到 Wayland 核心协议 XML 规范。
 这是一个高级协议，它建立在我们将在下一章要讨论的 wire 协议之上。
 本书的大部分内容致力于解释该文件。</p>
 <h2 id="wayland-scanner"><a class="header" href="#wayland-scanner">wayland-scanner</a></h2>
@@ -338,7 +337,7 @@ libwayland 同时提供一些常用工具，用于处理 Wayland 数据结构、
 <p>Wire 协议是由 32 位值所组成的流，使用当前机器的字节顺序进行编码（例如 x86 系列 CPU 上的小端序）。
 其中包含以下几种基础类型：</p>
 <ul>
-<li><strong>int</strong> <strong>uint</strong><br />
+<li><strong>int</strong>， <strong>uint</strong><br />
 32 位 有符号及无符号整型</li>
 <li><strong>fixed</strong><br />
 24 位整数 + 8 位小数 有符号浮点数</li>
@@ -353,7 +352,7 @@ libwayland 同时提供一些常用工具，用于处理 Wayland 数据结构、
 <p><strong>string</strong><br />
 字符串以 32 位整数开头，这个整数表示字符串的长度（以字节为单位），
 接下来是字符串的内容和 NUL 终结符，最后用未定义数据对齐填充 32 位。
-编码没有指定，但是实际使用 UTF-8。</p>
+编码没有规定，但是实践中使用 UTF-8。</p>
 </li>
 <li>
 <p><strong>array</strong><br />
@@ -362,7 +361,7 @@ libwayland 同时提供一些常用工具，用于处理 Wayland 数据结构、
 </li>
 <li>
 <p><strong>fd</strong><br />
-主传输上的 0 位值，在 Unix Socket 消息（msg_control）中使用辅助数据，将文件描述符从一端传输到另一端。</p>
+主体传输的是一个 0 bit 的值，但是会通过 Unix Socket 消息（msg_control）中的辅助数据将文件描述符（fd）传输到另一端。</p>
 </li>
 <li>
 <p><strong>enum</strong><br />
@@ -387,13 +386,13 @@ ID 1 预分配给了 Wayland 显示单例对象，它被用于引导产生其它
 此对象 ID 能在后续的消息头或者其它对象的参数中使用。
 客户端在 <code>[1, 0xFEFFFFFF]</code> 而服务端在 <code>[0xFF000000, 0xFFFFFFFF]</code> 内分配 ID。
 ID 从低位边界开始，并随每次新对象的分配递增。</p>
-<p>对象的 ID 为 0 代表 null 空对象，即不存在或者空缺。</p>
+<p>对象的 ID 为 0 代表空（null）对象，即对象不存在或者空缺。</p>
 <h2 id="传输"><a class="header" href="#传输">传输</a></h2>
 <p>迄今为止，所有的 Wayland 实现均通过 Unix Socket 工作。
 这有个很特别的原因：文件描述符消息。
-Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文件传输（如键盘映射、像素缓冲区、剪切板）非常必要。
-理论上其它传输协议（比 TCP）可行，但是需要开发者实现大文件传输的替代方案。</p>
-<p>为了找到 Unix Socket 连接，大部分实现和 libwayland 操作一样：</p>
+Unix Socket 是最实用的跨进程文件描述符传输方法，这对大文件传输（如键盘映射、像素缓冲区、剪切板）来说非常必要。
+理论上其它传输协议（比如 TCP）是可行的，但是需要开发者实现大文件传输的替代方案。</p>
+<p>为了找到 Unix Socket 并连接，大部分实现要做的事和 libwayland 所做的一样：</p>
 <ol>
 <li>如果 <code>WAYLAND_SOCKET</code> 已设置，则假设父进程已经为我们配置了连接，将 <code>WAYLAND_SOCKET</code> 解析为文件描述符。</li>
 <li>如果 <code>WAYLAND_DISPLAY</code> 已设置，则与 <code>XDG_RUNTIME_DIR</code> 路径连接，尝试建立 Unix Socket。</li>
@@ -407,30 +406,30 @@ Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文�
 <p><img src="2-protocol-design/wl_surface.png" alt="wl_surface" /></p>
 <h2 id="requests-请求"><a class="header" href="#requests-请求">Requests 请求</a></h2>
 <p>Surface 是可以在屏幕上显示的像素区域，
-是我们构建应用程序之类窗口的基本元素之一。
+是我们构建应用程序窗口之类的东西的基本元素之一。
 它有个请求名为“damage”（损坏），客户端发送这个请求表示某个 surface 的某些部分发生了变化，需要重绘。
-下面是 Wire 中的一个 damage 消息的注释示例（16 进制）：</p>
-<pre><code>0000000A    Object ID (10)
-00180002    Message length (24) and request opcode (2)
-00000000    X coordinate (int): 0
-00000000    Y coordinate (int): 0
-00000100    Width        (int): 256
-00000100    Height       (int): 256
+下面是 wire 中的一个 damage 消息的带注释示例（16 进制）：</p>
+<pre><code>0000000A    对象 ID (10)
+00180002    消息长度 (24) 和请求操作码 (2)
+00000000    X 坐标       (int): 0
+00000000    Y 坐标       (int): 0
+00000100    宽度         (int): 256
+00000100    高度         (int): 256
 </code></pre>
-<p>这是 session 会话的小片段：本次 surface 提前已分配，它的 ID 为 10。
+<p>这是 session 会话的小片段：surface 已经提前分配，它的 ID 为 10。
 当服务端收到这条消息后，服务端会查找 ID 为 10 的对象，发现它是一个 <code>wl_surface</code> 实例。
 基于此，服务端用请求的 opcode 操作码 <code>2</code> 查找请求的签名。
-然后就知道了接下来有四个整型作为参数，这样服务器就能解码这条消息，dispatch 分派内部处理。</p>
+然后就知道了接下来有四个整型作为参数，这样服务器就能解码这条消息，分派到内部处理。</p>
 <h2 id="events-事件"><a class="header" href="#events-事件">Events 事件</a></h2>
 <p>请求是从客户端发送到服务端，反之，服务端也可以给客户端广播消息，叫做“事件”。
 例如，其中一个事件是 <code>wl_surface</code> 的 enter 事件，在 surface 被显示到指定的 output 时，服务端将发送该事件
 （客户端可能会响应这一事件，比如为 HiDPI 高分屏调整缩放的比例因数）。
 这样一条消息的示例如下：</p>
-<pre><code>0000000A    Object ID (10)
-000C0000    Message length (12) and event opcode (0)
+<pre><code>0000000A    对象 ID (10)
+000C0000    消息长度 (12) 和事件操作码 (0)
 00000005    Output (object ID): 5
 </code></pre>
-<p>这条消息通过 ID 引用了另一对象：<code>wl_output</code>，surface 就先是在这对象上显示。
+<p>这条消息通过 ID 引用了另一对象：<code>wl_output</code>，surface 就是在这对象上显示。
 客户端收到该消息后，行为与服务端类似：查找 ID 为 10 的对象、将其与 <code>wl_surface</code> 接口关联、查找操作码 <code>0</code> 对应事件的签名。
 它相应地解码其余信息（查找 ID 为 <code>5</code> 的 <code>wl_output</code>），然后分派内部处理。</p>
 <h2 id="interfaces-接口"><a class="header" href="#interfaces-接口">Interfaces 接口</a></h2>
@@ -443,7 +442,7 @@ Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文�
 <p>协议在线版查看：<a href="https://wayland.app/">https://wayland.app/</a></p>
 </blockquote>
 <blockquote>
-<p>Linux 大概路径：<code>/usr/share/wayland/wayland.xml</code></p>
+<p>Linux 下路径一般为：<code>/usr/share/wayland/wayland.xml</code></p>
 </blockquote>
 <p>此文件使用 XML 格式，其中定义了每个接口，以及对应的请求、事件和各自的签名。
 看看上一章中讨论的 <code>wl_surface</code> 示例：</p>
@@ -462,8 +461,8 @@ Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文�
 </code></pre>
 <p>片段为了简洁有删减，如果你有找到本机的 <code>wayland.xml</code> 文件，请亲自查看这个接口，它带有额外的文档，这些文档解释了每个请求事件的目的、准确语义。</p>
 <p>在处理此 XML 文件时，我们按照它们出现的顺序给每个请求和事件分配一个操作码（都是从 0 开始编号，依次递增）。
-结合参数列表，我们可以解码 Wire 协议传输来的请求和事件，并且基于 XML 文档，决定如何进行软件编程以得体行事。
-解析 XML 的工作通常不需要手写，会有代码生成器自动生成，我们将在第 3 章讨论 libwayland 如何实现这一点。</p>
+结合参数列表，我们可以解码 Wire 协议传输来的请求和事件，并且根据 XML 文档，决定如何进行软件编程来做出相应的处理。
+解析 XML 的工作通常不需要手写，而是由代码生成器自动生成，我们将在第 3 章讨论 libwayland 如何实现这一点。</p>
 <p>从第 4 章开始，本书其余大部分内容专门用于解释该协议文件，以及一些补充扩展协议。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="协议设计规范"><a class="header" href="#协议设计规范">协议设计规范</a></h1>
 <p>在大多数 Wayland 协议的设计中已经应用了一些关键性的理念，我们简述一下。
@@ -477,26 +476,26 @@ Wayland 的一个既定目标是 &quot;每帧都完美&quot;。
 <ul>
 <li>附加的像素缓冲区</li>
 <li>需要重新绘制的变更区域</li>
-<li>出于优化而不透明的区域</li>
+<li>出于优化而设置为不透明的区域</li>
 <li>可接受输入事件的区域</li>
 <li>变换，比如旋转 90 度</li>
 <li>缓冲区的缩放比例，用于 HiDPI</li>
 </ul>
-<p>接口为这些配置提供了许多独立的请求，但它们都处于 pending 挂起状态。
-仅当发送 commit 提交请求时，挂起状态才会合并到 current 当前状态。
+<p>接口为这些配置提供了许多独立的请求，但它们都处于挂起状态（pending）。
+仅当发送提交(commit)请求时，挂起状态才会合并到当前状态（current）。
 从而可以在单帧内，原子地更新所有这些属性。
 结合其他一些关键性的设计决策，Wayland 合成器可以在每一帧中都完美地渲染一切，没有撕裂或更新一半的窗口，每个像素都在它应在的位置，静静地显示。</p>
-<h2 id="resource-资源的生命周期"><a class="header" href="#resource-资源的生命周期">Resource 资源的生命周期</a></h2>
-<p>另一个重要的规范有关资源的生命周期，尽量避免服务端和客户端向无效对象发送事件或请求。
-因此，接口往往会给局部 resource 资源定义有关生命周期的请求和事件，这样服务端和客户端可以对 resource 资源进行显式释放。
-异步地，只有当两边都同意释放，才能销毁为对象分配的资源。</p>
+<h2 id="资源resource的生命周期"><a class="header" href="#资源resource的生命周期">资源（Resource）的生命周期</a></h2>
+<p>另一个重要的规范是关于资源的生命周期的：尽量避免服务端和客户端向无效对象发送事件或请求。
+因此，接口往往会给局部 resource 资源定义有关生命周期的请求和事件，客户端或服务器可以声明他们意图不再向该对象发送请求或事件。
+只有当两边都同意释放，才能<strong>异步地</strong>销毁为对象分配的资源。</p>
 <p>Wayland 是一个完全异步的协议，它只能保证同一发送者的消息按照发送的顺序到达。
 例如，当客户端决定销毁其键盘设备时，服务端可能有多个输入事件正在排队。
 客户端必须正确处理不再需要的对象事件，直到服务端同步。
 同理，如果客户端在释放资源请求之前还存在其它请求，那么请求队列就必须以正确的顺序发送，避免操作操作空。</p>
 <h2 id="版本相关"><a class="header" href="#版本相关">版本相关</a></h2>
 <p>Wayland 协议中的版本有两种模式：Unstable 不稳定版和 Stable 稳定版。
-这两种模式的协议都向后兼容，但协议从不稳定版过渡到稳定时，会允许最后一个变动不兼容。
+这两种模式的协议都向后兼容，但协议从不稳定版过渡到稳定时，会允许最后一次不兼容的变动。
 这样给协议提供了孵化期，期间可以进行实际测试，最后大变动可以完善协议，增加日后<sup class="footnote-reference"><a href="#2">2</a></sup>的可用性。</p>
 <p>为了向后兼容，新的事件请求只能在当前接口协议的末尾添加，枚举同理。
 此外，每个实现所用的接口事件，另一端必须支持。
@@ -519,15 +518,15 @@ Wayland 的一个既定目标是 &quot;每帧都完美&quot;。
 <li>用于序列化与反序列化 Wayland 协议消息的代码</li>
 <li>链表 <code>wl_list</code> 的实现</li>
 <li>数组 <code>wl_array</code> 的实现（用于相应的 Wayland 原语）</li>
-<li>用于 Wayland 数值（如定点小数）和 C 语言类型转化的程序</li>
+<li>用于 Wayland 标量（如定点小数）和 C 语言类型转化的程序</li>
 <li>Debug/Log 工具，获取来自 libwayland 内部传出的信息</li>
 </ul>
 <p>头文件自身包含了许多非常好的注释，您应当自己实际读一读。
 我们将在接下来的几节中详细介绍如何使用这些原语。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-scanner-1"><a class="header" href="#wayland-scanner-1">wayland-scanner</a></h1>
 <p>Wayland 包里有一个二进制可执行文件：wayland-scanner。
-该工具负责预处理，读取 Wayland 协议的 XML 文件生成 C 语言头文件和对应的胶水代码。
-生成的头文件为 <code>wayland-client-protocol.h</code> 和 <code>wayland-server-protocol.h</code>，此外通常还包括对协议进行封装的头文件 <code>wayland-client.h</code> 和 <code>wayland-server.h</code>，通常可以直接 include 它们而不是手动使用它们。</p>
+正如本书 2.3 章所说，该工具负责预处理，读取 Wayland 协议的 XML 文件生成 C 语言头文件和对应的胶水代码。
+该工具在 Wayland 包的构建过程中会处理核心协议 wayland.xml，并生成名为 <code>wayland-client-protocol.h</code> 和 <code>wayland-server-protocol.h</code> 的头文件以及胶水代码，此外 Wayland 包中通常还包括对协议进行封装的头文件： <code>wayland-client.h</code> 和 <code>wayland-server.h</code>，一般直接 include 后者而不是手动使用前者。</p>
 <p>该工具的用法非常简单（见 <code>wayland-scanner -h</code>），可概述如下：</p>
 <p>生成客户端头文件：</p>
 <pre><code class="language-shell">$ wayland-scanner client-header &lt; protocol.xml &gt; protocol_client.h
@@ -582,16 +581,17 @@ clean:
 $ find /usr/include -name wayland-client-core.h
 </code></pre>
 </blockquote>
-<p>在服务端，对象通过 wl_resource 进行抽象，这点与客户端非常相似，不过有一点更复杂——服务端必须知晓哪个对象属于哪个客户端。
+<p>在服务端，对象通过 wl_resource 进行抽象，这点与客户端非常相似，不过有一点更复杂 —— 服务端必须知晓哪个对象属于哪个客户端。
 每个 wl_resource 都归单独的某一客户端所有，除此之外，接口大致相同，也有提供把事件发送给客户端的底层抽象。
 在服务端上直接使用 wl_resource 的频次将比客户端直接使用 wl_proxy 更高。
-这种用法的一个例子是获取对某资源的 wl_client 引用，或者在客户端尝试无效操作的时候发送协议错误。</p>
-<p>此外还有另一组高级接口，大多数 Wayland 客户端和服务端的代码都与之交互以完成其大部分任务。</p>
+这种用法的一个例子是获取拥有你想在上下文之外操纵的资源的 wl_client 的引用，或者在客户端尝试无效操作的时候发送协议错误。</p>
+<p>此外还有另一组高级接口，大多数 Wayland 客户端和服务端的代码都与之交互以完成其大部分任务。
+我们将在下一节中讨论它们。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="接口与监听"><a class="header" href="#接口与监听">接口与监听</a></h1>
 <p>终于，我们到达了 libwayland 顶层的抽象：接口与监听。
 前几章讨论的 wl_proxy、wl_resource 以及原语是 libwayland 中的单一实现，它们的存在是为了支持本层抽象。
 调用 wayland-scanner 处理 XML 文件时，它会针对高级协议中的每个接口，生成接口、监听及其与底层 Wire 协议之间的胶水代码。</p>
-<p>回想一下，Wayland 连接上的每个参与者都可以接受和发送消息。客户端监听事件并发送请求，服务端监听请求并发送事件。
+<p>回想一下，Wayland 连接上的每个参与者都可以接收和发送消息。客户端监听事件并发送请求，服务端监听请求并发送事件。
 各方都使用特定名称的 wl_listener 监听另一方的消息。
 下面是这个接口的一个例子：</p>
 <blockquote>
@@ -685,7 +685,7 @@ wl_surface_add_listener(surf, &amp;surface_listener, NULL);
 <div style="break-before: page; page-break-before: always;"></div><h1 id="wayland-display-显示"><a class="header" href="#wayland-display-显示">Wayland Display 显示</a></h1>
 <p>到目前为止，我们在解释 Wayland 如何管理客户端和服务器之间对象的所有权时，遗漏了一个关键细节：
 对象首先是如何创建出来的？
-Wayland Display 显示，即 <code>wl_display</code> 隐式存在于每次 Wayland 连接中，它具有以下接口：</p>
+Wayland Display，即 <code>wl_display</code> 隐式存在于每次 Wayland 连接中，它具有以下接口：</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
   &lt;request name=&quot;sync&quot;&gt;
     &lt;arg name=&quot;callback&quot; type=&quot;new_id&quot; interface=&quot;wl_callback&quot;
@@ -716,7 +716,7 @@ Wayland Display 显示，即 <code>wl_display</code> 隐式存在于每次 Wayla
   &lt;!-- event 相当于接口的声明，其内部指定了变量名称，类型和说明 --&gt;
 &lt;/interface&gt;
 </code></pre>
-<p>对于大部分 Wayland 受众来说，其中最有趣的是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。
+<p>对于普通 Wayland 用户来说，其中最有趣的是 <code>get_registry</code>，我们将会在接下来的章节中讨论其细节。
 简而言之，registry 注册函数是用来分配其他对象的。
 其余接口用于连接的状态维护，通常不重要，除非您想编写自己的 libwayland 替代实现。</p>
 <p>所以，本章会关注 libwayland 中一些与 <code>wl_display</code> 有关——用于建立和维护 Wayland 连接的函数。
@@ -817,11 +817,12 @@ int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
 </code></pre>
 <p>在添加套接字后，调用 <code>wl_display_run</code> 将会运行 <code>libwayland</code> 的内部事件循环，并阻塞至调用 <code>wl_display_terminate</code> 终止。这个事件循环是什么？让我们翻开下一页就明白了！</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="加入一个事件循环"><a class="header" href="#加入一个事件循环">加入一个事件循环</a></h1>
-<p><code>libwayland</code> 为 Wayland 服务端提供了自己的事件循环实现，但维护者需要知道这是一种设计上的僭越行为。</p>
+<p><code>libwayland</code> 为 Wayland 服务端提供了自己的事件循环实现，但维护者需要知道这是一种设计上的僭越行为。
+对于客户端，没有这样的等价物。无论如何，Wayland 服务端事件循环已经足够有用了。</p>
 <h2 id="wayland-服务端事件循环"><a class="header" href="#wayland-服务端事件循环">Wayland 服务端事件循环</a></h2>
 <p>由 <code>libwayland-server</code> 创建的每一个 <code>wl_display</code> 都有一个对应的 <code>wl_event_loop</code>，你可以通过 <code>wl_display_get_event_loop</code> 来获取其引用。如果你正在写一个新的 Wayland 混成器，你很可能想把它作为唯一的事件循环。你可以用 <code>wl_event_loop_add_fd</code> 来添加一个文件描述符，用 <code>wl_event_loop_add_timer</code> 来添加一个计时器。还可以通过 <code>wl_event_loop_add_signal</code> 来处理信号，这可能是非常便捷的做法。</p>
 <p>可以根据你的喜好配置事件循环，以监控混成器所需响应的全部事件。你可以通过调用 <code>wl_display_run</code> 来一次性处理事件和调度 Wayland 客户端。它将处理并陷入事件循环，直到通过 <code>wl_display_terminate</code> 进行终止。大多数 Wayland 混成器从一开始就考虑到 Wayland 的这种用法（而不是从 X11 移植过来）。</p>
-<p>然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。<code>wl_display</code> 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 <code>wl_event_loop_get_fd</code> 来过的一个可以回调的文件描述符，然后在该文件描述符发生活动时调用 <code>wl_event_loop_dispatch</code> 来处理事件。当你有数据需要写入客户端时，你也需要调用 <code>wl_display_flush_clients</code>。 </p>
+<p>然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。<code>wl_display</code> 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 <code>wl_event_loop_get_fd</code> 来过的一个可以<a href="https://pubs.opengroup.org/onlinepubs/009695399/functions/poll.html">回调</a>的文件描述符，然后在该文件描述符发生活动时调用 <code>wl_event_loop_dispatch</code> 来处理事件。当你有数据需要写入客户端时，你也需要调用 <code>wl_display_flush_clients</code>。 </p>
 <h2 id="wayland-客户端事件循环"><a class="header" href="#wayland-客户端事件循环">Wayland 客户端事件循环</a></h2>
 <p>另一方面，<code>libwayland-client</code> 并没有自己的事件循环。然而，由于通常只有一个文件描述符，所以没有自己的事件循环更容易管理。如果你的程序期望响应唯一的 Wayland 事件，那么这个简单的循环就足够了。</p>
 <pre><code class="language-c">while (wl_display_dispatch(display) != -1) {
@@ -832,8 +833,8 @@ int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
 <h2 id="小节"><a class="header" href="#小节">小节</a></h2>
 <p>至此，你已经拥有了所有设置 Wayland 显示器和处理事件和请求的背景知识。剩下的唯一步骤是分配对象，以便与连接的对方通讯。为此，我们使用 registry 注册。在下一章结束时，我们将拥有自己第一个可用的 Wayland 客户端。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="全局和注册"><a class="header" href="#全局和注册">全局和注册</a></h1>
-<p>如果你还能回想起 2.1 章的内容——每个请求和事件都有一个对象 ID 与之关联。但到目前为止，我们还没有讨论对象是如何被创建的。当我们收到一个 Wayland 消息时，我们必须知道对象 ID 所代表的接口，以便对其进行编码。我们还必须以某种方式协商可用的对象，创建新的对象，以及为它们分配 ID。在 Wayland 上，我们同时解决这两个问题——当我们帮顶一个对象 ID 时，我们认为在未来所有的消息中使用其接口，并在我们本地状态中存储一个对象 ID 到接口的映射。</p>
-<p>为了引导这些，服务端提供了一个全局对象的列表。这些全局对象已经根据自身特点来提供信息和功能，且最常见的是它们被用来代理其他对象以实现各种目的——比如创建应用程序的窗口。这些全局对象它们自己也有对象 ID 和接口，我们必须以某种方式来分配和同意这些对象。</p>
+<p>如果你还能回想起 2.1 章的内容——每个请求和事件都有一个对象 ID 与之关联。但到目前为止，我们还没有讨论对象是如何被创建的。当我们收到一个 Wayland 消息时，我们必须知道对象 ID 所代表的接口，以便对其进行编码。我们还必须以某种方式协商可用的对象，创建新的对象，以及为它们分配 ID。在 Wayland 上，我们同时解决这两个问题——当我们绑定一个对象 ID 时，我们认为在未来所有的消息中使用其接口，并在我们本地状态中存储一个对象 ID 到接口的映射。</p>
+<p>为了引导（bootstrap）这些，服务端提供了一个全局对象的列表。这些全局对象根据自身已有的特点来提供信息和功能，且最常见的是它们被用来代理其他对象以实现各种目的——比如创建应用程序的窗口。这些全局对象它们自己也有对象 ID 和接口，我们必须以某种方式来分配和这些对象并对接口定义达成共识。</p>
 <p>毫无疑问地，你现在已经想到了鸡生蛋的问题，我们将揭示其奥秘：对象 ID 为 1 的已经被隐式分配给了 <code>wl_display</code> 接口。当你想要调用这个接口时，注意使用 <code>wl_display::get_registry</code> 请求：</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_display&quot; version=&quot;1&quot;&gt;
   &lt;request name=&quot;sync&quot;&gt;
@@ -851,7 +852,7 @@ int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
 <pre><code>C-&gt;S    00000001 000C0001 00000002            .... .... ....
 </code></pre>
 <p>当我们将其分解时，第一串序列是对象 ID，第二串序列中前 16 位是消息总长度（以字节为单位），其后的位是请求操作码。剩下的字（只有一个）是参数。简而言之，这是对象 ID 1 <code>(wl_display)</code> 上调用的请求 1
-（从 0 开始），它接受一个参数：一个新对象生成的 ID。在 XML 文档中注意，这个新 ID 是提前定义好的，由 <code>wl_registry</code> 接口来管理。</p>
+（从 0 开始），它接受一个参数：一个新对象生成的 ID。请注意在 XML 文档中这个新 ID 是提前定义好的，由 <code>wl_registry</code> 接口来管理。</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_registry&quot; version=&quot;1&quot;&gt;
   &lt;request name=&quot;bind&quot;&gt;
     &lt;arg name=&quot;name&quot; type=&quot;uint&quot; /&gt;
@@ -871,7 +872,7 @@ int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
 </code></pre>
 <p>这些接口我们将在后续的章节中讨论。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="绑定全局变量"><a class="header" href="#绑定全局变量">绑定全局变量</a></h1>
-<p>创建注册表对象后，服务端将为服务器上每个可用的全局对象发起全局事件。
+<p>创建注册表（registry）对象后，服务端将为服务器上每个可用的全局对象发起全局事件。
 然后，您可以绑定到所需要的全局对象。</p>
 <p>这个为已知对象分配 ID 的过程称为对象绑定。
 一旦客户端像这样绑定到注册表，服务器就会多次发起全局事件，以告知它支持的接口。
@@ -879,7 +880,7 @@ int wl_display_add_socket_fd(struct wl_display *display, int sock_fd);
 接口字符串映射到协议中找到的接口名称：在上面 XML 中的 <code>wl_display</code> 就是这样一个名称的示例。
 此外，版本号也在这里定义——关于接口版本的更多信息，请查看附录 C。</p>
 <p>要绑定到任意一个接口时，我们需要使用绑定请求，其工作方式类似于我们绑定到 <code>wl_registry</code> 的神奇过程。
-例如，考虑下面的通信协议交换：</p>
+例如，考虑下面的 wire 协议交换：</p>
 <pre><code>C-&gt;S    00000001 000C0001 00000002            .... .... ....
 
 S-&gt;C    00000002 001C0000 00000001 00000007   .... .... .... ....
@@ -947,7 +948,7 @@ interface: 'wl_drm', version: 2, name: 2
 interface: 'zwp_linux_dmabuf_v1', version: 3, name: 3
 ...
 </code></pre>
-<p>注意：本章是我们最后一次展示线程协议输出到十六进制，可能也是你最后一次在文中看到它们总体的情况。
+<p>注意：本章是我们最后一次用十六进制展示线程协议输出，可能也是你最后一次在文中看到它们总体的情况。
 追踪你的 Wayland 客户端或服务端的一个更好的方法是，在运行你的程序之前，
 将环境中的 <code>WAYLAND_DEBUG</code> 变量设为 1。
 现在就用 <code>globals</code> 程序试试吧!</p>
@@ -1207,7 +1208,7 @@ wl_output_handle_bind(struct wl_client *client, void *data,
 <p>资源代表每个客户端对象实例的服务器端状态。</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>如果你对更为健壮的程序有兴趣，我们还可以从 Weston 项目中获取一种稍微复杂一些的&quot;globals&quot;程序版本，名为 <code>wayland-info</code>。</p>
+<p>如果你对更为健壮的程序有兴趣，我们还可以从 Wayland-utils （之前在 Weston） 项目中获取一种稍微复杂一些的&quot;globals&quot;程序版本，名为 <code>wayland-info</code>。</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="缓冲区和表面"><a class="header" href="#缓冲区和表面">缓冲区和表面</a></h1>
 <p><em>译注：surface 取了直译，实际上即为像素最后渲染到屏幕前的显示面</em></p>
@@ -1278,7 +1279,7 @@ main(int argc, char *argv[])
 </code></pre>
 <p>一旦绑定，我们可以选择通过 <code>wl_shm_add_listener</code> 添加一个监听器。混成器将通过这个监听器公布器其所支持的像素格式。可用的像素格式的完整列表在 <code>wayland.xml</code> 中给出。有两种格式是必须支持的：ARGB (各 8 位色深) 和 XRGB (各 8 位色深)，它们是 24 位颜色，分别有和没有透明度 (alpha) 通道。</p>
 <h2 id="分配共享内存工具"><a class="header" href="#分配共享内存工具">分配共享内存工具</a></h2>
-<p>可以利用 <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> <code>shm_open</code> 和随即文件名的组合来创建一个适合这一目的的文件，并利用 <code>ftruncate</code> 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：</p>
+<p>可以利用 <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> <code>shm_open</code> 和随机文件名的组合来创建一个适合这一目的的文件，并利用 <code>ftruncate</code> 分配合适的大小。下面的模板可以在公共领域或 CC0 下自由使用：</p>
 <pre><code class="language-c">#define _POSIX_C_SOURCE 200112L
 #include &lt;errno.h&gt;
 #include &lt;fcntl.h&gt;
@@ -1372,7 +1373,7 @@ for (int y = 0; y &lt; height; ++y) {
 wl_surface_damage(surface, 0, 0, UINT32_MAX, UINT32_MAX);
 wl_surface_commit(surface);
 </code></pre>
-<p>如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一部——给你的表面分配一个任务。</p>
+<p>如果你运用这些新学到的知识来编写一个 Wayland 客户端，当你的缓冲区没有显示在屏幕上时，你可能会感到疑惑。我们错过了关键的最后一步——给你的表面分配一个角色（role）。</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>“损坏” 意味着 “这个区域需要重新绘制”</p>
 </div>
@@ -1460,7 +1461,7 @@ wl_shm_buffer_get_height(struct wl_shm_buffer *buffer);
   &lt;arg name=&quot;serial&quot; type=&quot;uint&quot; summary=&quot;the serial from the configure event&quot;/&gt;
 &lt;/request&gt;
 </code></pre>
-<p><code>xdg-surface</code> 最重要的 API 就是 <code>configure</code> 和 <code>ack_configure</code> 这一对。你可能还记得，Wayland 的一个目标是让每一帧都完美呈现。这意味着没有任何一帧有半应用的状态变化（原子性，避免画面撕裂），为了实现这个目标，我们必须要在客户端和服务端之间同步这些变化。对于 XDG 表面来说，这对消息（这两个 API 传递的内容）正是实现这一目的的机制。</p>
+<p><code>xdg-surface</code> 最重要的 API 就是 <code>configure</code> 和 <code>ack_configure</code> 这一对。你可能还记得，Wayland 的一个目标是让每一帧都完美呈现。这意味着任何一帧都没有应用了一半的状态变化（原子性，避免画面撕裂），为了实现这个目标，我们必须要在客户端和服务端之间同步这些变化。对于 XDG 表面来说，这对消息（这两个 API 传递的内容）正是实现这一目的的机制。</p>
 <p>我们目前只关注基础内容，因此我们会总结这两个事件的重点如下：当来自服务端的事件通知你配置（或重新配置）一个表面时，将它们设置到一个待定状态。当一个 configure 事件到来时，会应用先前准备好的变化，使用 <code>ack_configure</code> 来确定你已经这样做了，然后渲染并提交一个新的帧。我们将在下一章节中展示这一做法，并在 8.1 章中详细解释。</p>
 <pre><code class="language-xml">&lt;request name=&quot;set_window_geometry&quot;&gt;
   &lt;arg name=&quot;x&quot; type=&quot;int&quot;/&gt;
@@ -1773,14 +1774,14 @@ main(int argc, char *argv[])
 </ul>
 <p>除了表面的这些特征之外，表面的角色还可以有额外的双缓冲区。所有这些状态，以及与角色相关的任何状态，都会在发达送 <code>wl_surface.commit</code> 时应用。如果你改变主意，你可以多次发送这些请求，当表面最终被提交的时候只会考虑这些属性的最新值（即可最后一次提交有效）。</p>
 <p>当你第一次创建表面时，初始状态是无效的。为了使其有效（或映射到表面），你需要提供必要的信息来初次为该曲面建立一致的状态。这包括给它一个角色（比如 <code>xdg_toplevel</code>），分配和附加一个缓冲区，以及配置该表面的任何角色特定状态。当你发送了一个 <code>wl_surface.commit</code> 并正确配置了这个状态时，这个表面就会生效（或被映射）并被混成器呈现。</p>
-<p>下一个问题是：我该合适准备一个新的帧？</p>
+<p>下一个问题是：我该何时准备一个新的帧？</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>这是以优化混成器为目的而采取的措施</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="帧回调"><a class="header" href="#帧回调">帧回调</a></h1>
-<p>更新表面最简单的方法是：在需要改变时简单渲染和附加新的帧。这种方法很好用，例如，在事件驱动的应用中，用户按下了一个键，文本框需要重新渲染，那么你就可以立即开始重新渲染，将相应的区域标记为 “损坏”，并附加一个新的缓冲区，在下一帧中呈现。</p>
-<p>然而，有些程序可能希望连续渲染帧率。你可能正在渲染视频游戏的帧、回放视频、或者渲染动画。你的显示器有一个固定的刷新率，或者说它能够显示更新的最快速度（通常是一个数字，如 60Hz、144Hz 等）。超出这个范围渲染帧的速度在快也没有意义，而且这样做会浪费资源——CPU、GPU、甚至是用户的电量。如果你在每次刷新间隔之内发送几个帧，那么除了最后一个帧以外，其它的都会被丢掉，而且是白白地浪费渲染。</p>
-<p>此外，某些情况下，混成器甚至可能不想为你显示新的帧。比如你的应用程序可能已经离开屏幕、被最小化或者隐藏在其它窗口后面、或者只显示了你应用程序的小缩略图，所以混成器可能想以比较低的帧速率渲染你的应用，以节省资源。因此，在 Wayland 客户端中连续渲染帧的最好方法是让混成器告诉你什么时候它准备好接收新的帧：使用帧回调。</p>
+<p>更新表面最简单的方法是：在需要改变时简单的渲染和附加新的帧。这种方法很好用，例如，在事件驱动的应用中，用户按下了一个按键，文本框需要重新渲染，那么你就可以立即开始重新渲染，将相应的区域标记为 “损坏”，并附加一个新的缓冲区，在下一帧中呈现。</p>
+<p>然而，有些程序可能希望连续地渲染帧。比如你可能正在渲染视频游戏、回放视频、或者动画的帧。你的显示器有一个固定的刷新率，既它能够显示的最快的刷新速度（通常是一个数字，如 60Hz、144Hz 等）。超出这个范围渲染帧的速度在快也没有意义，而且这样做只会浪费资源——CPU、GPU、甚至是用户的电量。如果你在每次显示器刷新间隔之内发送多个帧，那么除了最后一个帧以外，其它的帧都会被丢掉，渲染它们没有意义。</p>
+<p>此外，某些情况下，混成器甚至可能不想为你显示新的帧。比如你的应用程序可能离开屏幕、被最小化或者隐藏在其它窗口后面、或者只显示了你应用程序的缩略图，所以混成器可能想以比较低的帧速率渲染你的应用，以节省资源。因此，在 Wayland 客户端中连续渲染帧的最好方法是让混成器告诉你什么时候它准备好接收新的帧：使用帧回调。</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
   &lt;!-- ... --&gt;
 
@@ -1798,7 +1799,7 @@ main(int argc, char *argv[])
   &lt;/event&gt;
 &lt;/interface&gt;
 </code></pre>
-<p>当你在一个表面上请求一个帧回调时，一旦这个表面的新帧准备好了，混成器会向回到对象发送一个完成事件。在帧事件的情况下，<code>callback_data</code> 被设置为从一个未指定的时期开始到当前时间，以毫秒为单位计算。你可以将其与上一帧进行比较，以计算动画的进度或对输入事件进行调整。 </p>
+<p>当你在一个表面上请求一个帧回调时，一旦这个表面的新帧准备好了，混成器会向回调对象发送一个完成事件。在帧事件的情况下，<code>callback_data</code> 被设置为从一个未指定的时期开始到当前时间，以毫秒为单位计算。你可以将其与上一帧进行比较，以计算动画的进度或对输入事件进行调整。 </p>
 <p>有了帧回调这个工具，我们为什么不更新一下第 7.3 章节中的应用程序，让它每一帧都滚动一下呢？让我们先在我们的 <code>client_state</code> 结构体中添加一点状态：</p>
 <pre><code class="language-c">--- a/client.c
 +++ b/client.c
@@ -1953,8 +1954,8 @@ main(int argc, char *argv[])
 &lt;/interface&gt;
 </code></pre>
 <p>不透明区域是给混成器的一个提示，告诉它你的表面哪些部分被认为是不透明的。基于这些信息，混成器可以优化它的渲染过程。例如，你的表面是完全不透明的，并且遮挡了它下面的另一个窗口，那么混成器就不会在重新绘制下面窗口上浪费任何时间。默认情况下是没有这个提示的， 它假定你表面的任何部分都可能是透明的。这使得默认情况下绘制效率最低，但效果也最正确。</p>
-<p>输入区域表示你的表面哪些部分可以接受光标和触摸输入事件。例如，你可以在你的表面下绘制一个下拉阴影，但发生在这个区域的输入事件应该被传递到你内部的的客户端。或者，如果你的窗口是一个不寻常的形状，你也可以在此创建一个符合形状的输入区域。在默认情况下，对于大多数表面类型，你的整个表面都接受输入。</p>
-<p>这两个请求都可以通过传入 null 而不但是 <code>wl_region</code> 对象来设置一个空的区域。它们也都是带有双缓冲区的——所以发送一个 <code>wl_surface.commit</code> 来使得你的改变生效。一旦你发送了 <code>set_opaque_region</code> 或 <code>set_input_region</code> 请求，你就可以销毁 <code>wl_region</code> 对象以释放其资源。在你发送这些请求后，再更新这一区域不会更新表面的状态。</p>
+<p>输入区域表示你的表面哪些部分可以接受光标和触摸输入事件。例如，你可以在你的表面下绘制一个下拉阴影，但发生在这个区域的输入事件应该被传递到你内部的的客户端。或者，如果你的窗口是一个不规则的形状，你也可以在此创建一个符合形状的输入区域。在默认情况下，对于大多数表面类型，你的整个表面都接受输入。</p>
+<p>这两个请求都可以通过传入 null （而不是 <code>wl_region</code> 对象）来设置一个空的区域。它们也都是带有双缓冲区的——所以发送一个 <code>wl_surface.commit</code> 来使得你的改变生效。一旦你发送了 <code>set_opaque_region</code> 或 <code>set_input_region</code> 请求，你就可以销毁 <code>wl_region</code> 对象以释放其资源。在你发送这些请求后，再更新这一区域不会更新表面的状态。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="子表面"><a class="header" href="#子表面">子表面</a></h1>
 <p>在核心 Wayland 协议中，<code>wayland.xml</code> 只定义了一种<sup class="footnote-reference"><a href="#1">1</a></sup>表面角色：子表面。它们拥有一个相对于父表面但并不受到其父表面边界的限制的 X、Y 位置，以及一个相对于其兄弟和父表面的 Z 轴顺序。</p>
 <p>这个功能的一些使用情况包括：以其原始像素格式播放带有视频的表面，并在上面显示 RGBA 用户界面或字幕；使用 OpenGL 表面作为你主要的应用界面，并在软件中使用子表面来渲染窗口装饰，或在用户界面各个部分移动而不必在客户端重新绘制。在硬件表面的帮助下，混成器也可能不需要绘制任何东西来更新你的子表面。特别是在嵌入式系统上，当它符合你的使用情况时，这可能特别有用。一个巧妙设计的应用程序可以利用子表面来提高运行效率。</p>
@@ -1990,7 +1991,7 @@ main(int argc, char *argv[])
 <p>忽略弃用的 <code>wl_shell</code> 接口</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="高分辨率表面hidpi"><a class="header" href="#高分辨率表面hidpi">高分辨率表面（HiDPI）</a></h1>
-<p>在过去的几年时间里，高端显示器的像素密度取得了巨大的飞跃，新的显示器在相同的物理显示面积上装入了两倍于我们过去几年所见的像素量。我们称这些显示器为 “HiDPI” 显示器（高分屏），是 “像素每英寸” 的简称。然而这些显示器要远远领先于它们的 “低分屏” 同行，要正确利用它们，必须在应用层面作出改变。通过在相同的空间内将屏幕的分辨率提高一倍，如果我们不特别考虑它们的话，我们所有的用户界面尺寸都会减少一半。对于大多数显示器而言，这将使得文字无法阅读，交互元素也会变得很小，令人不悦。</p>
+<p>在过去的几年时间里，高端显示器的像素密度取得了巨大的飞跃，新的显示器在相同的物理显示面积上装入了两倍于我们过去几年所见的像素量。我们称这些显示器为 “HiDPI” 显示器（高分屏），是 “每英寸高像素密度” 的简称。然而这些显示器要远远领先于它们的 “低分屏” 同行，要正确利用它们，必须在应用层面作出改变。通过在相同的空间内将屏幕的分辨率提高一倍，如果我们不特别考虑它们的话，我们所有的用户界面尺寸都会减少一半。对于大多数显示器而言，这将使得文字无法阅读，交互元素也会变得很小，令人不悦。</p>
 <p>然而，作为交换，其为我们的矢量图形提高了图形的保真度，最明显的是在文本渲染方面。Wayland 通过为每个输出添加一个 “比例因子”（scale factor） 来解决这个问题，而客户端也被期望将这个比例因子应用到它们的界面上。此外，没有意识到 HiDPI 的客户端通过无动作来传达这一限制信号，让混成器放大他们的缓冲区来弥补这一限制。混成器通过适当的事件发出每个输出的比例因子信号：</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_output&quot; version=&quot;3&quot;&gt;
   &lt;!-- ... --&gt;
@@ -2007,7 +2008,7 @@ main(int argc, char *argv[])
   &lt;/event&gt;
 &lt;/interface&gt;
 </code></pre>
-<p>一旦你知道客户端显示的输出集合，就应该取比例因子中的最大值，将其中缓冲区的大小（以像素为单位）乘以这个值，然后以 2 倍或 3 倍（或 N 倍）的比例渲染 UI。然后像这样指出缓冲区准备的比例：</p>
+<p>一旦你知道客户端的输出集合开始显示，就应该取比例因子中的最大值，将其中缓冲区的大小（以像素为单位）乘以这个值，然后以 2 倍或 3 倍（或 N 倍）的比例渲染 UI。然后像这样指出缓冲区准备的比例：</p>
 <pre><code class="language-xml">&lt;interface name=&quot;wl_surface&quot; version=&quot;4&quot;&gt;
   &lt;!-- ... --&gt;
   &lt;request name=&quot;set_buffer_scale&quot; since=&quot;3&quot;&gt;

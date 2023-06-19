@@ -151,11 +151,12 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="加入一个事件循环"><a class="header" href="#加入一个事件循环">加入一个事件循环</a></h1>
-<p><code>libwayland</code> 为 Wayland 服务端提供了自己的事件循环实现，但维护者需要知道这是一种设计上的僭越行为。</p>
+<p><code>libwayland</code> 为 Wayland 服务端提供了自己的事件循环实现，但维护者需要知道这是一种设计上的僭越行为。
+对于客户端，没有这样的等价物。无论如何，Wayland 服务端事件循环已经足够有用了。</p>
 <h2 id="wayland-服务端事件循环"><a class="header" href="#wayland-服务端事件循环">Wayland 服务端事件循环</a></h2>
 <p>由 <code>libwayland-server</code> 创建的每一个 <code>wl_display</code> 都有一个对应的 <code>wl_event_loop</code>，你可以通过 <code>wl_display_get_event_loop</code> 来获取其引用。如果你正在写一个新的 Wayland 混成器，你很可能想把它作为唯一的事件循环。你可以用 <code>wl_event_loop_add_fd</code> 来添加一个文件描述符，用 <code>wl_event_loop_add_timer</code> 来添加一个计时器。还可以通过 <code>wl_event_loop_add_signal</code> 来处理信号，这可能是非常便捷的做法。</p>
 <p>可以根据你的喜好配置事件循环，以监控混成器所需响应的全部事件。你可以通过调用 <code>wl_display_run</code> 来一次性处理事件和调度 Wayland 客户端。它将处理并陷入事件循环，直到通过 <code>wl_display_terminate</code> 进行终止。大多数 Wayland 混成器从一开始就考虑到 Wayland 的这种用法（而不是从 X11 移植过来）。</p>
-<p>然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。<code>wl_display</code> 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 <code>wl_event_loop_get_fd</code> 来过的一个可以回调的文件描述符，然后在该文件描述符发生活动时调用 <code>wl_event_loop_dispatch</code> 来处理事件。当你有数据需要写入客户端时，你也需要调用 <code>wl_display_flush_clients</code>。 </p>
+<p>然而，也可以采用轮询的方式将 Wayland 显示服务纳入你自己的事件循环。<code>wl_display</code> 在内部使用事件循环来处理客户端，你可以选择自己监控 Wayland 事件循环，在必要的时候对其进行调度，或者也可以完全忽略，手动处理客户端的更新请求。如果你希望让 Wayland 事件循环自己运行，并将其视作你自己事件循环的附属品，你可以使用 <code>wl_event_loop_get_fd</code> 来过的一个可以<a href="https://pubs.opengroup.org/onlinepubs/009695399/functions/poll.html">回调</a>的文件描述符，然后在该文件描述符发生活动时调用 <code>wl_event_loop_dispatch</code> 来处理事件。当你有数据需要写入客户端时，你也需要调用 <code>wl_display_flush_clients</code>。 </p>
 <h2 id="wayland-客户端事件循环"><a class="header" href="#wayland-客户端事件循环">Wayland 客户端事件循环</a></h2>
 <p>另一方面，<code>libwayland-client</code> 并没有自己的事件循环。然而，由于通常只有一个文件描述符，所以没有自己的事件循环更容易管理。如果你的程序期望响应唯一的 Wayland 事件，那么这个简单的循环就足够了。</p>
 <pre><code class="language-c">while (wl_display_dispatch(display) != -1) {

@@ -157,7 +157,7 @@
 <p>Wire 协议是由 32 位值所组成的流，使用当前机器的字节顺序进行编码（例如 x86 系列 CPU 上的小端序）。
 其中包含以下几种基础类型：</p>
 <ul>
-<li><strong>int</strong> <strong>uint</strong><br />
+<li><strong>int</strong>， <strong>uint</strong><br />
 32 位 有符号及无符号整型</li>
 <li><strong>fixed</strong><br />
 24 位整数 + 8 位小数 有符号浮点数</li>
@@ -172,7 +172,7 @@
 <p><strong>string</strong><br />
 字符串以 32 位整数开头，这个整数表示字符串的长度（以字节为单位），
 接下来是字符串的内容和 NUL 终结符，最后用未定义数据对齐填充 32 位。
-编码没有指定，但是实际使用 UTF-8。</p>
+编码没有规定，但是实践中使用 UTF-8。</p>
 </li>
 <li>
 <p><strong>array</strong><br />
@@ -181,7 +181,7 @@
 </li>
 <li>
 <p><strong>fd</strong><br />
-主传输上的 0 位值，在 Unix Socket 消息（msg_control）中使用辅助数据，将文件描述符从一端传输到另一端。</p>
+主体传输的是一个 0 bit 的值，但是会通过 Unix Socket 消息（msg_control）中的辅助数据将文件描述符（fd）传输到另一端。</p>
 </li>
 <li>
 <p><strong>enum</strong><br />
@@ -206,13 +206,13 @@ ID 1 预分配给了 Wayland 显示单例对象，它被用于引导产生其它
 此对象 ID 能在后续的消息头或者其它对象的参数中使用。
 客户端在 <code>[1, 0xFEFFFFFF]</code> 而服务端在 <code>[0xFF000000, 0xFFFFFFFF]</code> 内分配 ID。
 ID 从低位边界开始，并随每次新对象的分配递增。</p>
-<p>对象的 ID 为 0 代表 null 空对象，即不存在或者空缺。</p>
+<p>对象的 ID 为 0 代表空（null）对象，即对象不存在或者空缺。</p>
 <h2 id="传输"><a class="header" href="#传输">传输</a></h2>
 <p>迄今为止，所有的 Wayland 实现均通过 Unix Socket 工作。
 这有个很特别的原因：文件描述符消息。
-Unix Socket 是最实用的跨进程文件描述符传输方法，它对大文件传输（如键盘映射、像素缓冲区、剪切板）非常必要。
-理论上其它传输协议（比 TCP）可行，但是需要开发者实现大文件传输的替代方案。</p>
-<p>为了找到 Unix Socket 连接，大部分实现和 libwayland 操作一样：</p>
+Unix Socket 是最实用的跨进程文件描述符传输方法，这对大文件传输（如键盘映射、像素缓冲区、剪切板）来说非常必要。
+理论上其它传输协议（比如 TCP）是可行的，但是需要开发者实现大文件传输的替代方案。</p>
+<p>为了找到 Unix Socket 并连接，大部分实现要做的事和 libwayland 所做的一样：</p>
 <ol>
 <li>如果 <code>WAYLAND_SOCKET</code> 已设置，则假设父进程已经为我们配置了连接，将 <code>WAYLAND_SOCKET</code> 解析为文件描述符。</li>
 <li>如果 <code>WAYLAND_DISPLAY</code> 已设置，则与 <code>XDG_RUNTIME_DIR</code> 路径连接，尝试建立 Unix Socket。</li>
