@@ -62,7 +62,7 @@ wl_output_handle_bind(struct wl_client *client, void *data,
     struct my_output *client_output = calloc(1, sizeof(struct client_output));
 
     struct wl_resource *resource = wl_resource_create(
-        client, &wl_output_implementation, wl_output_interface.version, id);
+        client, &wl_output_interface, wl_output_interface.version, id);
 
     wl_resource_set_implementation(resource, &wl_output_implementation,
         client_output, wl_output_handle_resource_destroy);
